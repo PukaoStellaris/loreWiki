@@ -53,221 +53,758 @@ Her ultimate technique, "Shattering Heaven and Earth," allows her to fracture th
         'Shattering Heaven and Earth - Ultimate technique that disintegrates targets'
       ],
       relationships: [
-        { name: 'Sentinel', relation: 'Best Friend & Partner' },
-        { name: 'General Xi', relation: 'Trusted Subordinate' },
+        { name: 'Sentinel Phantasma', relation: 'Best Friend & Partner' },
+        { name: 'Mei Xi', relation: 'Trusted Subordinate' },
         { name: 'King Cenric', relation: 'Liege Lord' }
       ]
     },
     {
-      id: 'sentinel',
-      name: 'Sentinel',
-      title: 'Archmage of the Divinity Council',
+      id: 'sentinel-phantasma',
+      name: 'Sentinel Phantasma',
+      title: 'Violet Nihility',
       category: 'Main Characters',
       image: 'https://cdn.discordapp.com/attachments/795828287468601375/1451494261278244985/PLA.png?ex=694660df&is=69450f5f&hm=777266013cdf4f2249fb938847666c6f814cde345e42642a0fddfeb9201a1733&PLA.png',
       infobox: {
-        'Full Name': 'Sentinel',
-        'Title': 'Archmage',
-        'Affiliation': 'Divinity Council',
-        'Magic Type': 'Gravity Magic, Violet Nihility',
-        'Weapon': 'Halberd (Evolved from Katana)',
-        'Race': 'Bunny-eared humanoid',
-        'Status': 'Active (Ascended)'
+        'Full Name': 'Sentinel Phantasma',
+        'Title': 'Violet Nihility',
+        'Affiliation': 'Violet Aegis (Formerly Divinity Council/Imperial Aegis)',
+        'Rank': 'Rank 1 Cardinal Mage (éna)',
+        'Magic Type': 'Gravity Magic, Nihil',
+        'Weapon': 'Destiny’s Fall, Inabsolutus Halberd',
+        'Status': 'Active (Rogue/Outlaw)'
       },
-      description: `Sentinel is an Archmage serving under the Divinity Council and Astral's best friend since their academy days. Distinguished by her bunny ears, she was nearly expelled from Sovereign Saints Academy due to her inability to control elemental magic.
+      description: `Sentinel Phantasma is the Kingdom's strongest and most volatile magic user, formerly known as the "Ace" of the Imperial Aegis. After deciphering a forbidden scroll, she became the vessel for "Nihil," a primordial power capable of deleting magical and physical existence.
 
-Her life changed when Astral stole an Ancient Gravity Scroll for her, allowing Sentinel to develop her signature Gravity Magic. During the operation against the Forsaken Executioners, she discovered the Violet Nihility and achieved Ascension.`,
+    Following her arrest by the Archon for protecting her sister, all Cardinals of Divinity Council resigned to form the "Violet Aegis," a rogue family of misfits seeking to protect her and the world from external threats. Sentinel possesses a unique dual-nature, having eventually merged with the ancient entity Oreia to master her Vera Forma (True Form).
+
+    Though initially limited to a thirty-three-second combat window, her connection to her sister Luna’s Aethereal magic allows her to stabilize her immense power.`,
       abilities: [
-        'Gravity Art: Downward Spiral - Creates intense localized gravity fields',
-        'Nano Singularity - Small sphere with tremendous gravitational force',
-        'Mana Sword Manifestation - Creates colossal swords of pure mana',
-        'Violet Nihility - Forbidden power of absolute destruction',
-        'Inabsolutus Form - Ascended state with enhanced abilities'
+        'Gravity Art: Downward Spiral - Intensifies gravity to sink or trip targets',
+        'Nano Singularity - A high-density gravity sphere used to destroy structures',
+        'Ultimate Art: Oblivion - A barrage of mana blades that nullify magic circuits',
+        'Umbra Sanctuarium - A cylindrical domain that imposes absolute spatial control',
+        'Absolute Negation - Ultimate technique using Vera Forma to delete existence'
       ],
       relationships: [
         { name: 'Astral Anemos', relation: 'Best Friend & Partner' },
-        { name: 'The Archon', relation: 'Superior (Tense)' }
+        { name: 'Luna', relation: 'Sister & Aethereal Anchor' },
+        { name: 'Oreia', relation: 'Inhabiting Entity (Goddess of the Void)' },
+        { name: 'Vesta Aeris', relation: 'Scientific Partner & Confidant' },
+        { name: 'Zane Axios', relation: 'Partner & Double Agent' }
+      ]
+    },
+    {
+      id: 'luna-phantasma',
+      name: 'Luna Phantasma',
+      title: 'The Aethereal Spark',
+      category: 'Main Characters',
+      image: 'https://cdn.discordapp.com/attachments/795828287468601375/1451494261278244985/PLA.png?ex=694660df&is=69450f5f&hm=777266013cdf4f2249fb938847666c6f814cde345e42642a0fddfeb9201a1733&PLA.png',
+      infobox: {
+        'Full Name': 'Luna Phantasma', 
+        'Title': 'The Spark', 
+        'Affiliation': 'Violet Aegis (Formerly Sovereign Saints Academy)', 
+        'Rank': 'Senior Cadet',
+        'Magic Type': 'Aethereal Magic (Pure Light)', 
+        'Status': 'Active'
+      },
+      description: `Luna is the younger sister of Sentinel Phantasma and was a final-year student at Sovereign Saints Academy before joining the Violet Aegis. She wields Aethereal Magic, a rare and highly destructive form of light magic that initially caused her significant physical recoil due to its overwhelming density.
+
+    After being kidnapped by the Monarch to serve as a light-based "power" for his void form, she was rescued by her sister and the resigned Cardinals. Luna is now recognized as the essential "White Dwarf" anchor to Sentinel's "Black Hole," as her pure light magic is the only force capable of washing out the "Red" corruption within the Nihil power.`,
+      abilities: [
+        'Aethereal Magic - Unstable light magic that detonates air and incinerates foes',
+        'Starburst - A high-tier light spell that Luna is learning to stabilize',
+        'Dual Star Orbit - A passive link with Sentinel that creates a loop of infinite, stable energy',
+        'Equinox Control - Specialized techniques learned from Xi to manage high-output mana'
+      ],
+      relationships: [
+        { name: 'Sentinel', relation: 'Older Sister & "Dual Star" Partner' },
+        { name: 'Mei Xi', relation: 'Mentor' },
+        { name: 'Miyu', relation: 'Friend & "Dragon Sister"' },
+        { name: 'Astral Anemos', relation: 'Protective Authority Figure' }
       ]
     },
     {
       id: 'general-xi',
-      name: 'General Xi',
-      title: 'General of the Imperial Aegis',
-      category: 'Allies',
-      image: '⚔️',
-      infobox: {
-        'Title': 'General',
-        'Affiliation': 'Imperial Aegis',
-        'Magic Type': 'Equinox Magic (Light & Dark)',
-        'Status': 'Active'
-      },
-      description: `General Xi is one of the most trusted military officers under Grand Marshal Astral Anemos. She wields the rare Equinox Magic, allowing her to blend light and dark elemental powers.
-
-Her ultimate technique, "Perfect Confluence," represents a perfect blend of her dual light and dark powers.`,
-      abilities: [
-        'Twin Equinotial Slashes - Dual light/dark sword strikes',
-        'Ultimate Weapon Art: Perfect Confluence - Perfect blend of light and dark'
-      ],
-      relationships: [
-        { name: 'Astral Anemos', relation: 'Commander' },
-        { name: 'Mirai', relation: 'Fellow Officer' }
-      ]
-    },
-    {
-      id: 'pukao',
-      name: 'Pukao',
-      title: 'Project: Divinity',
-      category: 'IDK BRO',
+      name: 'Mei Xi',
+      title: 'Equinox Master',
+      category: 'Supporting Characters',
       image: 'https://cdn.discordapp.com/attachments/795828287468601375/1451494261278244985/PLA.png?ex=694660df&is=69450f5f&hm=777266013cdf4f2249fb938847666c6f814cde345e42642a0fddfeb9201a1733&PLA.png',
       infobox: {
-        'Full Name': 'Pukao Stellaris',
-        'Title': 'Author',
-        'Weapon': 'Pineapple Pen',
-        'Status': 'Probably not alive'
+        'Full Name': 'Mei Xi',
+        'Title': 'The Strategist',
+        'Affiliation': 'Violet Aegis (Formerly Imperial Aegis)',
+        'Rank': 'General',
+        'Magic Type': 'Equinox Magic (Light and Dark)',
+        'Weapon': 'Dual Blades (Twin Equinoctial Slashes)',
+        'Status': 'Active (Rogue)'
       },
-      description: ``,
+      description: `General Xi is a coolly professional high-ranking officer formerly of the Imperial Aegis. Known for her tactical brilliance and mastery of Equinox Magic, she provides the strategic foundation that balances the more chaotic elements of the Violet Aegis. 
+
+    She was instrumental in the recovery operations against the Executioners and was one of the first to commit to protecting Sentinel’s secret. Following the Archon's betrayal, Xi resigned her commission alongside Marshal Anemos to join the rogue Violet Aegis, eventually becoming the mentor to Luna Phantasma.`,
       abilities: [
-        'Wha the dawg doing',
+        'Equinox Magic - A perfect blend of light and dark elements utilized in combat',
+        'Twin Equinoctial Slashes - A high-speed offensive technique using dual blades',
+        'Maximus: Perfect Confluence - An ultimate weapon art combining light and dark slashes to clash with high-level spells',
+        'Mana Tracking - Capability to analyze and track mana signatures and data'
       ],
       relationships: [
-        { name: 'Sentinel', relation: 'Creator' },
+        { name: 'Astral Anemos', relation: 'Trusted Friend & Commander' },
+        { name: 'Luna Phantasma', relation: 'Student & Aethereal Mentee' },
+        { name: 'Sentinel Phantasma', relation: 'Teammate & "Dual Star" Guardian' },
+        { name: 'Lyra Mirai', relation: 'Fellow General & Tactical Partner' }
       ]
     },
     {
-      id: 'thysia-asteri',
-      name: 'Thysia Asteri',
-      title: "Executioner's Overseer",
-      category: 'Antagonists',
-      image: '🩸',
+      id: 'lyra-mirai',
+      name: 'Lyra Mirai',
+      title: 'Imperial General',
+      category: 'Supporting Characters',
+      image: 'https://cdn.discordapp.com/attachments/795828287468601375/1451494261278244985/PLA.png?ex=694660df&is=69450f5f&hm=777266013cdf4f2249fb938847666c6f814cde345e42642a0fddfeb9201a1733&PLA.png',
       infobox: {
-        'Title': 'Overseer',
-        'Affiliation': 'Forsaken Executioners',
-        'Magic Type': 'Sacrifice Magic',
-        'Weapon': 'Corrupted Durandal Fragment',
+        'Full Name': 'Lyra Mirai',
+        'Title': 'The Hero of the Ruins',
+        'Affiliation': 'Violet Aegis (Formerly Imperial Aegis)',
+        'Rank': 'General',
+        'Magic Type': 'Ice Magic (Glacial Art)',
         'Status': 'Active'
       },
-      description: `Thysia Asteri is one of the four Overseers of the Forsaken Executioners, wielding the dangerous Sacrifice Magic. Her power allows her to convert damage dealt to enemies into strength for herself.
+      description: `General Mirai is a high-speed skirmisher who rose from Vice General to General after surviving a near-fatal encounter with Sullivan Domineer. Known for her frantic energy and tendency to hyperventilate under pressure, she is nonetheless one of the fastest and most agile fighters in the kingdom.
 
-She possesses a corrupted fragment of the legendary Durandal, reforged into a dark red claymore with malevolent crimson runes.`,
+    She was promoted by King Cenric to serve as a "new hero" to distract the public from Sentinel's existence. After being used as bait in the Whispering Canyons and rescued by the Divinity Council, she realized her true allegiance lay with her teammates, eventually joining the Violet Aegis in their exile.`,
       abilities: [
-        'Sacrifice Magic - Converts dealt damage into personal power',
-        'Ultimate Weapon Art: Rites of Annihilation - Corrupting energy slashes'
+        'Ultimate Art: Glacial Zero - A wave of absolute cold that locks molecules to stop magic flow',
+        'Flash Freeze - Instantaneous creation of ice structures for mobility or defense',
+        'High-Mobility Skirmishing - Exceptional reaction speed used to dodge tracking death magic',
+        'Rapid Response - Specialization in leading fast-strike units against guerrilla forces'
       ],
       relationships: [
-        { name: 'Stellium', relation: 'Rival (Durandal wielders)' },
-        { name: 'Forsaken Executioners', relation: 'Overseer' }
+        { name: 'Astral Anemos', relation: 'Commander & Mentor' },
+        { name: 'Mei Xi', relation: 'Tactical Partner' },
+        { name: 'Sentinel Phantasma', relation: 'Close Friend & "Cosplay" Consultant' },
+        { name: 'Sullivan Domineer', relation: 'Archenemy' }
       ]
-    }
+    },
+    {
+      id: 'stellium-choros',
+      name: 'Stellium Choros',
+      title: 'Rank 2 Cardinal Mage (Dio)',
+      category: 'Supporting Characters',
+      image: 'https://cdn.discordapp.com/attachments/795828287468601375/1451494261278244985/PLA.png?ex=694660df&is=69450f5f&hm=777266013cdf4f2249fb938847666c6f814cde345e42642a0fddfeb9201a1733&PLA.png',
+      infobox: {
+        'Full Name': 'Stellium Choros',
+        'Title': 'The Knight of the Spire',
+        'Affiliation': 'Violet Aegis (Formerly Divinity Council)',
+        'Rank': 'Cardinal Mage (Rank Dio)',
+        'Magic Type': 'Sacrifice Magic, Sword Arts',
+        'Weapon': 'Durandal (Reforged Claymore)',
+        'Status': 'Active'
+      },
+      description: `Cardinal Stellium is the steadfast protector and the second-highest ranking member of the Divinity Council. Known for her ironclad sense of duty, she wields the legendary blade Durandal, which she successfully reforged after years of effort. She is a master of defensive combat, often tasked with holding the line against relentlessly aggressive foes like Thysia Asteri.
+
+    Stellium was the primary advocate for Sentinel's independence, traveling to the Astral Spire to secure divine and demonic blessings for her friend. Her loyalty to Sentinel is so absolute that she was the first to answer the call to resign and form the Violet Aegis, choosing family over the Archon's military structure.`,
+      abilities: [
+        'Ultimate Weapon Art: Umbral Nova - A devastating swing that releases darkness-infused slashes',
+        'Durandal Resonance - Utilizing the dark runic patterns of her blade to counter legendary weapons',
+        'Sacrifice Magic Defense - A specialized fighting style designed to outlast conversion-based magic',
+        'Absolute Guard - Mastery of parrying and blocking that can withstand the strength of a Voidwalker'
+      ],
+      relationships: [
+        { name: 'Sentinel Phantasma', relation: 'Protective Partner & Best Friend' },
+        { name: 'Astral Anemos', relation: 'Peer & Fellow Outlaw' },
+        { name: 'Thysia Asteri', relation: 'Rival & Opposite "Durandal" Wielder' },
+        { name: 'Polaris Lunae', relation: 'Celestial Contact' }
+      ]
+    },
+    {
+      id: 'vesta-aeris',
+      name: 'Vesta Aeris',
+      title: 'Rank 3 Cardinal Mage (Tria)',
+      category: 'Supporting Characters',
+      image: 'https://cdn.discordapp.com/attachments/795828287468601375/1451494261278244985/PLA.png?ex=694660df&is=69450f5f&hm=777266013cdf4f2249fb938847666c6f814cde345e42642a0fddfeb9201a1733&PLA.png',
+      infobox: {
+        'Full Name': 'Vesta Aeris',
+        'Title': 'The Scientist',
+        'Affiliation': 'Violet Aegis (Formerly Divinity Council)',
+        'Rank': 'Cardinal Mage (Rank Tria)',
+        'Magic Type': 'Spirit Magic, Magitech Engineering',
+        'Status': 'Active'
+      },
+      description: `Cardinal Vesta is the intellectual backbone and chief engineer of the Violet Aegis. Originally a Rank 3 Cardinal of the Divinity Council, she is a specialist in Spirit Magic and high-level magitech. Vesta was the primary architect of the "Deceitful Report," creating a fake "Mana Filtration Drive" to hide Sentinel’s Nihil power from the Archon.
+
+    She is the first to scientifically define the "Dual Star" relationship between Sentinel and Luna, recognizing their mana as a self-stabilizing orbit of consumption and emission. Vesta currently operates out of the Astral Spire, managing the group's logistics and conducting medical assessments for both allies and former enemies.`,
+      abilities: [
+        'Spirit Art: Phantasmal Tide - An ethereal defensive barrier used to withstand physical force',
+        'Magitech Engineering - Expert capability in building detection devices, suppression visors, and mana generators',
+        'Mana Signature Analysis - Scientific mapping of mana circuits and void patterns',
+        'Aethereal Synchronization - Theoretical modeling of Dual Star mana systems'
+      ],
+      relationships: [
+        { name: 'Sentinel Phantasma', relation: 'Best Friend & Lab Partner' },
+        { name: 'Luna Phantasma', relation: 'Technical Advisor & Subject Matter Expert' },
+        { name: 'Ryusei', relation: 'Scientific Collaborator' },
+        { name: 'Lilith Nacht', relation: 'Patient & Research Subject' }
+      ]
+    },
+    {
+      id: 'vespera-nox',
+      name: 'Vespera Nox',
+      title: 'Rank 4 Cardinal Mage (Téssera)',
+      category: 'Supporting Characters',
+      image: 'https://cdn.discordapp.com/attachments/795828287468601375/1451494261278244985/PLA.png?ex=694660df&is=69450f5f&hm=777266013cdf4f2249fb938847666c6f814cde345e42642a0fddfeb9201a1733&PLA.png',
+      infobox: {
+        'Full Name': 'Vespera Nox',
+        'Title': 'The Ancient Demon',
+        'Affiliation': 'Violet Aegis (Formerly Divinity Council)',
+        'Rank': 'Cardinal Mage (Rank Téssera)',
+        'Magic Type': 'Poison Art, Death Magic',
+        'Status': 'Active'
+      },
+      description: `Cardinal Vespera is an ancient demon who balances a "grandmotherly warmth" with a terrifying, predatory aura. As a Rank 4 Cardinal, she represents the "Spear" of the Divinity Council. Her presence is described as an oil slick on the soul, capable of making the temperature drop through suffocating heaviness rather than cold.
+
+    Vespera treats Sentinel as a "youngest sister" and was pivotal in the rescue mission at the Stasis Vaults. Despite her lethal capabilities, she is deeply protective of the group's "misfit" nature and often provides a calm, intimidating presence during high-stakes confrontations.`,
+      abilities: [
+        'Poison Art: Wither - A lethal touch that causes armor and organic matter to rust and decay instantly',
+        'Demon Flight - Utilizing large, ancient wings for high-altitude mobility',
+        'Dissonance Perception - Capability to sniff out lies and detect ancient, forbidden mana signatures',
+        'Abyssal Presence - Passively suppressing surrounding enemies through ancient demonic energy'
+      ],
+      relationships: [
+        { name: 'Sentinel Phantasma', relation: 'Protective "Older Sister"' },
+        { name: 'Miyu', relation: 'Combat Partner' },
+        { name: 'Lyra Mirai', relation: 'Occasional Rescuer & Mentor' },
+        { name: 'Avis', relation: 'Long-term Demonic Peer' }
+      ]
+    },
+    {
+      id: 'zane-axios',
+      name: 'Zane Axios',
+      title: 'Rank 5 Cardinal Mage (Pende)',
+      category: 'Supporting Characters',
+      image: 'https://cdn.discordapp.com/attachments/795828287468601375/1451494261278244985/PLA.png?ex=694660df&is=69450f5f&hm=777266013cdf4f2249fb938847666c6f814cde345e42642a0fddfeb9201a1733&PLA.png',
+      infobox: {
+        'Full Name': 'Zane Axios',
+        'Title': 'The Double Agent',
+        'Affiliation': 'Violet Aegis (Formerly Divinity Council)',
+        'Rank': 'Cardinal Mage (Rank Pende)',
+        'Magic Type': 'Spatial Magic',
+        'Status': 'Active'
+      },
+      description: `Zane Axios is a genius Spatial Mage and the strategic "eyes" of the Violet Aegis. Originally assigned by the Archon to spy on Sentinel under "Project: SYN," Zane chose to betray the Citadel, falsifying logs and monitoring signals to protect Sentinel’s privacy.
+
+    An arrogant but loyal operative, Zane utilizes his spatial manipulation to manage the battlefield and provide high-speed transport for the team. His betrayal was the final piece that allowed the Divinity Council to escape the Archon’s grasp, proving that he preferred his "family of misfits" over the Archon’s authority.`,
+      abilities: [
+        'Spatial Art: Displacement Field - High-precision teleportation and warping of multiple targets',
+        'Spatial Coin - A recurring focus for his magic, often used to bridge gaps or trigger effects',
+        'Internal Structure Warping - Manipulating the physical dimensions of objects to cause distortion',
+        'Signal Loop/Falsification - Hacking and altering security feeds and data logs'
+      ],
+      relationships: [
+        { name: 'Sentinel Phantasma', relation: 'Partner & Field Operative' },
+        { name: 'The Archon', relation: 'Former Superior (Betrayed)' },
+        { name: 'Stellium Choros', relation: 'Respected Peer' },
+        { name: 'Ryusei', relation: 'Tactical Partner' }
+      ]
+    },
+    {
+      id: 'modeus-exi',
+      name: 'Modeus',
+      title: 'Rank 6 Cardinal Mage (Éxi)',
+      category: 'Supporting Characters',
+      image: 'https://cdn.discordapp.com/attachments/795828287468601375/1451494261278244985/PLA.png?ex=694660df&is=69450f5f&hm=777266013cdf4f2249fb938847666c6f814cde345e42642a0fddfeb9201a1733&PLA.png',
+      infobox: {
+        'Full Name': 'Modeus',
+        'Title': 'The Pursuer',
+        'Affiliation': 'Violet Aegis (Formerly Divinity Council)',
+        'Rank': 'Cardinal Mage (Rank Éxi)',
+        'Magic Type': 'Stealth Magic, Shadow Manipulation',
+        'Status': 'Active'
+      },
+      description: `Cardinal Modeus is the elite stealth operative and "Pursuer" of the group. An elven mage of few words, she specializes in infiltration, surveillance, and shadow-based extraction. She was initially tasked with monitoring Sentinel within the Citadel, but her loyalty to the team led her to assist in the "conspiracy" to hide Sentinel's recovery from the Archon.
+
+    Modeus is responsible for maintaining the security of the Violet Aegis, often looping security feeds or creating "glitches" to hide training sessions. During the escape from the Citadel, she was instrumental in the stealth extraction of Sentinel from the Stasis Vaults.`,
+      abilities: [
+        'Shadow Materialization - Emerging from or disappearing into shadows instantly',
+        'Stealth Extraction - Executing high-stakes prison breaks without triggering alarms',
+        'Security Override - Hacking and looping magitech surveillance systems',
+        'Mana Flare Detection - Sensing distant flares of mana to track allies or enemies]'
+      ],
+      relationships: [
+        { name: 'Sentinel Phantasma', relation: 'Teammate & Former Surveillance Target' },
+        { name: 'Zane Axios', relation: 'Intelligence Partner' },
+        { name: 'Astral Anemos', relation: 'Field Operative' }
+      ]
+    },
+    {
+      id: 'miyu-epta',
+      name: 'Miyu',
+      title: 'Rank 7 Cardinal Mage (Eptá)',
+      category: 'Supporting Characters',
+      image: 'https://cdn.discordapp.com/attachments/795828287468601375/1451494261278244985/PLA.png?ex=694660df&is=69450f5f&hm=777266013cdf4f2249fb938847666c6f814cde345e42642a0fddfeb9201a1733&PLA.png',
+      infobox: {
+        'Full Name': 'Miyu',
+        'Title': 'Hybrid Dark Angel-Dragon',
+        'Affiliation': 'Violet Aegis (Formerly Divinity Council)',
+        'Rank': 'Cardinal Mage (Rank Eptá)',
+        'Magic Type': 'Crystalline Flash Magic',
+        'Status': 'Active'
+      },
+      description: `Cardinal Miyu is a hyperactive hybrid of a Dark Angel and a Dragon. Boasting manic energy and a playful demeanor, she often lightens the mood within the Violet Aegis. In combat, however, she is a terrifying force of speed and power, using her Crystalline magic to petrify enemies before shattering them.
+
+    Miyu has a sisterly bond with Luna Phantasma and was one of the first to offer emotional support to Sentinel during her most unstable moments. Despite her child-like curiosity about eating bugs, she is an elite fighter who played a major role in breaking the Resonance Protocol at the Academy.`,
+      abilities: [
+        'Crystalline Flash - High-speed magic that turns enemies into crystalline statues',
+        'Dragon Flight - Extreme aerial mobility using white scales and blinding light',
+        'Ethereal Resonance - Ability to perceive and react to shifting mana frequencies',
+        'Crystalline Shockwave - Unleashing mana upon impact to throw back armored foes'
+      ],
+      relationships: [
+        { name: 'Luna Phantasma', relation: 'Best Friend & "Shiny Bunny" Sister' },
+        { name: 'Sentinel Phantasma', relation: 'Teammate & Snack Sharer' },
+        { name: 'Vespera Nox', relation: 'Doting Partner' }
+      ]
+    },
+    {
+      id: 'avis-okto',
+      name: 'Avis',
+      title: 'Rank 8 Cardinal Mage (Októ)',
+      category: 'Supporting Characters',
+      image: 'https://cdn.discordapp.com/attachments/795828287468601375/1451494261278244985/PLA.png?ex=694660df&is=69450f5f&hm=777266013cdf4f2249fb938847666c6f814cde345e42642a0fddfeb9201a1733&PLA.png',
+      infobox: {
+        'Full Name': 'Avis',
+        'Title': 'Ancient Demon of the Phoenix',
+        'Affiliation': 'Violet Aegis (Formerly Divinity Council)',
+        'Rank': 'Cardinal Mage (Rank Októ)',
+        'Magic Type': 'Phoenix Flame (Rebirth/Holy Fire)',
+        'Status': 'Active'
+      },
+      description: `Cardinal Avis is an ancient Demon and the spiritual elder of the Violet Aegis. Wielding the absolute heat of the Phoenix Flame, he possesses the power of "Everything" to counter Sentinel's "Nothing". 
+
+    He performed a pivotal role in Sentinel’s survival by using his Holy Flame to penetrate and seal the "Nihil fracture" on her face, creating a permanent brand that prevented her essence from leaking. Though he often appears as a "grumpy grandfather," his loyalty to his "misfit family" led him to burn down the Archon's vaults to free Sentinel.`,
+      abilities: [
+        'Phoenix Art: Solar Flare - Transforming into a massive bird of golden fire spanning 100 meters',
+        'Holy Flame Seal - Creating a permanent metaphysical "plug" for mana leaks',
+        'Phoenix Rebirth - Utilizing fire as a creative force to generate existence where there is none',
+        'Demon Talons - Transforming limbs into swirling talons of absolute heat'
+      ],
+      relationships: [
+        { name: 'Sentinel Phantasma', relation: 'Grandfatherly Mentor & Protector' },
+        { name: 'Astral Anemos', relation: 'Respected Ally' },
+        { name: 'The Monarch', relation: 'Ancient Rival' }
+      ]
+    },
+    {
+      id: 'selena-enea',
+      name: 'Selena',
+      title: 'Rank 9 Cardinal Mage (Enéa)',
+      category: 'Supporting Characters',
+      image: 'https://cdn.discordapp.com/attachments/795828287468601375/1451494261278244985/PLA.png?ex=694660df&is=69450f5f&hm=777266013cdf4f2249fb938847666c6f814cde345e42642a0fddfeb9201a1733&PLA.png',
+      infobox: {
+        'Full Name': 'Selena',
+        'Title': 'The Subzero Mage',
+        'Affiliation': 'Violet Aegis (Formerly Divinity Council)',
+        'Rank': 'Cardinal Mage (Rank Enéa)',
+        'Magic Type': 'Subzero Magic (Absolute Cold)',
+        'Status': 'Active'
+      },
+      description: `Cardinal Selena is a powerful cryomancer who initially harbored a cold, arrogant resentment toward Sentinel. However, upon learning of Sentinel's true burden and the Archon's manipulation, she became a vital member of the cover-up, using her magic to "freeze" evidence and add realism to their lies.
+
+    Selena’s magic is a reactive force of equilibrium; her body automatically responds to extreme heat or void energy by dropping the local temperature to absolute zero. Despite her detached exterior, she is a reliable defender who stood shoulder-to-shoulder with her peers to resign and form the Violet Aegis.`,
+      abilities: [
+        'Subzero Magic - Reducing local temperatures to absolute zero to freeze air or machinery',
+        'Emergency Reinforcement - Applying rapid-cooling to prevent thermal meltdowns of magitech',
+        'Thermal Sensor Icing - Disabling security sensors by manipulating local heat signatures',
+        'Reactive Frost - Automatic defensive mana reaction to hostile magic signatures'
+      ],
+      relationships: [
+        { name: 'Sentinel Phantasma', relation: 'Teammate & Former Rival' },
+        { name: 'Ryusei', relation: 'Technical Collaborator' },
+        { name: 'Vesta Aeris', relation: 'Research Assistant (Field Testing)' }
+      ]
+    },
+    {
+      id: 'ryusei-dekka',
+      name: 'Ryusei',
+      title: 'Rank 10 Cardinal Mage (Déka)',
+      category: 'Supporting Characters',
+      image: 'https://cdn.discordapp.com/attachments/795828287468601375/1451494261278244985/PLA.png?ex=694660df&is=69450f5f&hm=777266013cdf4f2249fb938847666c6f814cde345e42642a0fddfeb9201a1733&PLA.png',
+      infobox: {
+        'Full Name': 'Ryusei',
+        'Title': 'The Atomic Mage',
+        'Affiliation': 'Violet Aegis (Formerly Divinity Council)',
+        'Rank': 'Cardinal Mage (Rank Déka)',
+        'Magic Type': 'Atomic Magic',
+        'Status': 'Active'
+      },
+      description: `Cardinal Ryusei is the master of Atomic Magic and the primary data analyst for the Violet Aegis. Known for his cold, logical approach and reliance on precise calculations, he was the first to realize that Sentinel’s power was not mere "filtration" but absolute deletion. 
+
+    Despite his adherence to physics, Ryusei willingly falsified energy logs and developed mathematical models to shield the "anomaly" that is Sentinel from the Archon. He provides critical artillery support and calculated evacuations, maintaining a 98.4% success probability for the team's rogue operations.`,
+      abilities: [
+        'Atomic Art: Electron Cage - Beams of pure energy that form an inescapable grid',
+        'Atomic Artillery - High-precision blasts capable of vaporizing Maestro-level barriers',
+        'Atomic Destabilization - Weakening molecular structures by manipulating atomic bonds',
+        'Probability Calculation - Real-time analysis of mission success rates and escape windows'
+      ],
+      relationships: [
+        { name: 'Sentinel Phantasma', relation: 'Subject of Study & Teammate' },
+        { name: 'Vesta Aeris', relation: 'Technical Collaborator' },
+        { name: 'Zane Axios', relation: 'Strategic Partner' },
+        { name: 'The Archon', relation: 'Former Superior (Deceived)' }
+      ]
+    },
+    {
+  id: 'thysia-asteri',
+  name: 'Thysia Asteri',
+  title: 'Executioner’s Overseer',
+  category: 'Antagonists',
+  image: 'https://cdn.discordapp.com/attachments/795828287468601375/1451494261278244985/PLA.png?ex=694660df&is=69450f5f&hm=777266013cdf4f2249fb938847666c6f814cde345e42642a0fddfeb9201a1733&PLA.png',
+  infobox: {
+    'Full Name': 'Thysia Asteri',
+    'Title': 'The Red Berserker',
+    'Affiliation': 'Forsaken Executioners',
+    'Rank': 'Overseer',
+    'Magic Type': 'Sacrifice Magic',
+    'Weapon': 'Durandal Fragment (Dark Red Claymore)',
+    'Status': 'Active (Injured)'
+  },
+  description: `Thysia Asteri is one of the four elite Overseers of the Forsaken Executioners. A relentlessly aggressive warrior, she wields a massive, dark red claymore made from a fragment of the legendary sword Durandal. Her Sacrifice Magic allows her to steal strength from her opponents to fuel her own strikes, making her an expert in conversion-based combat.
+
+Driven by a fierce desire to prove her strength, she led the brutal assault on the Azure Sanctions to draw out Sentinel. Although she was forced into a truce to combat the Monarch, she remains a volatile rival to the Violet Aegis, currently recovering under their watchful eye at the Astral Spire.`,
+  abilities: [
+    'Ultimate Weapon Art: Rites of Annihilation - A devastating surge of corrupting energy slashes',
+    'Sacrifice Magic - Converting landed strikes into stolen strength and stamina',
+    'Durandal Fragment Resonance - Utilizing dark runic patterns to clash with Stellium’s Durandal',
+    'Berserker Charge - A high-pressure, close-quarters combat style that ignores standard defenses'
+  ],
+  relationships: [
+    { name: 'Stellium Choros', relation: 'Arch-Rival' },
+    { name: 'Sullivan Domineer', relation: 'Fellow Overseer & Strategic Partner' },
+    { name: 'Sentinel', relation: 'Respected Enemy & Temporary Ally' },
+    { name: 'The Monarch', relation: 'Former Liege (Betrayed)' }
+  ]
+},
+{
+  id: 'sullivan-domineer',
+  name: 'Sullivan Domineer',
+  title: 'Executioner’s Overseer',
+  category: 'Antagonists',
+  image: 'https://cdn.discordapp.com/attachments/795828287468601375/1451494261278244985/PLA.png?ex=694660df&is=69450f5f&hm=777266013cdf4f2249fb938847666c6f814cde345e42642a0fddfeb9201a1733&PLA.png',
+  infobox: {
+    'Full Name': 'Sullivan Domineer',
+    'Title': 'The Architect of Decay',
+    'Affiliation': 'Forsaken Executioners',
+    'Rank': 'Overseer',
+    'Magic Type': 'Death Magic (Domineer Lineage)',
+    'Status': 'Active (Reforming)'
+  },
+  description: `Sullivan Domineer is the calculating and cold-blooded leader of the Overseers. A member of the noble Domineer family, he specializes in elegant yet devastating death curses and corrosive barriers. Sullivan is a master strategist who prioritized "eroding the foundation" of the kingdom by poisoning supply lines and exhausting Sentinel's limited energy reserves.
+
+After realizing the Monarch viewed the Overseers merely as food, Sullivan initiated a "Phantom Gate" escape and formed a desperate truce with the Violet Aegis. He currently leads the rebranding of the Executioners into the 'Domineer Restoration Corp,' dedicated to rebuilding from the ruins of the Dark Continent.`,
+  abilities: [
+    'Ultimate Art: Herald of the End - A concentrated sphere of absolute decay designed to shatter the soul',
+    'Binding Art: Soul Anchor - A vortex of death energy used to counter suppression and empower allies',
+    'Phantom Gate - A swirling portal of corrosive shadow used for tactical retreats and spatial travel',
+    'Corrosive Wards - Creating rings of energy that burn the skin of those who attempt to pass'
+  ],
+  relationships: [
+    { name: 'Sentinel', relation: 'Former Target & Tactical Ally' },
+    { name: 'Thysia Asteri', relation: 'Subordinate Overseer' },
+    { name: 'General Mirai', relation: 'Former Prey' },
+    { name: 'The Monarch', relation: 'Former Master (Betrayed)' }
+  ]
+},
+{
+  id: 'lilith-nacht',
+  name: 'Lilith Nacht',
+  title: 'Executioner’s Overseer',
+  category: 'Antagonists',
+  image: 'https://cdn.discordapp.com/attachments/795828287468601375/1451494261278244985/PLA.png?ex=694660df&is=69450f5f&hm=777266013cdf4f2249fb938847666c6f814cde345e42642a0fddfeb9201a1733&PLA.png',
+  infobox: {
+    'Full Name': 'Lilith Nacht',
+    'Title': 'The Balance Mage',
+    'Affiliation': 'Forsaken Executioners',
+    'Rank': 'Overseer',
+    'Magic Type': 'Balance Magic (Equilibrium)',
+    'Status': 'Active (Power Diminished)'
+  },
+  description: `Lilith Nacht is a calm and precise mage who specializes in perfect equilibrium. Her Balance Magic allows her to neutralize any force by conjuring its exact opposite, making her nearly untouchable by standard elemental attacks. 
+
+During the clash in the ruins, her magic was utterly shattered by Sentinel's Oblivion blades, which deleted her magical circuits rather than countering them. Now recovering at the Astral Spire with only 42% of her functionality restored, she serves as a research subject for Cardinal Vesta as she relearns how to navigate the world without her absolute control over balance.`,
+  abilities: [
+    'Ultimate Art: Abyssal Hegemony - Draining surrounding mana into a giant scale to crush opponents',
+    'Perfect Equilibrium - Automatically conjuring opposing elements (e.g., cold vs fire) to nullify attacks',
+    'Gravitational Inertia - Using balance magic to enforce stasis on high-speed targets',
+    'Structural Analysis - Identifying the "greatest instability" in magical domains to disrupt them'
+  ],
+  relationships: [
+    { name: 'General Xi', relation: 'Former Opponent' },
+    { name: 'Cardinal Vesta', relation: 'Research Monitor & Healer' },
+    { name: 'Sullivan Domineer', relation: 'Former Commander' },
+    { name: 'Sentinel', relation: 'The Force that Shattered Her' }
+  ]
+},
+{
+    id: 'gamma-voidwalker',
+    name: 'Gamma Voidwalker',
+    title: 'Executioner’s Overseer',
+    category: 'Antagonists',
+    image: 'https://cdn.discordapp.com/attachments/795828287468601375/1451494261278244985/PLA.png?ex=694660df&is=69450f5f&hm=777266013cdf4f2249fb938847666c6f814cde345e42642a0fddfeb9201a1733&PLA.png',
+    infobox: {
+      'Full Name': 'Gamma Voidwalker',
+      'Title': 'The Brute',
+      'Affiliation': 'Forsaken Executioners',
+      'Rank': 'Overseer',
+      'Magic Type': 'Voidwalking (Physical Prowess)',
+      'Status': 'Deceased (Executed)'
+    },
+    description: `Gamma was the elite "Gamma" rank of the Voidwalker clan, a notorious group known for superhuman endurance and physical power. A monstrously strong fighter with a predatory nature, he relied on overwhelming brute force and a "maelstrom of fists" to crush his enemies. 
+
+  He was the first of the high-value targets to be permanently removed from the battlefield when Sentinel utilized Nihil. Instead of a standard death, his existence was "erased" and "nullified," leaving no trace of the vitality that defined his clan.`,
+    abilities: [
+      'Ultimate Martial Art: Gatling Blitz - Hundreds of concussive blows, each with the force of a cannon',
+      'Superhuman Endurance - Almost inexhaustible stamina typical of the Voidwalker elite',
+      'Void Speed - Impossibly fast movement for a figure of his massive size',
+      'Vitality Surge - Using raw physical presence to overwhelm mana-based barriers'
+    ],
+    relationships: [
+      { name: 'Sentinel', relation: 'Executioner' },
+      { name: 'Vesta Aeris', relation: 'Former Opponent' },
+      { name: 'Sullivan Domineer', relation: 'Former Ally' }
+    ]
+  },
+  {
+  id: 'the-monarch',
+  name: 'The Monarch',
+  title: 'Entity of the Dark Continent',
+  category: 'Antagonists',
+  image: 'https://cdn.discordapp.com/attachments/795828287468601375/1451494261278244985/PLA.png?ex=694660df&is=69450f5f&hm=777266013cdf4f2249fb938847666c6f814cde345e42642a0fddfeb9201a1733&PLA.png',
+  infobox: {
+    'Full Name': 'Unknown',
+    'Title': 'The Eclipse',
+    'Affiliation': 'Forsaken Executioners (Leader)',
+    'Magic Type': 'Void Manipulation, Aethereal Consumption',
+    'Status': 'Deceased (Deleted)'
+  },
+  description: `The Monarch was the supreme ruler of the Dark Continent and the ultimate antagonist behind the Executioners' campaign. A being of shifting silhouettes and cosmic power, he viewed all life—including his own Overseers—as "juice" or "food" to be consumed. 
+
+He sought to harvest Luna’s Aethereal light to stabilize his own fragile void form, temporarily ascending into a ten-foot-tall titan of obsidian armor. He was eventually erased from existence when Sentinel merged with Oreia to manifest the "Vera Forma," utilizing the blade Destiny’s Fall to delete his core entirely.`,
+  abilities: [
+    'Aethereal Extraction - Forcible draining of light magic to fuel a physical void form',
+    'Phantom Gate Control - Creating massive portals of corrosive shadow to transport armies',
+    'Dissonance Curse - A frequency-shifting spell that inverts stable magic cores into vacuums',
+    'Vocal Pressure - Manifesting physical weight and destructive force through speech alone'
+  ],
+  relationships: [
+    { name: 'Sentinel', relation: 'Targeted Vessel & Executioner' },
+    { name: 'Luna Phantasma', relation: 'Stolen Power Source' },
+    { name: 'Oreia', relation: 'Ancient Rival & Prey' },
+    { name: 'Sullivan Domineer', relation: 'Former Subordinate (Betrayed)' }
+  ]
+},
+{
+  id: 'the-archon',
+  name: 'The Archon',
+  title: 'Leader of the Divinity Council',
+  category: 'Antagonists',
+  image: 'https://cdn.discordapp.com/attachments/795828287468601375/1451494261278244985/PLA.png?ex=694660df&is=69450f5f&hm=777266013cdf4f2249fb938847666c6f814cde345e42642a0fddfeb9201a1733&PLA.png',
+  infobox: {
+    'Full Name': 'Unknown',
+    'Title': 'Leader of the Citadel',
+    'Affiliation': 'The Divinity Council (Director)',
+    'Rank': 'Supreme Archon',
+    'Magic Type': 'Arcane Knowledge, Suppression Arts',
+    'Status': 'Active (Powerless/Isolated)'
+  },
+  description: `The Archon is the formidable leader of the mages within the Citadel. A man of cold, stark practicality, he views magic users as strategic assets rather than people. He branded Sentinel with the name "Violet Nihility" to isolate her as a tool of the state and attempted to imprison her once she became a political liability.
+
+His obsession with control led to the mass resignation of his elite Cardinals and the Grand Marshal. Despite his vast arcane knowledge, he was ultimately outsmarted by Zane Axios and left ruling an empty Citadel, isolated from the very military and magical power he sought to leash.`,
+  abilities: [
+    'Arcane Interrogation - Using piercing gaze and pressure to extract half-truths from mages',
+    'Stasis Protocol - Authority to lock "anomalous" mages in anti-magic vaults',
+    'System Oversight - Monitoring the energy grid and mana fluctuations of the entire Citadel',
+    'Political Manipulation - Using ranks and codenames to brand and control high-level assets'
+  ],
+  relationships: [
+    { name: 'Sentinel', relation: 'Strategic Asset & "Prisoner"' },
+    { name: 'Astral Anemos', relation: 'Former Military Peer & Rival' },
+    { name: 'Zane Axios', relation: 'Former Spy (Double-Crossed By)' },
+    { name: 'King Cenric', relation: 'Political Superior' }
+  ]
+}
   ],
   
   worldMap: [
     {
-      id: 'royal-capital',
-      name: 'The Royal Capital',
-      type: 'Major City',
-      image: '🏰',
-      infobox: {
-        'Type': 'Capital City',
-        'Ruler': 'King Cenric',
-        'Key Locations': 'Imperial Castle, Northern Gate',
-        'Notable Events': 'Siege of the Iron Giants',
-        'Status': 'Thriving'
-      },
-      description: `The Royal Capital serves as the heart of the kingdom, housing both the Imperial Castle where King Cenric rules and the headquarters of the Imperial Aegis.
-
-The Imperial Castle contains the Grand Marshal's Office, an extravagant space where Astral Anemos manages the kingdom's military affairs. Following the successful defense against the Titan Series, the capital has become a symbol of the kingdom's resilience.`
+    id: 'the-citadel',
+    name: 'The Citadel',
+    type: 'Magical Stronghold',
+    image: 'https://cdn.discordapp.com/attachments/795828287468601375/1451494261278244985/PLA.png?ex=694660df&is=69450f5f&hm=777266013cdf4f2249fb938847666c6f814cde345e42642a0fddfeb9201a1733&PLA.png',
+    infobox: {
+      'Type': 'Magical Research & Military Hub',
+      'Ruler': 'The Archon',
+      'Key Locations': "Archon's Study, High Tower, Stasis Vaults, Eye (Operations Center)",
+      'Notable Events': 'Sabotage of the Ley Lines, Resignation of the Divinity Council',
+      'Status': 'Operational (Compromised)'
     },
-    {
-      id: 'sovereign-saints-academy',
-      name: 'Sovereign Saints Academy',
-      type: 'Institution',
-      image: '📚',
-      infobox: {
-        'Type': 'Magic Academy',
-        'Purpose': 'Train Future Mages',
-        'Notable Alumni': 'Astral Anemos, Sentinel',
-        'Status': 'Active'
-      },
-      description: `Sovereign Saints Academy is the premier institution for magical education in the kingdom. The academy maintains strict standards, with students who fail to meet requirements facing expulsion.
+    description: `The Citadel is the kingdom's center for arcane knowledge and the base of the Divinity Council. It is a severe, practical fortress designed to house and monitor the world's strongest mages.
 
-Both Astral Anemos and Sentinel attended the academy, where their friendship began when Astral risked her future to help Sentinel master gravity magic.`
+Within its walls lies the "Eye," a tactical operations center that monitors mana fluctuations across the kingdom. The Citadel also contains the Stasis Vaults, an anti-magic prison designed to contain "Rogue Anomalies." Recently, the facility suffered significant internal damage following the mass resignation and escape of its high-ranking Cardinals.`
+  },
+  {
+    id: 'astral-spire',
+    name: 'The Astral Spire',
+    type: 'Floating Sanctuary',
+    image: 'https://cdn.discordapp.com/attachments/795828287468601375/1451494261278244985/PLA.png?ex=694660df&is=69450f5f&hm=777266013cdf4f2249fb938847666c6f814cde345e42642a0fddfeb9201a1733&PLA.png',
+    infobox: {
+      'Type': 'Neutral Sanctuary / Rogue Base',
+      'Rulers': 'Polaris Lunae & Aurora Glacies',
+      'Key Locations': 'Observation Deck, Starlight Balcony, Vesta’s Laboratory',
+      'Notable Events': 'Founding of the Violet Aegis',
+      'Status': 'Hidden / Active'
     },
-    {
-      id: 'forsaken-ruins',
-      name: 'The Forsaken Ruins',
-      type: 'Hostile Territory',
-      image: '🏚️',
-      infobox: {
-        'Type': 'Ancient Ruins',
-        'Current Occupant': 'Forsaken Executioners',
-        'Atmosphere': 'Eerily Desolate',
-        'Danger Level': 'Extreme'
-      },
-      description: `The Forsaken Ruins serve as the operational base of the Executioners. The atmosphere is described as "unnervingly eerie," with a desolate beauty that some find overwhelming and terrifying.
+    description: `A neutral sanctuary floating above the clouds, the Astral Spire is constructed from starlight and frozen obsidian. It exists outside the political reach of both the Kingdom and the Dark Continent.
 
-Within the ruins lie hidden vaults containing treasures and forbidden artifacts, including the scroll containing the Violet Nihility power.`
-    }
+It serves as the current headquarters for the Violet Aegis after they fled the Citadel. The environment is rich with immense power, allowing mages to recover and train without surveillance. It is currently the only place where former enemies of the Executioners and the Imperial Aegis live and work together in common cause.`
+  },
+  {
+    id: 'sovereign-saints-academy',
+    name: 'Sovereign Saints Academy',
+    type: 'Educational Institution',
+    image: 'https://cdn.discordapp.com/attachments/795828287468601375/1451494261278244985/PLA.png?ex=694660df&is=69450f5f&hm=777266013cdf4f2249fb938847666c6f814cde345e42642a0fddfeb9201a1733&PLA.png',
+    infobox: {
+      'Type': 'Mage Training Academy',
+      'Headmaster': 'Headmaster Valen',
+      'Key Locations': 'Headmaster’s Vault, Abandoned Training Hall, Senior Dormitories',
+      'Notable Events': 'The Resonance Protocol Attack',
+      'Status': 'Rebuilding'
+    },
+    description: `Sovereign Saints Academy (or "Saints") is the premier institution where both Astral Anemos and Sentinel Phantasma were trained. It is the site where Sentinel first received her gravity magic and where her sister, Luna, studied as a senior cadet.
+
+The academy was recently devastated by an Executioner assault involving Resonance Towers designed to destabilize mana. Despite the destruction of its barrier and campus, it remains a symbolic home for the sisters and is currently undergoing reconstruction.`
+  },
+  {
+    id: 'the-dark-continent',
+    name: 'The Dark Continent',
+    type: 'Wasteland',
+    image: 'https://cdn.discordapp.com/attachments/795828287468601375/1451494261278244985/PLA.png?ex=694660df&is=69450f5f&hm=777266013cdf4f2249fb938847666c6f814cde345e42642a0fddfeb9201a1733&PLA.png',
+    infobox: {
+      'Type': 'Corrupted Territory',
+      'Former Ruler': 'The Monarch',
+      'Key Locations': 'The Spire, Forsaken Executioners Base, Ash Plains',
+      'Notable Events': 'Destruction of the Monarch',
+      'Status': 'Under Reconstruction'
+    },
+    description: `A nightmare landscape of twisted obsidian spires and gray dust where the laws of physics are inverted. The atmosphere is thick with liquid mana storms that are poisonous to standard mages.
+
+At its center stood the Spire, the throne of the Monarch. Following the Monarch's deletion by Sentinel, the continent has transitioned into a zone of recovery. The remaining Executioners, led by Sullivan Domineer, have rebranded as 'Domineer Restoration Corp' to purge the remaining corruption from their homeland.`
+  },
+  {
+    id: 'whispering-canyons',
+    name: 'The Whispering Canyons',
+    type: 'Geographic Region',
+    image: 'https://cdn.discordapp.com/attachments/795828287468601375/1451494261278244985/PLA.png?ex=694660df&is=69450f5f&hm=777266013cdf4f2249fb938847666c6f814cde345e42642a0fddfeb9201a1733&PLA.png',
+    infobox: {
+      'Type': 'Canyon Sector',
+      'Key Locations': 'Sector 9, Oakhaven Village',
+      'Notable Events': 'Ambush of the 3rd Division, Cardinal Intervention',
+      'Status': 'Secured'
+    },
+    description: `A dangerous geographic sector characterized by narrow passes and steep cliffs, often used by the Executioners for guerrilla warfare. It was the site of a major "Kill Box" trap set for General Mirai.
+
+The region includes the mining town of Oakhaven, which was famously saved from green corrosive fire by Sentinel and Zane. It remains a strategic boundary between the civilized kingdom and the untamed ruins.`
+  }
   ],
   
   magicSystem: [
     {
-      id: 'wind-magic',
-      name: 'Wind Magic',
-      type: 'Elemental',
-      image: '💨',
-      infobox: {
-        'Classification': 'Elemental Magic',
-        'Primary User': 'Astral Anemos',
-        'Characteristics': 'Speed, Mobility, Cutting',
-        'Academy Status': 'Standard Curriculum'
-      },
-      description: `Wind Magic is one of the fundamental elemental magics taught at institutions like Sovereign Saints Academy. Practitioners can manipulate air currents for offensive, defensive, and mobility purposes.
-
-Astral Anemos represents the pinnacle of wind magic application, using techniques like Wind Step for instantaneous movement and Gale Javelin for high-velocity attacks.`
+    id: 'nihil-the-void',
+    name: 'Nihil (The Void)',
+    type: 'Primordial',
+    image: 'https://cdn.discordapp.com/attachments/795828287468601375/1451494261278244985/PLA.png?ex=694660df&is=69450f5f&hm=777266013cdf4f2249fb938847666c6f814cde345e42642a0fddfeb9201a1733&PLA.png',
+    infobox: {
+      'Classification': 'Primordial Magic',
+      'Primary User': 'Sentinel Phantasma',
+      'Time Limit': '33 Seconds (Initial)',
+      'Nature': 'Absolute Negation / Deletion'
     },
-    {
-      id: 'gravity-magic',
-      name: 'Gravity Magic',
-      type: 'Ancient',
-      image: '🌑',
-      infobox: {
-        'Classification': 'Ancient Magic',
-        'Primary User': 'Sentinel',
-        'Source': 'Ancient Gravity Scroll',
-        'Rarity': 'Extremely Rare'
-      },
-      description: `Gravity Magic is an ancient form of magic that allows the manipulation of gravitational forces. Unlike elemental magic, it cannot be learned through standard training—it requires access to ancient knowledge.
+    description: `Nihil is an ancient, primordial power that defies the established magical hierarchy. Unlike elemental magic that creates or manipulates, Nihil reduces all magical constructs and existence to zero.
 
-Sentinel's mastery of Gravity Magic transformed her from a failing student into one of the most powerful Archmages in the kingdom.`
+Sentinel Phantasma obtained this power by deciphering a forbidden scroll. Its usage is physically taxing, initially causing "fractures" on the user's skin. It is characterized by violet smoke and obsidian energy that "deletes" rather than destroys.`
+  },
+  {
+    id: 'shatter-magic',
+    name: 'Shatter Magic',
+    type: 'Forbidden',
+    image: 'https://cdn.discordapp.com/attachments/795828287468601375/1451494261278244985/PLA.png?ex=694660df&is=69450f5f&hm=777266013cdf4f2249fb938847666c6f814cde345e42642a0fddfeb9201a1733&PLA.png',
+    infobox: {
+      'Classification': 'Forbidden Arts',
+      'Primary User': 'Astral Anemos',
+      'Origin': 'Ancient Shatter Scroll',
+      'Characteristics': 'Vibration, Cracking, Shockwaves'
     },
-    {
-      id: 'shatter-magic',
-      name: 'Shatter Magic',
-      type: 'Forbidden',
-      image: '💥',
-      infobox: {
-        'Classification': 'Forbidden Magic',
-        'Primary User': 'Astral Anemos',
-        'Source': 'Ancient Shatter Scroll',
-        'Status': 'Quarantined Knowledge'
-      },
-      description: `Shatter Magic is a forbidden art that allows the user to "grab" vibrations in the air and crack them, creating devastating shockwaves that bypass conventional defenses.
+    description: `Shatter Magic is a forbidden technique that focuses on grabbing the vibrations in the air to "crack" the atmosphere. It was inspired by ancient pirate legends of those who could tilt the seas.
 
-Learning Shatter Magic is extremely dangerous—without proper anchoring, the recoil can shatter the user's own bones. Astral spent six months mastering the technique.`
+Astral Anemos uses this magic to bypass armor and gold plating, as the vibration travels directly through physical barriers to shatter the core of the target. Her ultimate technique, "Shattering Heaven and Earth," can disintegrate massive mechanical constructs like the Titan Series.`
+  },
+  {
+    id: 'aethereal-magic',
+    name: 'Aethereal Magic',
+    type: 'Ancient / Hybrid',
+    image: 'https://cdn.discordapp.com/attachments/795828287468601375/1451494261278244985/PLA.png?ex=694660df&is=69450f5f&hm=777266013cdf4f2249fb938847666c6f814cde345e42642a0fddfeb9201a1733&PLA.png',
+    infobox: {
+      'Classification': 'Celestial Light Magic',
+      'Primary User': 'Luna Phantasma',
+      'Stabilization': 'Dual Star Orbit',
+      'Nature': 'Unstable High-Output Light'
     },
-    {
-      id: 'violet-nihility',
-      name: 'Violet Nihility',
-      type: 'Forbidden',
-      image: '🟣',
-      infobox: {
-        'Classification': 'Forbidden/Transcendent',
-        'Primary User': 'Sentinel',
-        'Risk': 'Mental corruption, Loss of self'
-      },
-      description: `The Violet Nihility is a forbidden power representing absolute freedom and power beyond normal comprehension, but at the cost of potential mental corruption.
+    description: `Aethereal Magic is a rare, highly destructive form of light magic described as carrying the power of a "Big Bang." Because of its immense density, it is notoriously difficult for a standard vessel to channel without causing internal damage.
 
-Through sheer force of will and Astral's intervention, Sentinel conquered the Violet Nihility rather than being consumed by it, achieving Ascension.`
-    }
+When paired with Nihil, Aethereal Magic acts as a stabilizing agent. Luna Phantasma's light "washes out" the corruption of the Void, allowing for a sustainable, infinite energy loop known as the Dual Star system.`
+  },
+  {
+    id: 'equinox-magic',
+    name: 'Equinox Magic',
+    type: 'Elemental Mastery',
+    image: 'https://cdn.discordapp.com/attachments/795828287468601375/1451494261278244985/PLA.png?ex=694660df&is=69450f5f&hm=777266013cdf4f2249fb938847666c6f814cde345e42642a0fddfeb9201a1733&PLA.png',
+    infobox: {
+      'Classification': 'Balanced Elementalism',
+      'Primary User': 'General Xi',
+      'Elements': 'Light and Dark',
+      'Application': 'Synchronization, Defense'
+    },
+    description: `Equinox Magic is the art of perfectly balancing opposing elements of light and dark. It is a sophisticated style used to synchronize differing mana signatures and stabilize chaotic energy outputs.
+
+General Xi uses Equinox Magic to guide those with unstable high-output magic, such as Luna Phantasma. By mastering the confluence of these forces, practitioners can create "Perfect Confluence" slashes that harmonize destructive energy.`
+  },
+  {
+    id: 'destinys-fall',
+    name: "Destiny's Fall",
+    type: 'Artifact Weapon',
+    image: 'https://cdn.discordapp.com/attachments/795828287468601375/1451494261278244985/PLA.png?ex=694660df&is=69450f5f&hm=777266013cdf4f2249fb938847666c6f814cde345e42642a0fddfeb9201a1733&PLA.png',
+    infobox: {
+      'Weapon Type': 'Nihil-Infused Dagger',
+      'Primary User': 'Sentinel Phantasma',
+      'Core': 'Trapped White Star',
+      'Form': 'Vera Forma (True Form)'
+    },
+    description: `Destiny's Fall is the ultimate manifestation of Sentinel's power in her Vera Forma. The weapon is a dagger crafted from deep violet crystal encased in obsidian shadow.
+
+At the center of its crossguard sits a brilliant white star that pulses with a heartbeat. The blade drips with void energy and is used to execute "Absolute Negation," a technique that deletes the essence of a target, effectively removing them from existence.`
+  },
+  {
+    id: 'falling-up',
+    name: 'Falling Up',
+    type: 'Enchanted Weapon',
+    image: 'https://cdn.discordapp.com/attachments/795828287468601375/1451494261278244985/PLA.png?ex=694660df&is=69450f5f&hm=777266013cdf4f2249fb938847666c6f814cde345e42642a0fddfeb9201a1733&PLA.png',
+    infobox: {
+      'Weapon Type': 'Gravity-Enchanted Katana',
+      'Original Creator': 'Sentinel Phantasma',
+      'Current User': 'Astral Anemos',
+      'Enchantment': 'Permanent Gravity / Weight Manipulation'
+    },
+    description: `"Falling Up" is a katana that hums with a faint violet resonance. It was enchanted by Sentinel as a gift for Astral Anemos to grant her attacks the "crunch" and weight needed to cut through heavy armor.
+
+The sword allows the wielder to manipulate the gravity of the blade itself, parrying massive limbs with "impossible weight" or anchoring the wielder's body to the ground to prevent recoil from powerful shockwave attacks.`
+  }
   ],
   
   history: [
@@ -275,7 +812,7 @@ Through sheer force of will and Astral's intervention, Sentinel conquered the Vi
       id: 'academy-days',
       name: 'Academy Days: A Friendship Forged',
       era: 'Past',
-      image: '🎓',
+      image: 'https://cdn.discordapp.com/attachments/795828287468601375/1451494261278244985/PLA.png?ex=694660df&is=69450f5f&hm=777266013cdf4f2249fb938847666c6f814cde345e42642a0fddfeb9201a1733&PLA.png',
       infobox: {
         'Time Period': 'Approximately 10 years ago',
         'Location': 'Sovereign Saints Academy',
@@ -290,7 +827,7 @@ Astral broke into the Headmaster's vault to steal the Ancient Gravity Scroll, sa
       id: 'siege-of-iron-giants',
       name: 'The Siege of the Iron Giants',
       era: 'Recent Past',
-      image: '🤖',
+      image: 'https://cdn.discordapp.com/attachments/795828287468601375/1451494261278244985/PLA.png?ex=694660df&is=69450f5f&hm=777266013cdf4f2249fb938847666c6f814cde345e42642a0fddfeb9201a1733&PLA.png',
       infobox: {
         'Time Period': '3 years ago',
         'Location': 'Northern Gate, Royal Capital',
@@ -304,7 +841,7 @@ Then Astral Anemos walked through the panicked soldiers. With Sentinel's gravity
       id: 'sentinel-ascension',
       name: "Sentinel's Ascension",
       era: 'Present',
-      image: '🌟',
+      image: 'https://cdn.discordapp.com/attachments/795828287468601375/1451494261278244985/PLA.png?ex=694660df&is=69450f5f&hm=777266013cdf4f2249fb938847666c6f814cde345e42642a0fddfeb9201a1733&PLA.png',
       infobox: {
         'Time Period': 'Present day',
         'Location': "Executioners' Vault",
@@ -572,11 +1109,11 @@ const Sidebar = ({ activeCategory, onSelectCategory, isOpen, onClose }) => {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 bg-gradient-to-br from-violet-700/50 to-violet-900/50 rounded-xl flex items-center justify-center shadow-lg border border-violet-600/30">
-                <Scroll className="w-6 h-6 text-violet-400" />
+                <img src='../Icon_Main.png'></img>
               </div>
               <div>
                 <h1 className="text-xl font-bold text-violet-200 tracking-wide">Lore Wiki</h1>
-                <p className="text-violet-600/60 text-xs tracking-widest uppercase">Imperial Archives</p>
+                <p className="text-violet-600/60 text-xs tracking-widest uppercase">Violet Aegis Archives</p>
               </div>
             </div>
             <button onClick={onClose} className="lg:hidden p-2 text-violet-600 hover:text-violet-400 transition-colors">
@@ -737,7 +1274,7 @@ const CategoryContent = ({ category, searchQuery, onSelectItem }) => {
           <div key={groupName} className="mb-8">
             <h2 className="text-xl font-bold text-violet-300 mb-4 flex items-center gap-3">
               {groupName === 'Main Characters' && <Star className="w-5 h-5 text-violet-400" />}
-              {groupName === 'Allies' && <Shield className="w-5 h-5 text-emerald-400" />}
+              {groupName === 'Supporting Characters' && <Shield className="w-5 h-5 text-emerald-400" />}
               {groupName === 'Antagonists' && <Target className="w-5 h-5 text-rose-400" />}
               {groupName}
               <div className="flex-1 h-px bg-gradient-to-r from-violet-600/30 to-transparent" />
@@ -798,7 +1335,7 @@ const ArticleView = ({ item, category, onBack }) => {
                 <Divider />
                 <div className="mt-6 space-y-4">
                   {item.description.split('\n\n').map((p, i) => (
-                    <p key={i} className={`text-stone-300 leading-relaxed ${i === 0 ? 'first-letter:text-2xl first-letter:text-violet-400 first-letter:mr-1' : ''}`}>{p}</p>
+                    <p key={i} className={`indent-8 text-stone-300 leading-relaxed ${i === 0 ? 'first-letter:text-2xl first-letter:text-violet-400 first-letter:mr-1' : ''}`}>{p}</p>
                   ))}
                 </div>
                 
@@ -932,8 +1469,8 @@ export default function LoreWiki() {
         }
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #1c1917; }
-        ::-webkit-scrollbar-thumb { background: #78350f; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #92400e; }
+        ::-webkit-scrollbar-thumb { background: #4800b4; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #4800b4; }
       `}</style>
     </div>
   );
