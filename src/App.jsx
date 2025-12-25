@@ -31,7 +31,7 @@ const loreData = {
       name: 'Astral Anemos',
       title: 'Grand Marshal of the Imperial Aegis',
       category: 'Main Characters',
-      image: 'https://cdn.discordapp.com/attachments/795828287468601375/1451494261278244985/PLA.png?ex=694660df&is=69450f5f&hm=777266013cdf4f2249fb938847666c6f814cde345e42642a0fddfeb9201a1733&PLA.png',
+      image: './place.png',
       infobox: {
         'Full Name': 'Astral Anemos',
         'Title': 'Shield of The Kingdom',
@@ -53,17 +53,19 @@ Her ultimate technique, "Shattering Heaven and Earth," allows her to fracture th
         'Shattering Heaven and Earth - Ultimate technique that disintegrates targets'
       ],
       relationships: [
-        { name: 'Sentinel Phantasma', relation: 'Best Friend & Partner' },
-        { name: 'Mei Xi', relation: 'Trusted Subordinate' },
-        { name: 'King Cenric', relation: 'Liege Lord' }
-      ]
+    { name: 'Sentinel', relation: 'Best Friend & "Ace" Partner' },
+    { name: 'Luna Phantasma', relation: 'Protective Mentor & "Older Sister" figure' },
+    { name: 'General Xi', relation: 'Trusted Strategist & Ally' },
+    { name: 'General Mirai', relation: 'Vouched-for Subordinate' },
+    { name: 'King Cenric', relation: 'Former Liege Lord' }
+  ]
     },
     {
       id: 'sentinel-phantasma',
       name: 'Sentinel Phantasma',
       title: 'Violet Nihility',
       category: 'Main Characters',
-      image: 'https://cdn.discordapp.com/attachments/795828287468601375/1451494261278244985/PLA.png?ex=694660df&is=69450f5f&hm=777266013cdf4f2249fb938847666c6f814cde345e42642a0fddfeb9201a1733&PLA.png',
+      image: './sentinel.png',
       infobox: {
         'Full Name': 'Sentinel Phantasma',
         'Title': 'Violet Nihility',
@@ -98,7 +100,7 @@ Her ultimate technique, "Shattering Heaven and Earth," allows her to fracture th
       name: 'Luna Phantasma',
       title: 'The Aethereal Spark',
       category: 'Main Characters',
-      image: 'https://cdn.discordapp.com/attachments/795828287468601375/1451494261278244985/PLA.png?ex=694660df&is=69450f5f&hm=777266013cdf4f2249fb938847666c6f814cde345e42642a0fddfeb9201a1733&PLA.png',
+      image: './place.png',
       infobox: {
         'Full Name': 'Luna Phantasma', 
         'Title': 'The Spark', 
@@ -128,7 +130,7 @@ Her ultimate technique, "Shattering Heaven and Earth," allows her to fracture th
       name: 'Mei Xi',
       title: 'Equinox Master',
       category: 'Supporting Characters',
-      image: 'https://cdn.discordapp.com/attachments/795828287468601375/1451494261278244985/PLA.png?ex=694660df&is=69450f5f&hm=777266013cdf4f2249fb938847666c6f814cde345e42642a0fddfeb9201a1733&PLA.png',
+      image: './place.png',
       infobox: {
         'Full Name': 'Mei Xi',
         'Title': 'The Strategist',
@@ -159,7 +161,7 @@ Her ultimate technique, "Shattering Heaven and Earth," allows her to fracture th
       name: 'Lyra Mirai',
       title: 'Imperial General',
       category: 'Supporting Characters',
-      image: 'https://cdn.discordapp.com/attachments/795828287468601375/1451494261278244985/PLA.png?ex=694660df&is=69450f5f&hm=777266013cdf4f2249fb938847666c6f814cde345e42642a0fddfeb9201a1733&PLA.png',
+      image: './place.png',
       infobox: {
         'Full Name': 'Lyra Mirai',
         'Title': 'The Hero of the Ruins',
@@ -189,7 +191,7 @@ Her ultimate technique, "Shattering Heaven and Earth," allows her to fracture th
       name: 'Stellium Choros',
       title: 'Rank 2 Cardinal Mage (Dio)',
       category: 'Supporting Characters',
-      image: 'https://cdn.discordapp.com/attachments/795828287468601375/1451494261278244985/PLA.png?ex=694660df&is=69450f5f&hm=777266013cdf4f2249fb938847666c6f814cde345e42642a0fddfeb9201a1733&PLA.png',
+      image: './place.png',
       infobox: {
         'Full Name': 'Stellium Choros',
         'Title': 'The Knight of the Spire',
@@ -220,7 +222,7 @@ Her ultimate technique, "Shattering Heaven and Earth," allows her to fracture th
       name: 'Vesta Aeris',
       title: 'Rank 3 Cardinal Mage (Tria)',
       category: 'Supporting Characters',
-      image: 'https://cdn.discordapp.com/attachments/795828287468601375/1451494261278244985/PLA.png?ex=694660df&is=69450f5f&hm=777266013cdf4f2249fb938847666c6f814cde345e42642a0fddfeb9201a1733&PLA.png',
+      image: './place.png',
       infobox: {
         'Full Name': 'Vesta Aeris',
         'Title': 'The Scientist',
@@ -250,7 +252,7 @@ Her ultimate technique, "Shattering Heaven and Earth," allows her to fracture th
       name: 'Vespera Nox',
       title: 'Rank 4 Cardinal Mage (Téssera)',
       category: 'Supporting Characters',
-      image: 'https://cdn.discordapp.com/attachments/795828287468601375/1451494261278244985/PLA.png?ex=694660df&is=69450f5f&hm=777266013cdf4f2249fb938847666c6f814cde345e42642a0fddfeb9201a1733&PLA.png',
+      image: './place.png',
       infobox: {
         'Full Name': 'Vespera Nox',
         'Title': 'The Ancient Demon',
@@ -280,7 +282,7 @@ Her ultimate technique, "Shattering Heaven and Earth," allows her to fracture th
       name: 'Zane Axios',
       title: 'Rank 5 Cardinal Mage (Pende)',
       category: 'Supporting Characters',
-      image: 'https://cdn.discordapp.com/attachments/795828287468601375/1451494261278244985/PLA.png?ex=694660df&is=69450f5f&hm=777266013cdf4f2249fb938847666c6f814cde345e42642a0fddfeb9201a1733&PLA.png',
+      image: './place.png',
       infobox: {
         'Full Name': 'Zane Axios',
         'Title': 'The Double Agent',
@@ -310,7 +312,7 @@ Her ultimate technique, "Shattering Heaven and Earth," allows her to fracture th
       name: 'Modeus',
       title: 'Rank 6 Cardinal Mage (Éxi)',
       category: 'Supporting Characters',
-      image: 'https://cdn.discordapp.com/attachments/795828287468601375/1451494261278244985/PLA.png?ex=694660df&is=69450f5f&hm=777266013cdf4f2249fb938847666c6f814cde345e42642a0fddfeb9201a1733&PLA.png',
+      image: './place.png',
       infobox: {
         'Full Name': 'Modeus',
         'Title': 'The Pursuer',
@@ -339,7 +341,7 @@ Her ultimate technique, "Shattering Heaven and Earth," allows her to fracture th
       name: 'Miyu',
       title: 'Rank 7 Cardinal Mage (Eptá)',
       category: 'Supporting Characters',
-      image: 'https://cdn.discordapp.com/attachments/795828287468601375/1451494261278244985/PLA.png?ex=694660df&is=69450f5f&hm=777266013cdf4f2249fb938847666c6f814cde345e42642a0fddfeb9201a1733&PLA.png',
+      image: './place.png',
       infobox: {
         'Full Name': 'Miyu',
         'Title': 'Hybrid Dark Angel-Dragon',
@@ -368,7 +370,7 @@ Her ultimate technique, "Shattering Heaven and Earth," allows her to fracture th
       name: 'Avis',
       title: 'Rank 8 Cardinal Mage (Októ)',
       category: 'Supporting Characters',
-      image: 'https://cdn.discordapp.com/attachments/795828287468601375/1451494261278244985/PLA.png?ex=694660df&is=69450f5f&hm=777266013cdf4f2249fb938847666c6f814cde345e42642a0fddfeb9201a1733&PLA.png',
+      image: './place.png',
       infobox: {
         'Full Name': 'Avis',
         'Title': 'Ancient Demon of the Phoenix',
@@ -397,7 +399,7 @@ Her ultimate technique, "Shattering Heaven and Earth," allows her to fracture th
       name: 'Selena',
       title: 'Rank 9 Cardinal Mage (Enéa)',
       category: 'Supporting Characters',
-      image: 'https://cdn.discordapp.com/attachments/795828287468601375/1451494261278244985/PLA.png?ex=694660df&is=69450f5f&hm=777266013cdf4f2249fb938847666c6f814cde345e42642a0fddfeb9201a1733&PLA.png',
+      image: './place.png',
       infobox: {
         'Full Name': 'Selena',
         'Title': 'The Subzero Mage',
@@ -426,7 +428,7 @@ Her ultimate technique, "Shattering Heaven and Earth," allows her to fracture th
       name: 'Ryusei',
       title: 'Rank 10 Cardinal Mage (Déka)',
       category: 'Supporting Characters',
-      image: 'https://cdn.discordapp.com/attachments/795828287468601375/1451494261278244985/PLA.png?ex=694660df&is=69450f5f&hm=777266013cdf4f2249fb938847666c6f814cde345e42642a0fddfeb9201a1733&PLA.png',
+      image: './place.png',
       infobox: {
         'Full Name': 'Ryusei',
         'Title': 'The Atomic Mage',
@@ -456,7 +458,7 @@ Her ultimate technique, "Shattering Heaven and Earth," allows her to fracture th
   name: 'Thysia Asteri',
   title: 'Executioner’s Overseer',
   category: 'Antagonists',
-  image: 'https://cdn.discordapp.com/attachments/795828287468601375/1451494261278244985/PLA.png?ex=694660df&is=69450f5f&hm=777266013cdf4f2249fb938847666c6f814cde345e42642a0fddfeb9201a1733&PLA.png',
+  image: './place.png',
   infobox: {
     'Full Name': 'Thysia Asteri',
     'Title': 'The Red Berserker',
@@ -487,7 +489,7 @@ Driven by a fierce desire to prove her strength, she led the brutal assault on t
   name: 'Sullivan Domineer',
   title: 'Executioner’s Overseer',
   category: 'Antagonists',
-  image: 'https://cdn.discordapp.com/attachments/795828287468601375/1451494261278244985/PLA.png?ex=694660df&is=69450f5f&hm=777266013cdf4f2249fb938847666c6f814cde345e42642a0fddfeb9201a1733&PLA.png',
+  image: './place.png',
   infobox: {
     'Full Name': 'Sullivan Domineer',
     'Title': 'The Architect of Decay',
@@ -517,7 +519,7 @@ After realizing the Monarch viewed the Overseers merely as food, Sullivan initia
   name: 'Lilith Nacht',
   title: 'Executioner’s Overseer',
   category: 'Antagonists',
-  image: 'https://cdn.discordapp.com/attachments/795828287468601375/1451494261278244985/PLA.png?ex=694660df&is=69450f5f&hm=777266013cdf4f2249fb938847666c6f814cde345e42642a0fddfeb9201a1733&PLA.png',
+  image: './place.png',
   infobox: {
     'Full Name': 'Lilith Nacht',
     'Title': 'The Balance Mage',
@@ -547,7 +549,7 @@ During the clash in the ruins, her magic was utterly shattered by Sentinel's Obl
     name: 'Gamma Voidwalker',
     title: 'Executioner’s Overseer',
     category: 'Antagonists',
-    image: 'https://cdn.discordapp.com/attachments/795828287468601375/1451494261278244985/PLA.png?ex=694660df&is=69450f5f&hm=777266013cdf4f2249fb938847666c6f814cde345e42642a0fddfeb9201a1733&PLA.png',
+    image: './place.png',
     infobox: {
       'Full Name': 'Gamma Voidwalker',
       'Title': 'The Brute',
@@ -576,7 +578,7 @@ During the clash in the ruins, her magic was utterly shattered by Sentinel's Obl
   name: 'The Monarch',
   title: 'Entity of the Dark Continent',
   category: 'Antagonists',
-  image: 'https://cdn.discordapp.com/attachments/795828287468601375/1451494261278244985/PLA.png?ex=694660df&is=69450f5f&hm=777266013cdf4f2249fb938847666c6f814cde345e42642a0fddfeb9201a1733&PLA.png',
+  image: './place.png',
   infobox: {
     'Full Name': 'Unknown',
     'Title': 'The Eclipse',
@@ -605,7 +607,7 @@ He sought to harvest Luna’s Aethereal light to stabilize his own fragile void 
   name: 'The Archon',
   title: 'Leader of the Divinity Council',
   category: 'Antagonists',
-  image: 'https://cdn.discordapp.com/attachments/795828287468601375/1451494261278244985/PLA.png?ex=694660df&is=69450f5f&hm=777266013cdf4f2249fb938847666c6f814cde345e42642a0fddfeb9201a1733&PLA.png',
+  image: './place.png',
   infobox: {
     'Full Name': 'Unknown',
     'Title': 'Leader of the Citadel',
@@ -637,7 +639,7 @@ His obsession with control led to the mass resignation of his elite Cardinals an
     id: 'the-citadel',
     name: 'The Citadel',
     type: 'Magical Stronghold',
-    image: 'https://cdn.discordapp.com/attachments/795828287468601375/1451494261278244985/PLA.png?ex=694660df&is=69450f5f&hm=777266013cdf4f2249fb938847666c6f814cde345e42642a0fddfeb9201a1733&PLA.png',
+    image: './place.png',
     infobox: {
       'Type': 'Magical Research & Military Hub',
       'Ruler': 'The Archon',
@@ -653,7 +655,7 @@ Within its walls lies the "Eye," a tactical operations center that monitors mana
     id: 'astral-spire',
     name: 'The Astral Spire',
     type: 'Floating Sanctuary',
-    image: 'https://cdn.discordapp.com/attachments/795828287468601375/1451494261278244985/PLA.png?ex=694660df&is=69450f5f&hm=777266013cdf4f2249fb938847666c6f814cde345e42642a0fddfeb9201a1733&PLA.png',
+    image: './place.png',
     infobox: {
       'Type': 'Neutral Sanctuary / Rogue Base',
       'Rulers': 'Polaris Lunae & Aurora Glacies',
@@ -669,7 +671,7 @@ It serves as the current headquarters for the Violet Aegis after they fled the C
     id: 'sovereign-saints-academy',
     name: 'Sovereign Saints Academy',
     type: 'Educational Institution',
-    image: 'https://cdn.discordapp.com/attachments/795828287468601375/1451494261278244985/PLA.png?ex=694660df&is=69450f5f&hm=777266013cdf4f2249fb938847666c6f814cde345e42642a0fddfeb9201a1733&PLA.png',
+    image: './place.png',
     infobox: {
       'Type': 'Mage Training Academy',
       'Headmaster': 'Headmaster Valen',
@@ -685,7 +687,7 @@ The academy was recently devastated by an Executioner assault involving Resonanc
     id: 'the-dark-continent',
     name: 'The Dark Continent',
     type: 'Wasteland',
-    image: 'https://cdn.discordapp.com/attachments/795828287468601375/1451494261278244985/PLA.png?ex=694660df&is=69450f5f&hm=777266013cdf4f2249fb938847666c6f814cde345e42642a0fddfeb9201a1733&PLA.png',
+    image: './place.png',
     infobox: {
       'Type': 'Corrupted Territory',
       'Former Ruler': 'The Monarch',
@@ -701,7 +703,7 @@ At its center stood the Spire, the throne of the Monarch. Following the Monarch'
     id: 'whispering-canyons',
     name: 'The Whispering Canyons',
     type: 'Geographic Region',
-    image: 'https://cdn.discordapp.com/attachments/795828287468601375/1451494261278244985/PLA.png?ex=694660df&is=69450f5f&hm=777266013cdf4f2249fb938847666c6f814cde345e42642a0fddfeb9201a1733&PLA.png',
+    image: './place.png',
     infobox: {
       'Type': 'Canyon Sector',
       'Key Locations': 'Sector 9, Oakhaven Village',
@@ -719,7 +721,7 @@ The region includes the mining town of Oakhaven, which was famously saved from g
     id: 'nihil-the-void',
     name: 'Nihil (The Void)',
     type: 'Primordial',
-    image: 'https://cdn.discordapp.com/attachments/795828287468601375/1451494261278244985/PLA.png?ex=694660df&is=69450f5f&hm=777266013cdf4f2249fb938847666c6f814cde345e42642a0fddfeb9201a1733&PLA.png',
+    image: './place.png',
     infobox: {
       'Classification': 'Primordial Magic',
       'Primary User': 'Sentinel Phantasma',
@@ -734,7 +736,7 @@ Sentinel Phantasma obtained this power by deciphering a forbidden scroll. Its us
     id: 'shatter-magic',
     name: 'Shatter Magic',
     type: 'Forbidden',
-    image: 'https://cdn.discordapp.com/attachments/795828287468601375/1451494261278244985/PLA.png?ex=694660df&is=69450f5f&hm=777266013cdf4f2249fb938847666c6f814cde345e42642a0fddfeb9201a1733&PLA.png',
+    image: './place.png',
     infobox: {
       'Classification': 'Forbidden Arts',
       'Primary User': 'Astral Anemos',
@@ -749,7 +751,7 @@ Astral Anemos uses this magic to bypass armor and gold plating, as the vibration
     id: 'aethereal-magic',
     name: 'Aethereal Magic',
     type: 'Ancient / Hybrid',
-    image: 'https://cdn.discordapp.com/attachments/795828287468601375/1451494261278244985/PLA.png?ex=694660df&is=69450f5f&hm=777266013cdf4f2249fb938847666c6f814cde345e42642a0fddfeb9201a1733&PLA.png',
+    image: './place.png',
     infobox: {
       'Classification': 'Celestial Light Magic',
       'Primary User': 'Luna Phantasma',
@@ -764,7 +766,7 @@ When paired with Nihil, Aethereal Magic acts as a stabilizing agent. Luna Phanta
     id: 'equinox-magic',
     name: 'Equinox Magic',
     type: 'Elemental Mastery',
-    image: 'https://cdn.discordapp.com/attachments/795828287468601375/1451494261278244985/PLA.png?ex=694660df&is=69450f5f&hm=777266013cdf4f2249fb938847666c6f814cde345e42642a0fddfeb9201a1733&PLA.png',
+    image: './place.png',
     infobox: {
       'Classification': 'Balanced Elementalism',
       'Primary User': 'General Xi',
@@ -779,7 +781,7 @@ General Xi uses Equinox Magic to guide those with unstable high-output magic, su
     id: 'destinys-fall',
     name: "Destiny's Fall",
     type: 'Artifact Weapon',
-    image: 'https://cdn.discordapp.com/attachments/795828287468601375/1451494261278244985/PLA.png?ex=694660df&is=69450f5f&hm=777266013cdf4f2249fb938847666c6f814cde345e42642a0fddfeb9201a1733&PLA.png',
+    image: './place.png',
     infobox: {
       'Weapon Type': 'Nihil-Infused Dagger',
       'Primary User': 'Sentinel Phantasma',
@@ -794,7 +796,7 @@ At the center of its crossguard sits a brilliant white star that pulses with a h
     id: 'falling-up',
     name: 'Falling Up',
     type: 'Enchanted Weapon',
-    image: 'https://cdn.discordapp.com/attachments/795828287468601375/1451494261278244985/PLA.png?ex=694660df&is=69450f5f&hm=777266013cdf4f2249fb938847666c6f814cde345e42642a0fddfeb9201a1733&PLA.png',
+    image: './place.png',
     infobox: {
       'Weapon Type': 'Gravity-Enchanted Katana',
       'Original Creator': 'Sentinel Phantasma',
@@ -812,7 +814,7 @@ The sword allows the wielder to manipulate the gravity of the blade itself, parr
       id: 'academy-days',
       name: 'Academy Days: A Friendship Forged',
       era: 'Past',
-      image: 'https://cdn.discordapp.com/attachments/795828287468601375/1451494261278244985/PLA.png?ex=694660df&is=69450f5f&hm=777266013cdf4f2249fb938847666c6f814cde345e42642a0fddfeb9201a1733&PLA.png',
+      image: './place.png',
       infobox: {
         'Time Period': 'Approximately 10 years ago',
         'Location': 'Sovereign Saints Academy',
@@ -827,7 +829,7 @@ Astral broke into the Headmaster's vault to steal the Ancient Gravity Scroll, sa
       id: 'siege-of-iron-giants',
       name: 'The Siege of the Iron Giants',
       era: 'Recent Past',
-      image: 'https://cdn.discordapp.com/attachments/795828287468601375/1451494261278244985/PLA.png?ex=694660df&is=69450f5f&hm=777266013cdf4f2249fb938847666c6f814cde345e42642a0fddfeb9201a1733&PLA.png',
+      image: './place.png',
       infobox: {
         'Time Period': '3 years ago',
         'Location': 'Northern Gate, Royal Capital',
@@ -841,7 +843,7 @@ Then Astral Anemos walked through the panicked soldiers. With Sentinel's gravity
       id: 'sentinel-ascension',
       name: "Sentinel's Ascension",
       era: 'Present',
-      image: 'https://cdn.discordapp.com/attachments/795828287468601375/1451494261278244985/PLA.png?ex=694660df&is=69450f5f&hm=777266013cdf4f2249fb938847666c6f814cde345e42642a0fddfeb9201a1733&PLA.png',
+      image: './place.png',
       infobox: {
         'Time Period': 'Present day',
         'Location': "Executioners' Vault",
