@@ -28,6 +28,7 @@ const HOME_TIPS = [
 // How many seconds each tip stays visible before transitioning
 const TIP_DURATION_SECONDS = 30;
 
+
 // Music folder base path (place your audio files in public/music/)
 const MUSIC_FOLDER = "/music/";
 
@@ -234,7 +235,7 @@ export default function MusicPlayer() {
       setTimeout(() => {
         setTipIndex(prev => (prev + 1) % HOME_TIPS.length);
         setTipVisible(true);
-      }, 500); // fade-out duration before switching
+      }, 500);
     }, TIP_DURATION_SECONDS * 1000);
     return () => clearInterval(interval);
   }, []);
