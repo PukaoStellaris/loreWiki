@@ -721,7 +721,7 @@ export default function MusicPlayer() {
               <>
                 <div style={{ position: "fixed", inset: 0, zIndex: 40 }} onClick={() => setShowSpeedMenu(false)} />
                 <div className="speed-menu">
-                  {[0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0].map(r => (
+                  {[0.75, 0.8, 0.9, 1.0, 1.1, 1.2, 1.25, 1.5].map(r => (
                     <button key={r}
                       className={`speed-opt ${playbackRate === r ? "active" : ""}`}
                       onClick={() => { setPlaybackRate(r); setShowSpeedMenu(false); }}
