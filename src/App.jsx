@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { musicFiles } from "virtual:music-manifest";
+import { parseBuffer, parseBlob } from "music-metadata";
 
 // =============================================================================
 // CONFIGURATION — Edit these to set up your library
@@ -88,6 +89,7 @@ function buildLibrary() {
       duration: 0,
       url: `${MUSIC_FOLDER}${file}`,
       file,
+      hasOverride: !!(override.title || override.artist),
     };
   });
 }
@@ -95,6 +97,9 @@ function buildLibrary() {
 const LIBRARY_SONGS = buildLibrary();
 
 const fmt = (s) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, "0")}`;
+
+const MIME_MAP = { mp3: "audio/mpeg", flac: "audio/flac", ogg: "audio/ogg", opus: "audio/ogg", wav: "audio/wav", aac: "audio/aac", m4a: "audio/mp4" };
+const getMime = (filename) => MIME_MAP[filename.split(".").pop().toLowerCase()] || "audio/mpeg";
 
 // --- Theme colors ---
 const ACCENT = "#c4b5fd";
@@ -128,6 +133,9 @@ const Icon = ({ name, size = 20 }) => {
     upload: <svg style={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>,
     folder: <svg style={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>,
     chevron: <svg style={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="9 18 15 12 9 6"/></svg>,
+    queue: <svg style={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="9" y1="6" x2="21" y2="6"/><line x1="9" y1="12" x2="21" y2="12"/><line x1="9" y1="18" x2="21" y2="18"/><polyline points="4 6 2 8 4 10"/><polyline points="4 18 2 20 4 22"/><line x1="2" y1="14" x2="6" y2="14"/></svg>,
+    minimize: <svg style={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="10" y1="14" x2="21" y2="3"/><line x1="3" y1="21" x2="14" y2="10"/></svg>,
+    expand: <svg style={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>,
   };
   return icons[name] || null;
 };
@@ -136,8 +144,15 @@ const Icon = ({ name, size = 20 }) => {
 const artColors = ["#c4b5fd","#f9a8d4","#93c5fd","#fcd34d","#6ee7b7","#fca5a5","#a78bfa","#67e8f9"];
 const getColor = (id) => artColors[id % artColors.length];
 
-// --- Fake album art ---
-const AlbumArt = ({ song, size = 48 }) => {
+// --- Album art — shows real cover if available, gradient placeholder otherwise ---
+const AlbumArt = ({ song, size = 48, pictureUrl }) => {
+  if (pictureUrl) {
+    return (
+      <img src={pictureUrl} alt="" style={{
+        width: size, height: size, minWidth: size, borderRadius: 6, objectFit: "cover",
+      }} />
+    );
+  }
   const bg = getColor(song.id);
   const bg2 = artColors[(song.id + 3) % artColors.length];
   return (
@@ -212,9 +227,17 @@ export default function MusicPlayer() {
   const [currentSong, setCurrentSong] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
-  const [volume, setVolume] = useState(0.7);
+  const [volume, setVolume] = useState(() => {
+    try { return parseFloat(localStorage.getItem('va-volume') ?? '0.7'); } catch { return 0.7; }
+  });
   const [isMuted, setIsMuted] = useState(false);
-  const [liked, setLiked] = useState(new Set());
+  const [liked, setLiked] = useState(() => {
+    try { return new Set(JSON.parse(localStorage.getItem('va-liked') || '[]')); } catch { return new Set(); }
+  });
+  const [durations, setDurations] = useState({});
+  const [miniPlayer, setMiniPlayer] = useState(false);
+  const [showQueue, setShowQueue] = useState(false);
+  const [songMeta, setSongMeta] = useState({});
   const [shuffle, setShuffle] = useState(false);
   const [repeatMode, setRepeatMode] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
@@ -230,6 +253,9 @@ export default function MusicPlayer() {
   const audioRef = useRef(null);
   const fileInputRef = useRef(null);
   const progressRef = useRef(null);
+  const currentSongRowRef = useRef(null);
+  const containerRef = useRef(null);
+  const keyHandlerRef = useRef(null);
 
   const allSongs = [...LIBRARY_SONGS, ...uploadedSongs];
 
@@ -271,6 +297,70 @@ export default function MusicPlayer() {
     }, TIP_DURATION_SECONDS * 1000);
     return () => clearInterval(interval);
   }, []);
+
+  // Load durations for all library songs upfront via metadata-only fetch
+  useEffect(() => {
+    LIBRARY_SONGS.forEach(song => {
+      const a = new Audio();
+      a.preload = "metadata";
+      a.onloadedmetadata = () => setDurations(prev => ({ ...prev, [song.id]: a.duration }));
+      a.src = song.url;
+    });
+  }, []);
+
+  // Fetch ID3/Vorbis tags using a Range request (first 128KB only)
+  const fetchMeta = useCallback(async (song) => {
+    try {
+      const res = await fetch(song.url, { headers: { Range: "bytes=0-131071" } });
+      const buf = await res.arrayBuffer();
+      const { common } = await parseBuffer(new Uint8Array(buf), { mimeType: getMime(song.file || song.url) });
+      let picture = null;
+      if (common.picture?.length) {
+        const pic = common.picture[0];
+        picture = URL.createObjectURL(new Blob([pic.data], { type: pic.format }));
+      }
+      setSongMeta(prev => ({
+        ...prev,
+        [song.id]: { title: common.title || null, artist: common.artist || null, picture },
+      }));
+    } catch {}
+  }, []);
+
+  // Load tag metadata for all library songs on mount, staggered to avoid hammering
+  useEffect(() => {
+    LIBRARY_SONGS.forEach((song, i) => {
+      setTimeout(() => fetchMeta(song), i * 150);
+    });
+  }, [fetchMeta]);
+
+  // Persist liked songs and volume to localStorage
+  useEffect(() => {
+    localStorage.setItem("va-liked", JSON.stringify([...liked]));
+  }, [liked]);
+
+  useEffect(() => {
+    localStorage.setItem("va-volume", String(volume));
+  }, [volume]);
+
+  // Keyboard shortcuts — handler ref is updated each render so it always has fresh state
+  useEffect(() => {
+    const handler = (e) => keyHandlerRef.current?.(e);
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, []);
+
+  // Auto mini player when window is narrower than 520px
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const ro = new ResizeObserver(([entry]) => setMiniPlayer(entry.contentRect.width < 520));
+    ro.observe(containerRef.current);
+    return () => ro.disconnect();
+  }, []);
+
+  // Scroll the current song row into view when it changes
+  useEffect(() => {
+    currentSongRowRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }, [currentSong]);
 
   const playSong = useCallback((song) => {
     const audio = audioRef.current;
@@ -321,19 +411,34 @@ export default function MusicPlayer() {
     }
   };
 
-  const handleFiles = (files) => {
+  const handleFiles = async (files) => {
     const audioFiles = Array.from(files).filter(f => f.type.startsWith("audio/"));
-    const newSongs = audioFiles.map((f, i) => {
-      const url = URL.createObjectURL(f);
-      const name = f.name.replace(/\.[^/.]+$/, "");
-      return {
-        id: 10000 + uploadedSongs.length + i,
-        title: name, artist: "Local File",
-        duration: 0, url,
-      };
-    });
+    const newSongs = audioFiles.map((f, i) => ({
+      id: 10000 + uploadedSongs.length + i,
+      title: f.name.replace(/\.[^/.]+$/, ""),
+      artist: "Local File",
+      duration: 0,
+      url: URL.createObjectURL(f),
+      file: f.name,
+      hasOverride: false,
+    }));
     setUploadedSongs(prev => [...prev, ...newSongs]);
     if (newSongs.length && !currentSong) playSong(newSongs[0]);
+    // Parse tags directly from the File blob — no network fetch needed
+    for (let i = 0; i < audioFiles.length; i++) {
+      try {
+        const { common } = await parseBlob(audioFiles[i]);
+        let picture = null;
+        if (common.picture?.length) {
+          const pic = common.picture[0];
+          picture = URL.createObjectURL(new Blob([pic.data], { type: pic.format }));
+        }
+        setSongMeta(prev => ({
+          ...prev,
+          [newSongs[i].id]: { title: common.title || null, artist: common.artist || null, picture },
+        }));
+      } catch {}
+    }
   };
 
   const onDrop = (e) => { e.preventDefault(); setDragOver(false); handleFiles(e.dataTransfer.files); };
@@ -345,6 +450,15 @@ export default function MusicPlayer() {
     s.artist.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  // Keep keyboard handler current every render (captures latest togglePlay/skipTrack/filteredSongs)
+  keyHandlerRef.current = (e) => {
+    if (["INPUT", "TEXTAREA"].includes(e.target.tagName)) return;
+    if (e.code === "Space") { e.preventDefault(); togglePlay(); }
+    else if (e.code === "ArrowRight") skipTrack(1);
+    else if (e.code === "ArrowLeft") skipTrack(-1);
+    else if (e.key === "m" || e.key === "M") setIsMuted(p => !p);
+  };
+
   const toggleLike = (id) => setLiked(prev => {
     const n = new Set(prev);
     n.has(id) ? n.delete(id) : n.add(id);
@@ -354,13 +468,18 @@ export default function MusicPlayer() {
   const getDuration = () => {
     if (!currentSong) return 0;
     if (audioRef.current && isFinite(audioRef.current.duration) && audioRef.current.duration > 0) return audioRef.current.duration;
-    return currentSong.duration || 0;
+    return durations[currentSong.id] || currentSong.duration || 0;
   };
 
   const progress = getDuration() > 0 ? (currentTime / getDuration()) * 100 : 0;
 
+  // Metadata helpers — prefer tag data unless song has an explicit LIBRARY_OVERRIDES entry
+  const getTitle  = (song) => (!song.hasOverride && songMeta[song.id]?.title)  || song.title;
+  const getArtist = (song) => (!song.hasOverride && songMeta[song.id]?.artist) || song.artist;
+  const getPic    = (song) => songMeta[song.id]?.picture || null;
+
   return (
-    <div style={{
+    <div ref={containerRef} style={{
       width: "100%", height: "100vh", display: "flex", flexDirection: "column",
       background: BG_MAIN, color: TEXT, fontFamily: "'DM Sans', 'Segoe UI', sans-serif",
       fontSize: 14, overflow: "hidden", position: "relative",
@@ -426,7 +545,7 @@ export default function MusicPlayer() {
         </div>
       )}
 
-      <div style={{ display: "flex", flex: 1, overflow: "hidden" }}>
+      <div style={{ display: miniPlayer ? "none" : "flex", flex: 1, overflow: "hidden" }}>
         {/* Sidebar */}
         {sidebarOpen && (
           <div style={{
@@ -514,9 +633,17 @@ export default function MusicPlayer() {
               style={{ gap: 6, borderRadius: 8, padding: "8px 14px", display: "flex", alignItems: "center", fontSize: 13 }}>
               <Icon name="upload" size={16} /> <span>Upload</span>
             </button>
+            <button className={`ctrl-btn ${showQueue ? "active" : ""}`}
+              onClick={() => setShowQueue(q => !q)}
+              style={{ gap: 6, borderRadius: 8, padding: "8px 14px", display: "flex", alignItems: "center", fontSize: 13 }}
+              title="Toggle queue">
+              <Icon name="queue" size={16} /> <span>Queue</span>
+            </button>
           </div>
 
 
+          {/* Content + Queue row */}
+          <div style={{ flex: 1, display: "flex", overflow: "hidden" }}>
           {/* Content area — all views stay mounted, toggled via display to keep video alive */}
           <div style={{ flex: 1, position: "relative", overflow: "hidden" }}>
 
@@ -625,16 +752,18 @@ export default function MusicPlayer() {
               </div>
 
               {(activeView === "favorites" ? filteredSongs.filter(s => liked.has(s.id)) : filteredSongs).map((song) => (
-                <div key={song.id} className="song-row"
+                <div key={song.id}
+                  ref={currentSong?.id === song.id ? currentSongRowRef : null}
+                  className="song-row"
                   style={{
                     display: "grid", gridTemplateColumns: "48px 1fr 70px 40px",
-                    padding: "10px 28px", alignItems: "center",
+                    padding: "10px 28px", alignItems: "center", position: "relative",
                     background: currentSong?.id === song.id ? `${ACCENT_DEEP}0c` : "transparent",
                   }}
                   onClick={() => playSong(song)}
                 >
-                  <div style={{ position: "relative" }}>
-                    <AlbumArt song={song} size={40} />
+                  <div style={{ position: "relative", width: 40, height: 40 }}>
+                    <AlbumArt song={song} size={40} pictureUrl={getPic(song)} />
                     <div className="row-play" style={{
                       position: "absolute", inset: 0, display: "flex", alignItems: "center",
                       justifyContent: "center", background: "#0008", borderRadius: 6, opacity: 0,
@@ -646,23 +775,67 @@ export default function MusicPlayer() {
                     <div style={{
                       fontWeight: 500, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
                       color: currentSong?.id === song.id ? ACCENT : TEXT,
-                    }}>{song.title}</div>
-                    <div style={{ fontSize: 12, color: TEXT_DIM, marginTop: 2 }}>{song.artist}</div>
+                    }}>{getTitle(song)}</div>
+                    <div style={{ fontSize: 12, color: TEXT_DIM, marginTop: 2 }}>{getArtist(song)}</div>
                   </div>
                   <span style={{ textAlign: "right", color: TEXT_DIM, fontSize: 13, fontFamily: "'Space Mono', monospace" }}>
-                    {fmt(song.duration)}
+                    {fmt(durations[song.id] || song.duration)}
                   </span>
                   <button className="ctrl-btn" style={{ padding: 4 }}
                     onClick={e => { e.stopPropagation(); toggleLike(song.id); }}>
                     <Icon name={liked.has(song.id) ? "heartFill" : "heart"} size={16} />
                   </button>
+                  {currentSong?.id === song.id && (
+                    <div style={{ position: "absolute", bottom: 0, left: 28, right: 28, height: 2, background: BORDER, borderRadius: 1 }}>
+                      <div style={{ width: `${progress}%`, height: "100%", background: `linear-gradient(90deg, ${ACCENT_DEEP}, ${ACCENT})`, borderRadius: 1, transition: "width 0.1s linear" }} />
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
 
           </div>
-        </div>
-      </div>
+
+          {/* Queue Panel */}
+          {showQueue && (() => {
+            const list = filteredSongs.length ? filteredSongs : allSongs;
+            const idx = currentSong ? list.findIndex(s => s.id === currentSong.id) : -1;
+            const queue = idx >= 0
+              ? [...list.slice(idx + 1), ...list.slice(0, idx)]
+              : list.slice(0, 30);
+            return (
+              <div style={{
+                width: 260, minWidth: 260, background: BG_PANEL, borderLeft: `1px solid ${BORDER}`,
+                display: "flex", flexDirection: "column", overflow: "hidden",
+              }}>
+                <div style={{ padding: "16px 16px 10px", fontSize: 11, fontWeight: 600, color: TEXT_MUTED, textTransform: "uppercase", letterSpacing: "0.08em", borderBottom: `1px solid ${BORDER}22` }}>
+                  Up Next — {queue.length} tracks
+                </div>
+                <div style={{ overflowY: "auto", flex: 1 }}>
+                  {queue.slice(0, 30).map((song, i) => (
+                    <div key={song.id} className="song-row"
+                      style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 14px" }}
+                      onClick={() => playSong(song)}
+                    >
+                      <span style={{ fontSize: 11, color: TEXT_MUTED, minWidth: 18, textAlign: "right", fontFamily: "'Space Mono', monospace" }}>{i + 1}</span>
+                      <AlbumArt song={song} size={32} pictureUrl={getPic(song)} />
+                      <div style={{ minWidth: 0, flex: 1 }}>
+                        <div style={{ fontWeight: 500, fontSize: 13, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", color: TEXT }}>{getTitle(song)}</div>
+                        <div style={{ fontSize: 11, color: TEXT_DIM, marginTop: 1 }}>{getArtist(song)}</div>
+                      </div>
+                      <span style={{ fontSize: 11, color: TEXT_MUTED, fontFamily: "'Space Mono', monospace", flexShrink: 0 }}>
+                        {fmt(durations[song.id] || song.duration)}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            );
+          })()}
+
+          </div>{/* end content+queue row */}
+        </div>{/* end Main Content */}
+      </div>{/* end top flex row */}
 
       {/* Now Playing Bar */}
       <div style={{
@@ -672,13 +845,13 @@ export default function MusicPlayer() {
         <div style={{ display: "flex", alignItems: "center", gap: 14, width: 260, minWidth: 200 }}>
           {currentSong ? (
             <>
-              <AlbumArt song={currentSong} size={50} />
+              <AlbumArt song={currentSong} size={50} pictureUrl={getPic(currentSong)} />
               <div style={{ minWidth: 0 }}>
                 <div style={{
                   fontWeight: 600, fontSize: 14, overflow: "hidden", textOverflow: "ellipsis",
                   whiteSpace: "nowrap", color: TEXT,
-                }}>{currentSong.title}</div>
-                <div style={{ fontSize: 12, color: TEXT_DIM, marginTop: 2 }}>{currentSong.artist}</div>
+                }}>{getTitle(currentSong)}</div>
+                <div style={{ fontSize: 12, color: TEXT_DIM, marginTop: 2 }}>{getArtist(currentSong)}</div>
               </div>
               <button className="ctrl-btn" style={{ padding: 4, flexShrink: 0 }}
                 onClick={() => toggleLike(currentSong.id)}>
@@ -770,6 +943,12 @@ export default function MusicPlayer() {
             onChange={e => { setVolume(parseFloat(e.target.value)); setIsMuted(false); }}
             style={{ width: 90 }}
           />
+          <button className={`ctrl-btn ${miniPlayer ? "active" : ""}`}
+            onClick={() => setMiniPlayer(p => !p)}
+            title={miniPlayer ? "Expand" : "Mini player"}
+            style={{ padding: 4 }}>
+            <Icon name={miniPlayer ? "expand" : "minimize"} size={16} />
+          </button>
         </div>
       </div>
     </div>
