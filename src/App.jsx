@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from "react";
+import { musicFiles } from "virtual:music-manifest";
 
 // =============================================================================
 // CONFIGURATION — Edit these to set up your library
@@ -10,7 +11,7 @@ const BG_VIDEO_PATH = "/videos/background.mp4";
 
 // Path to your logo/icon image (place in your public/ folder)
 // Set to null to use the default music note icon as fallback
-const LOGO_IMAGE_PATH = "/images/sentinel.png";
+const LOGO_IMAGE_PATH = "/Icon.png";
 
 // Rotating tips/descriptions shown on the home page
 // Each tip displays for a few seconds before fading to the next
@@ -32,13 +33,11 @@ const TIP_DURATION_SECONDS = 30;
 // Music folder base path (place your audio files in public/music/)
 const MUSIC_FOLDER = "/music/";
 
-// Your library: the app will scan MUSIC_FOLDER for all files listed here.
-// For any file NOT listed, it auto-generates title from the filename.
+// Optional metadata overrides for files in public/music/.
+// The app auto-scans the folder — you don't need to list files here.
+// Only add an entry if you want to customize the title or artist.
 //
-// To add a song: just drop the file into public/music/
-// To override metadata: add an entry below with matching `file` name.
-//
-// Fields:  file (required), title, artist (optional overrides)
+// Fields:  file (required), title, artist (optional)
 const LIBRARY_OVERRIDES = [
   // Examples — customize these with your actual files:
   // { file: "porter_robinson_-_get_your_wish.mp3", title: "Get Your Wish", artist: "Porter Robinson" },
@@ -72,21 +71,23 @@ const LIBRARY_OVERRIDES = [
 
 // =============================================================================
 
-// Build the library from overrides (in a real deployment, you'd also scan
-// the folder via a build script or API — for now, list your files above)
+// Builds the library from the scanned file list.
+// Files with a matching entry in LIBRARY_OVERRIDES get custom title/artist.
+// Everything else gets its title auto-generated from the filename.
 function buildLibrary() {
   const overrideMap = {};
   LIBRARY_OVERRIDES.forEach(o => { overrideMap[o.file] = o; });
 
-  return LIBRARY_OVERRIDES.map((entry, i) => {
-    const cleanName = entry.file.replace(/\.[^/.]+$/, "").replace(/[-_]/g, " ");
+  return musicFiles.map((file, i) => {
+    const override = overrideMap[file] || {};
+    const cleanName = file.replace(/\.[^/.]+$/, "").replace(/[-_]/g, " ");
     return {
       id: i + 1,
-      title: entry.title || cleanName,
-      artist: entry.artist || "Unknown Artist",
-      duration: 0, // auto-detected on play
-      url: `${MUSIC_FOLDER}${entry.file}`,
-      file: entry.file,
+      title: override.title || cleanName,
+      artist: override.artist || "Unknown Artist",
+      duration: 0,
+      url: `${MUSIC_FOLDER}${file}`,
+      file,
     };
   });
 }
@@ -158,21 +159,52 @@ const AlbumArt = ({ song, size = 48 }) => {
 };
 
 // --- Logo with image fallback ---
-const LogoIcon = ({ size = 32 }) => {
+// Renders its own container. Background disappears once the image loads.
+// When loaded successfully, renders the bare image with no container effects.
+const LogoIcon = ({ size = 32, radius = 8 }) => {
   const [imgFailed, setImgFailed] = useState(false);
+  const [imgLoaded, setImgLoaded] = useState(false);
+  const imgRef = useRef(null);
+
+  // Handle already-cached images that fire onLoad before React sees it
+  useEffect(() => {
+    if (imgRef.current?.complete && !imgRef.current.naturalWidth === 0) {
+      setImgLoaded(true);
+    }
+  }, []);
+
   if (LOGO_IMAGE_PATH && !imgFailed) {
     return (
-      <img
-        src={LOGO_IMAGE_PATH}
-        alt="Logo"
-        onError={() => setImgFailed(true)}
-        style={{
-          width: size, height: size, objectFit: "contain", borderRadius: size > 40 ? 16 : 6,
-        }}
-      />
+      <div style={{
+        width: size, height: size, borderRadius: radius, overflow: "hidden", flexShrink: 0,
+        background: imgLoaded ? "transparent" : `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
+        transition: "background 0.3s",
+        display: "flex", alignItems: "center", justifyContent: "center",
+      }}>
+        <img
+          ref={imgRef}
+          src={LOGO_IMAGE_PATH}
+          alt="Logo"
+          onLoad={() => setImgLoaded(true)}
+          onError={() => setImgFailed(true)}
+          style={{
+            width: size, height: size, objectFit: "contain", borderRadius: radius,
+            opacity: imgLoaded ? 1 : 0, transition: "opacity 0.3s",
+          }}
+        />
+      </div>
     );
   }
-  return <Icon name="music" size={size * 0.55} />;
+
+  return (
+    <div style={{
+      width: size, height: size, borderRadius: radius, flexShrink: 0,
+      background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
+      display: "flex", alignItems: "center", justifyContent: "center",
+    }}>
+      <Icon name="music" size={size * 0.55} />
+    </div>
+  );
 };
 
 // --- Main App ---
@@ -338,6 +370,7 @@ export default function MusicPlayer() {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
         * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; }
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: ${BORDER}; border-radius: 3px; }
@@ -404,14 +437,9 @@ export default function MusicPlayer() {
               display: "flex", alignItems: "center", gap: 10, padding: "8px 14px 20px",
               borderBottom: `1px solid ${BORDER}`, marginBottom: 8,
             }}>
-              <div style={{
-                width: 32, height: 32, borderRadius: 8, background: `linear-gradient(135deg, ${ACCENT_DEEP}, ${ACCENT})`,
-                display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden",
-              }}>
-                <LogoIcon size={32} />
-              </div>
+              <LogoIcon size={32} radius={8} />
               <span style={{ fontSize: 17, fontWeight: 700, color: ACCENT, letterSpacing: "-0.02em" }}>
-                Phantasma
+                Violet Aegis
               </span>
             </div>
 
@@ -489,149 +517,149 @@ export default function MusicPlayer() {
           </div>
 
 
-          {/* Content area */}
-          <div style={{ flex: 1, overflowY: "auto", padding: activeView === "home" ? "0" : "8px 0", position: "relative" }}>
-            {activeView === "home" ? (
-              /* ====== HOME PAGE ====== */
-              <div style={{
-                position: "relative", width: "100%", height: "100%", overflow: "hidden",
-                display: "flex", alignItems: "center", justifyContent: "center",
-              }}>
-                {BG_VIDEO_PATH ? (
-                  <video src={BG_VIDEO_PATH} autoPlay loop muted playsInline
-                    style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 0 }} />
-                ) : (
-                  <div style={{
-                    position: "absolute", inset: 0, zIndex: 0,
-                    background: `linear-gradient(135deg, ${BG_MAIN} 0%, #1a0e3a 30%, #120a2a 50%, #1e1040 70%, ${BG_MAIN} 100%)`,
-                    backgroundSize: "400% 400%", animation: "gradientShift 12s ease infinite",
-                  }} />
-                )}
+          {/* Content area — all views stay mounted, toggled via display to keep video alive */}
+          <div style={{ flex: 1, position: "relative", overflow: "hidden" }}>
+
+            {/* ====== HOME ====== */}
+            <div style={{
+              position: "absolute", inset: 0, overflow: "hidden",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              opacity: activeView === "home" ? 1 : 0,
+              visibility: activeView === "home" ? "visible" : "hidden",
+              transition: "opacity 0.6s ease",
+            }}>
+              {BG_VIDEO_PATH ? (
+                <video src={BG_VIDEO_PATH} autoPlay loop muted playsInline
+                  style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 0 }} />
+              ) : (
                 <div style={{
-                  position: "absolute", inset: 0, zIndex: 1,
-                  background: BG_VIDEO_PATH
-                    ? `radial-gradient(ellipse at center, ${BG_MAIN}66 0%, ${BG_MAIN}cc 70%, ${BG_MAIN}ee 100%)`
-                    : "transparent",
+                  position: "absolute", inset: 0, zIndex: 0,
+                  background: `linear-gradient(135deg, ${BG_MAIN} 0%, #1a0e3a 30%, #120a2a 50%, #1e1040 70%, ${BG_MAIN} 100%)`,
+                  backgroundSize: "400% 400%", animation: "gradientShift 12s ease infinite",
                 }} />
-                <div style={{
-                  position: "relative", zIndex: 2, textAlign: "center",
-                  display: "flex", flexDirection: "column", alignItems: "center", gap: 24,
-                }}>
-                  <div style={{
-                    width: 88, height: 88, borderRadius: 22,
-                    background: `linear-gradient(135deg, ${ACCENT}33, ${ACCENT_DEEP}22)`,
-                    border: `1px solid ${ACCENT}33`,
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    backdropFilter: "blur(20px)", boxShadow: `0 0 60px ${ACCENT_DEEP}25`,
-                    overflow: "hidden",
-                  }}>
-                    <LogoIcon size={88} />
-                  </div>
-                  <h1 style={{
-                    fontSize: 52, fontWeight: 700, color: "#ffffff",
-                    letterSpacing: "-0.03em", lineHeight: 1.1,
-                    fontFamily: "'DM Sans', sans-serif",
-                    textShadow: "0 0 10px #000000cc, 0 0 30px #000000aa, 0 2px 4px #000000ee, 0 0 60px #00000066",
-                    WebkitTextStroke: "0.5px rgba(0,0,0,0.3)",
-                  }}>
-                    Phantasma
-                  </h1>
-                  <div style={{ position: "relative", minHeight: 52, maxWidth: 420, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                    <p style={{
-                      fontSize: 16, color: "#d4d0e0", maxWidth: 400,
-                      lineHeight: 1.6, fontWeight: 400,
-                      textShadow: "0 0 8px #000000cc, 0 0 20px #000000aa, 0 1px 3px #000000ee",
-                      opacity: tipVisible ? 1 : 0,
-                      transition: "opacity 0.5s ease-in-out",
-                    }}>
-                      {HOME_TIPS[tipIndex]}
-                    </p>
-                  </div>
-                  <div style={{ display: "flex", gap: 12, marginTop: 8 }}>
-                    <button onClick={() => setActiveView("library")}
-                      style={{
-                        background: ACCENT, color: BG_MAIN, border: "none", borderRadius: 10,
-                        padding: "12px 28px", fontSize: 14, fontWeight: 600, cursor: "pointer",
-                        fontFamily: "inherit", transition: "all 0.2s", boxShadow: `0 0 20px ${ACCENT}33`,
-                      }}
-                      onMouseEnter={e => e.target.style.transform = "scale(1.04)"}
-                      onMouseLeave={e => e.target.style.transform = "scale(1)"}
-                    >
-                      Browse Library
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ) : activeView === "upload" ? (
+              )}
               <div style={{
-                display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
-                height: "100%", gap: 20, color: TEXT_DIM,
+                position: "absolute", inset: 0, zIndex: 1,
+                background: BG_VIDEO_PATH
+                  ? `radial-gradient(ellipse at center, ${BG_MAIN}66 0%, ${BG_MAIN}cc 70%, ${BG_MAIN}ee 100%)`
+                  : "transparent",
+              }} />
+              <div style={{
+                position: "relative", zIndex: 2, textAlign: "center",
+                display: "flex", flexDirection: "column", alignItems: "center", gap: 24,
               }}>
-                <div style={{
-                  width: 200, height: 200, border: `2px dashed ${BORDER}`, borderRadius: 16,
-                  display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
-                  gap: 12, cursor: "pointer", transition: "border-color 0.2s",
-                }} onClick={() => fileInputRef.current?.click()}>
-                  <Icon name="upload" size={40} />
-                  <span style={{ fontSize: 15, fontWeight: 500 }}>Click or drag files</span>
-                  <span style={{ fontSize: 12 }}>MP3, WAV, FLAC, OGG</span>
+                <LogoIcon size={88} radius={22} />
+                <h1 style={{
+                  fontSize: 52, fontWeight: 700, color: "#ffffff",
+                  letterSpacing: "-0.03em", lineHeight: 1.1,
+                  fontFamily: "'DM Sans', sans-serif",
+                  textShadow: "0 0 10px #000000cc, 0 0 30px #000000aa, 0 2px 4px #000000ee, 0 0 60px #00000066",
+                }}>
+                  Violet Aegis
+                </h1>
+                <div style={{ position: "relative", minHeight: 52, maxWidth: 420, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <p style={{
+                    fontSize: 16, color: "#d4d0e0", maxWidth: 400,
+                    lineHeight: 1.6, fontWeight: 400,
+                    textShadow: "0 0 8px #000000cc, 0 0 20px #000000aa, 0 1px 3px #000000ee",
+                    opacity: tipVisible ? 1 : 0,
+                    transition: "opacity 0.5s ease-in-out",
+                  }}>
+                    {HOME_TIPS[tipIndex]}
+                  </p>
+                </div>
+                <div style={{ display: "flex", gap: 12, marginTop: 8 }}>
+                  <button onClick={() => setActiveView("library")}
+                    style={{
+                      background: ACCENT, color: BG_MAIN, border: "none", borderRadius: 10,
+                      padding: "12px 28px", fontSize: 14, fontWeight: 600, cursor: "pointer",
+                      fontFamily: "inherit", transition: "all 0.2s", boxShadow: `0 0 20px ${ACCENT}33`,
+                    }}
+                    onMouseEnter={e => e.target.style.transform = "scale(1.04)"}
+                    onMouseLeave={e => e.target.style.transform = "scale(1)"}
+                  >
+                    Browse Library
+                  </button>
                 </div>
               </div>
-            ) : (
-              <>
-                <div style={{ padding: "12px 28px", fontSize: 13, color: TEXT_DIM, display: "flex", alignItems: "center" }}>
-                  <span style={{ flex: 1 }}>
-                    {activeView === "favorites" ? "Favorites" : "Songs"} — {
-                      (activeView === "favorites" ? filteredSongs.filter(s => liked.has(s.id)) : filteredSongs).length
-                    } tracks
-                  </span>
-                </div>
+            </div>
 
-                <div style={{
-                  display: "grid", gridTemplateColumns: "48px 1fr 70px 40px",
-                  padding: "6px 28px", fontSize: 11, color: TEXT_MUTED, fontWeight: 600,
-                  textTransform: "uppercase", letterSpacing: "0.06em", borderBottom: `1px solid ${BORDER}22`,
-                }}>
-                  <span></span><span>Title</span><span style={{ textAlign: "right" }}>Time</span>
-                  <span></span>
-                </div>
+            {/* ====== UPLOAD ====== */}
+            <div style={{
+              position: "absolute", inset: 0, overflowY: "auto",
+              display: activeView === "upload" ? "flex" : "none",
+              flexDirection: "column", alignItems: "center", justifyContent: "center",
+              gap: 20, color: TEXT_DIM,
+            }}>
+              <div style={{
+                width: 200, height: 200, border: `2px dashed ${BORDER}`, borderRadius: 16,
+                display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+                gap: 12, cursor: "pointer", transition: "border-color 0.2s",
+              }} onClick={() => fileInputRef.current?.click()}>
+                <Icon name="upload" size={40} />
+                <span style={{ fontSize: 15, fontWeight: 500 }}>Click or drag files</span>
+                <span style={{ fontSize: 12 }}>MP3, WAV, FLAC, OGG</span>
+              </div>
+            </div>
 
-                {(activeView === "favorites" ? filteredSongs.filter(s => liked.has(s.id)) : filteredSongs).map((song) => (
-                  <div key={song.id} className="song-row"
-                    style={{
-                      display: "grid", gridTemplateColumns: "48px 1fr 70px 40px",
-                      padding: "10px 28px", alignItems: "center",
-                      background: currentSong?.id === song.id ? `${ACCENT_DEEP}0c` : "transparent",
-                    }}
-                    onClick={() => playSong(song)}
-                  >
-                    <div style={{ position: "relative" }}>
-                      <AlbumArt song={song} size={40} />
-                      <div className="row-play" style={{
-                        position: "absolute", inset: 0, display: "flex", alignItems: "center",
-                        justifyContent: "center", background: "#0008", borderRadius: 6, opacity: 0,
-                      }}>
-                        <Icon name={currentSong?.id === song.id && isPlaying ? "pause" : "play"} size={16} />
-                      </div>
+            {/* ====== LIBRARY / SEARCH / FAVORITES ====== */}
+            <div style={{
+              position: "absolute", inset: 0, overflowY: "auto", padding: "8px 0",
+              display: activeView !== "home" && activeView !== "upload" ? "block" : "none",
+            }}>
+              <div style={{ padding: "12px 28px", fontSize: 13, color: TEXT_DIM, display: "flex", alignItems: "center" }}>
+                <span style={{ flex: 1 }}>
+                  {activeView === "favorites" ? "Favorites" : "Songs"} — {
+                    (activeView === "favorites" ? filteredSongs.filter(s => liked.has(s.id)) : filteredSongs).length
+                  } tracks
+                </span>
+              </div>
+
+              <div style={{
+                display: "grid", gridTemplateColumns: "48px 1fr 70px 40px",
+                padding: "6px 28px", fontSize: 11, color: TEXT_MUTED, fontWeight: 600,
+                textTransform: "uppercase", letterSpacing: "0.06em", borderBottom: `1px solid ${BORDER}22`,
+              }}>
+                <span></span><span>Title</span><span style={{ textAlign: "right" }}>Time</span>
+                <span></span>
+              </div>
+
+              {(activeView === "favorites" ? filteredSongs.filter(s => liked.has(s.id)) : filteredSongs).map((song) => (
+                <div key={song.id} className="song-row"
+                  style={{
+                    display: "grid", gridTemplateColumns: "48px 1fr 70px 40px",
+                    padding: "10px 28px", alignItems: "center",
+                    background: currentSong?.id === song.id ? `${ACCENT_DEEP}0c` : "transparent",
+                  }}
+                  onClick={() => playSong(song)}
+                >
+                  <div style={{ position: "relative" }}>
+                    <AlbumArt song={song} size={40} />
+                    <div className="row-play" style={{
+                      position: "absolute", inset: 0, display: "flex", alignItems: "center",
+                      justifyContent: "center", background: "#0008", borderRadius: 6, opacity: 0,
+                    }}>
+                      <Icon name={currentSong?.id === song.id && isPlaying ? "pause" : "play"} size={16} />
                     </div>
-                    <div style={{ minWidth: 0, paddingLeft: 12 }}>
-                      <div style={{
-                        fontWeight: 500, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
-                        color: currentSong?.id === song.id ? ACCENT : TEXT,
-                      }}>{song.title}</div>
-                      <div style={{ fontSize: 12, color: TEXT_DIM, marginTop: 2 }}>{song.artist}</div>
-                    </div>
-                    <span style={{ textAlign: "right", color: TEXT_DIM, fontSize: 13, fontFamily: "'Space Mono', monospace" }}>
-                      {fmt(song.duration)}
-                    </span>
-                    <button className="ctrl-btn" style={{ padding: 4 }}
-                      onClick={e => { e.stopPropagation(); toggleLike(song.id); }}>
-                      <Icon name={liked.has(song.id) ? "heartFill" : "heart"} size={16} />
-                    </button>
                   </div>
-                ))}
-              </>
-            )}
+                  <div style={{ minWidth: 0, paddingLeft: 12 }}>
+                    <div style={{
+                      fontWeight: 500, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
+                      color: currentSong?.id === song.id ? ACCENT : TEXT,
+                    }}>{song.title}</div>
+                    <div style={{ fontSize: 12, color: TEXT_DIM, marginTop: 2 }}>{song.artist}</div>
+                  </div>
+                  <span style={{ textAlign: "right", color: TEXT_DIM, fontSize: 13, fontFamily: "'Space Mono', monospace" }}>
+                    {fmt(song.duration)}
+                  </span>
+                  <button className="ctrl-btn" style={{ padding: 4 }}
+                    onClick={e => { e.stopPropagation(); toggleLike(song.id); }}>
+                    <Icon name={liked.has(song.id) ? "heartFill" : "heart"} size={16} />
+                  </button>
+                </div>
+              ))}
+            </div>
+
           </div>
         </div>
       </div>
