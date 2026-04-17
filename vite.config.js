@@ -32,4 +32,13 @@ function musicManifestPlugin() {
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), musicManifestPlugin()],
+  build: {
+    rollupOptions: {
+      input: {
+        main:      path.resolve('index.html'),
+        phantasma: path.resolve('phantasma/index.html'),
+        divinity:  path.resolve('divinity/index.html'),
+      },
+    },
+  },
 })

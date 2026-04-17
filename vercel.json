@@ -1,5 +1,7 @@
 {
   "rewrites": [
-    { "source": "/(.*)", "destination": "/index.html" }
+    { "source": "/phantasma", "destination": "/phantasma/index.html" },
+    { "source": "/divinity",  "destination": "/divinity/index.html"  },
+    { "source": "/(.*)",      "destination": "/index.html"           }
   ]
 }
