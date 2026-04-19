@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback, useMemo, memo } from "react";
 import { musicFiles } from "virtual:music-manifest";
 import { parseBuffer, parseBlob } from "music-metadata";
 
@@ -47,27 +47,27 @@ const LIBRARY_OVERRIDES = [
   //
   // Files in /music/ without an entry here will auto-appear with
   // their filename as the title and "Unknown Artist" as artist.
-  { file: "I Really Want To Stay At Your House ⧸ Eurobeat Remix.opus", 
-    title: "I Really Want To Stay At Your House ⧸ Eurobeat Remix", 
-    artist: "Turbo" },
-  { file: "HYURURIRAPAPPA.opus", 
-    title: "HYURURIRAPAPPA", 
-    artist: "tuki." },
-  { file: "Bao The Whale - 'Queen' Kanaria (Cover).opus", 
-    title: "Queen", 
-    artist: "Bao The Whale & Kanaria" },
-  { file: "フォニイ（phony）┃Cover by Raon Lee.opus", 
-    title: "フォニイ（phony）", 
-    artist: "Raon Lee" },
-  { file: "Senbonzakura (English Cover) 【JubyPhonic】千本桜.opus", 
-    title: "Senbonzakura (English Cover)", 
-    artist: "JubyPhonic" },
-  { file: "Override (English Cover)「オーバーライド」【Will Stetson】.opus", 
-    title: "「オーバーライド」", 
-    artist: "Will Stetson" },
-  { file: "Tobu & Jim Yosef - Miracle (Original Mix).opus", 
-    title: "Miracle", 
-    artist: "Tobu & Jim Yosef" },          
+  // { file: "I Really Want To Stay At Your House ⧸ Eurobeat Remix.opus", 
+  //   title: "I Really Want To Stay At Your House ⧸ Eurobeat Remix", 
+  //   artist: "Turbo" },
+  // { file: "HYURURIRAPAPPA.opus", 
+  //   title: "HYURURIRAPAPPA", 
+  //   artist: "tuki." },
+  // { file: "Bao The Whale - 'Queen' Kanaria (Cover).opus", 
+  //   title: "Queen", 
+  //   artist: "Bao The Whale & Kanaria" },
+  // { file: "フォニイ（phony）┃Cover by Raon Lee.opus", 
+  //   title: "フォニイ（phony）", 
+  //   artist: "Raon Lee" },
+  // { file: "Senbonzakura (English Cover) 【JubyPhonic】千本桜.opus", 
+  //   title: "Senbonzakura (English Cover)", 
+  //   artist: "JubyPhonic" },
+  // { file: "Override (English Cover)「オーバーライド」【Will Stetson】.opus", 
+  //   title: "「オーバーライド」", 
+  //   artist: "Will Stetson" },
+  // { file: "Tobu & Jim Yosef - Miracle (Original Mix).opus", 
+  //   title: "Miracle", 
+  //   artist: "Tobu & Jim Yosef" },          
 ];
 
 // =============================================================================
@@ -112,43 +112,44 @@ const TEXT = "#e8e4f0";
 const TEXT_DIM = "#6b6394";
 const TEXT_MUTED = "#3d3660";
 
-// --- Icons ---
-const Icon = ({ name, size = 20 }) => {
+// --- Icons — memo + switch so only the requested SVG is created per render ---
+const Icon = memo(({ name, size = 20 }) => {
   const s = { width: size, height: size, display: "inline-block", verticalAlign: "middle" };
-  const icons = {
-    home: <svg style={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>,
-    search: <svg style={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>,
-    play: <svg style={s} viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>,
-    pause: <svg style={s} viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>,
-    skipBack: <svg style={s} viewBox="0 0 24 24" fill="currentColor"><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="4" x2="5" y2="20" stroke="currentColor" strokeWidth="2"/></svg>,
-    skipFwd: <svg style={s} viewBox="0 0 24 24" fill="currentColor"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="4" x2="19" y2="20" stroke="currentColor" strokeWidth="2"/></svg>,
-    shuffle: <svg style={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg>,
-    repeat: <svg style={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg>,
-    volume: <svg style={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="currentColor"/><path d="M19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.07"/></svg>,
-    volumeMute: <svg style={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="currentColor"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>,
-    heart: <svg style={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>,
-    heartFill: <svg style={s} viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="1"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>,
-    music: <svg style={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>,
-    list: <svg style={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>,
-    upload: <svg style={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>,
-    folder: <svg style={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>,
-    chevron: <svg style={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="9 18 15 12 9 6"/></svg>,
-    queue: <svg style={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="9" y1="6" x2="21" y2="6"/><line x1="9" y1="12" x2="21" y2="12"/><line x1="9" y1="18" x2="21" y2="18"/><polyline points="4 6 2 8 4 10"/><polyline points="4 18 2 20 4 22"/><line x1="2" y1="14" x2="6" y2="14"/></svg>,
-    minimize: <svg style={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="10" y1="14" x2="21" y2="3"/><line x1="3" y1="21" x2="14" y2="10"/></svg>,
-    expand: <svg style={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>,
-  };
-  return icons[name] || null;
-};
+  switch (name) {
+    case "home":       return <svg style={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>;
+    case "search":     return <svg style={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>;
+    case "play":       return <svg style={s} viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>;
+    case "pause":      return <svg style={s} viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>;
+    case "skipBack":   return <svg style={s} viewBox="0 0 24 24" fill="currentColor"><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="4" x2="5" y2="20" stroke="currentColor" strokeWidth="2"/></svg>;
+    case "skipFwd":    return <svg style={s} viewBox="0 0 24 24" fill="currentColor"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="4" x2="19" y2="20" stroke="currentColor" strokeWidth="2"/></svg>;
+    case "shuffle":    return <svg style={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg>;
+    case "repeat":     return <svg style={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg>;
+    case "volume":     return <svg style={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="currentColor"/><path d="M19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.07"/></svg>;
+    case "volumeMute": return <svg style={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="currentColor"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>;
+    case "heart":      return <svg style={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>;
+    case "heartFill":  return <svg style={s} viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="1"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>;
+    case "music":      return <svg style={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>;
+    case "list":       return <svg style={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>;
+    case "upload":     return <svg style={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>;
+    case "folder":     return <svg style={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>;
+    case "chevron":    return <svg style={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="9 18 15 12 9 6"/></svg>;
+    case "queue":      return <svg style={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="9" y1="6" x2="21" y2="6"/><line x1="9" y1="12" x2="21" y2="12"/><line x1="9" y1="18" x2="21" y2="18"/><polyline points="4 6 2 8 4 10"/><polyline points="4 18 2 20 4 22"/><line x1="2" y1="14" x2="6" y2="14"/></svg>;
+    case "minimize":   return <svg style={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="10" y1="14" x2="21" y2="3"/><line x1="3" y1="21" x2="14" y2="10"/></svg>;
+    case "expand":     return <svg style={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>;
+    default:           return null;
+  }
+});
 
 // --- Color gen for album art ---
 const artColors = ["#c4b5fd","#f9a8d4","#93c5fd","#fcd34d","#6ee7b7","#fca5a5","#a78bfa","#67e8f9"];
 const getColor = (id) => artColors[id % artColors.length];
 
 // --- Album art — shows real cover if available, gradient placeholder otherwise ---
-const AlbumArt = ({ song, size = 48, pictureUrl }) => {
-  if (pictureUrl) {
+const AlbumArt = memo(({ song, size = 48, pictureUrl }) => {
+  const [imgError, setImgError] = useState(false);
+  if (pictureUrl && !imgError) {
     return (
-      <img src={pictureUrl} alt="" style={{
+      <img src={pictureUrl} alt="" onError={() => setImgError(true)} style={{
         width: size, height: size, minWidth: size, borderRadius: 6, objectFit: "cover",
       }} />
     );
@@ -171,7 +172,7 @@ const AlbumArt = ({ song, size = 48, pictureUrl }) => {
       <Icon name="music" size={size * 0.35} />
     </div>
   );
-};
+});
 
 // --- Logo with image fallback ---
 // Renders its own container. Background disappears once the image loads.
@@ -256,8 +257,10 @@ export default function MusicPlayer() {
   const currentSongRowRef = useRef(null);
   const containerRef = useRef(null);
   const keyHandlerRef = useRef(null);
+  const blobUrlsRef = useRef(new Set());
+  const metaTimeoutsRef = useRef([]);
 
-  const allSongs = [...LIBRARY_SONGS, ...uploadedSongs];
+  const allSongs = useMemo(() => [...LIBRARY_SONGS, ...uploadedSongs], [uploadedSongs]);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -303,7 +306,10 @@ export default function MusicPlayer() {
     LIBRARY_SONGS.forEach(song => {
       const a = new Audio();
       a.preload = "metadata";
-      a.onloadedmetadata = () => setDurations(prev => ({ ...prev, [song.id]: a.duration }));
+      a.onloadedmetadata = () => {
+        setDurations(prev => ({ ...prev, [song.id]: a.duration }));
+        a.src = "";
+      };
       a.src = song.url;
     });
   }, []);
@@ -311,27 +317,38 @@ export default function MusicPlayer() {
   // Fetch ID3/Vorbis tags using a Range request (first 128KB only)
   const fetchMeta = useCallback(async (song) => {
     try {
-      const res = await fetch(song.url, { headers: { Range: "bytes=0-131071" } });
+      const res = await fetch(song.url, { headers: { Range: "bytes=0-524287" } });
       const buf = await res.arrayBuffer();
-      const { common } = await parseBuffer(new Uint8Array(buf), { mimeType: getMime(song.file || song.url) });
+      const { common, format } = await parseBuffer(new Uint8Array(buf), { mimeType: getMime(song.file || song.url) });
+      if (format.duration) setDurations(prev => ({ ...prev, [song.id]: format.duration }));
       let picture = null;
       if (common.picture?.length) {
         const pic = common.picture[0];
-        picture = URL.createObjectURL(new Blob([pic.data], { type: pic.format }));
+        const mime = pic.format?.includes("/") ? pic.format : `image/${pic.format || "jpeg"}`;
+        picture = URL.createObjectURL(new Blob([pic.data], { type: mime }));
+        blobUrlsRef.current.add(picture);
       }
-      setSongMeta(prev => ({
-        ...prev,
-        [song.id]: { title: common.title || null, artist: common.artist || null, picture },
-      }));
+      setSongMeta(prev => {
+        const old = prev[song.id]?.picture;
+        if (old && old !== picture) { URL.revokeObjectURL(old); blobUrlsRef.current.delete(old); }
+        return { ...prev, [song.id]: { title: common.title || null, artist: common.artist || null, picture } };
+      });
     } catch {}
   }, []);
 
   // Load tag metadata for all library songs on mount, staggered to avoid hammering
   useEffect(() => {
-    LIBRARY_SONGS.forEach((song, i) => {
-      setTimeout(() => fetchMeta(song), i * 150);
-    });
+    metaTimeoutsRef.current = LIBRARY_SONGS.map((song, i) =>
+      setTimeout(() => fetchMeta(song), i * 150)
+    );
+    return () => { metaTimeoutsRef.current.forEach(clearTimeout); };
   }, [fetchMeta]);
+
+  // Revoke all tracked blob URLs on unmount
+  useEffect(() => {
+    const urls = blobUrlsRef.current;
+    return () => { urls.forEach(u => URL.revokeObjectURL(u)); };
+  }, []);
 
   // Persist liked songs and volume to localStorage
   useEffect(() => {
@@ -431,8 +448,11 @@ export default function MusicPlayer() {
         let picture = null;
         if (common.picture?.length) {
           const pic = common.picture[0];
-          picture = URL.createObjectURL(new Blob([pic.data], { type: pic.format }));
+          const mime = pic.format?.includes("/") ? pic.format : `image/${pic.format || "jpeg"}`;
+          picture = URL.createObjectURL(new Blob([pic.data], { type: mime }));
+          blobUrlsRef.current.add(picture);
         }
+        blobUrlsRef.current.add(newSongs[i].url);
         setSongMeta(prev => ({
           ...prev,
           [newSongs[i].id]: { title: common.title || null, artist: common.artist || null, picture },
@@ -445,10 +465,12 @@ export default function MusicPlayer() {
   const onDragOver = (e) => { e.preventDefault(); setDragOver(true); };
   const onDragLeave = () => setDragOver(false);
 
-  const filteredSongs = allSongs.filter(s =>
-    s.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    s.artist.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredSongs = useMemo(() =>
+    allSongs.filter(s =>
+      s.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      s.artist.toLowerCase().includes(searchQuery.toLowerCase())
+    ),
+  [allSongs, searchQuery]);
 
   // Keep keyboard handler current every render (captures latest togglePlay/skipTrack/filteredSongs)
   keyHandlerRef.current = (e) => {
@@ -471,7 +493,10 @@ export default function MusicPlayer() {
     return durations[currentSong.id] || currentSong.duration || 0;
   };
 
-  const progress = getDuration() > 0 ? (currentTime / getDuration()) * 100 : 0;
+  const progress = useMemo(() => {
+    const dur = getDuration();
+    return dur > 0 ? (currentTime / dur) * 100 : 0;
+  }, [currentTime, currentSong, durations]);
 
   // Metadata helpers — prefer tag data unless song has an explicit LIBRARY_OVERRIDES entry
   const getTitle  = (song) => (!song.hasOverride && songMeta[song.id]?.title)  || song.title;
