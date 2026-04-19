@@ -301,9 +301,11 @@ export default function MusicPlayer() {
     return () => clearInterval(interval);
   }, []);
 
-  // Load durations for all library songs upfront via metadata-only fetch
+  // Load durations for all library songs upfront via metadata-only fetch.
+  // Stored in a ref so the Audio elements aren't GC'd before onloadedmetadata fires.
+  const durationAudiosRef = useRef([]);
   useEffect(() => {
-    LIBRARY_SONGS.forEach(song => {
+    const audios = LIBRARY_SONGS.map(song => {
       const a = new Audio();
       a.preload = "metadata";
       a.onloadedmetadata = () => {
@@ -311,7 +313,10 @@ export default function MusicPlayer() {
         a.src = "";
       };
       a.src = song.url;
+      return a;
     });
+    durationAudiosRef.current = audios;
+    return () => { audios.forEach(a => { a.src = ""; }); };
   }, []);
 
   // Fetch ID3/Vorbis tags using a Range request (first 128KB only)
