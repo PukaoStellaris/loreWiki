@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-const BG_PATH = "/images/livvyBG.png";
+const BG_PATH = "/images/Pukao_wh.png";
 const BG_IS_IMAGE = /\.(png|jpe?g|webp|gif|avif)$/i.test(BG_PATH);
 
 const TIPS = ["Wow you clicked, Hello."];
