@@ -32,6 +32,7 @@ function musicManifestPlugin() {
 // Mirrors vercel.json rewrites so clean URLs work in dev too
 function devRewrites() {
   const map = {
+    '/listen':    '/listen/index.html',
     '/phantasma': '/phantasma/index.html',
     '/divinity':  '/divinity/index.html',
     '/livvy':     '/livvy/index.html',
@@ -56,6 +57,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main:      path.resolve('index.html'),
+        listen:    path.resolve('listen/index.html'),
         phantasma: path.resolve('phantasma/index.html'),
         divinity:  path.resolve('divinity/index.html'),
         livvy:     path.resolve('livvy/index.html'),

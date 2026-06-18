@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/Icon.png" />
+
+    <meta name="title" content="Listen — Violet Aegis" />
+    <meta name="description" content="A personal music player forged in the dark. Curated tracks, forbidden rhythms, and the occasional void-infused playlist." />
+    <meta name="theme-color" content="#4800b4">
+
+    <meta property="og:site_name" content="Violet Aegis" />
+    <meta property="og:type" content="music.playlist" />
+    <meta property="og:url" content="https://www.violet-aegis.com/listen" />
+    <meta property="og:title" content="Listen — Violet Aegis" />
+    <meta property="og:description" content="A personal music player forged in the dark. Curated tracks, forbidden rhythms, and the occasional void-infused playlist." />
+    <meta property="og:image" content="https://cdn.discordapp.com/attachments/634064728611880980/1419339612635267215/Pukao_comm2.png?ex=6946bc05&is=69456a85&hm=01bc05097d76c024281cccc6c380d68dbaf434b44a4f206bc3e104da2c8aa4ec&" />
+
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://www.violet-aegis.com/listen" />
+    <meta property="twitter:title" content="Listen — Violet Aegis" />
+    <meta property="twitter:description" content="A personal music player forged in the dark. Curated tracks, forbidden rhythms, and the occasional void-infused playlist." />
+    <meta property="twitter:image" content="https://cdn.discordapp.com/attachments/634064728611880980/1419339612635267215/Pukao_comm2.png?ex=6946bc05&is=69456a85&hm=01bc05097d76c024281cccc6c380d68dbaf434b44a4f206bc3e104da2c8aa4ec&" />
+
+    <title>Violet Aegis: Audio Player</title>
+    <style>
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+      body { background: #0c0a1a; color: #e8e4f0; font-family: 'Segoe UI', sans-serif; }
+
+      #root:empty {
+        display: flex; flex-direction: column; align-items: center;
+        justify-content: center; height: 100vh; gap: 28px;
+      }
+      #root:empty::before {
+        content: 'Violet Aegis';
+        font-size: 36px; font-weight: 700; letter-spacing: -0.03em;
+        color: #c4b5fd; text-shadow: 0 0 40px #7c3aed55;
+        animation: pulse 1.8s ease-in-out infinite;
+      }
+      #root:empty::after {
+        content: ''; width: 36px; height: 36px;
+        border: 2px solid #1e1a3a; border-top-color: #c4b5fd;
+        border-radius: 50%; animation: spin 0.8s linear infinite;
+      }
+      @keyframes spin  { to { transform: rotate(360deg); } }
+      @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/listen.jsx"></script>
+  </body>
+</html>
