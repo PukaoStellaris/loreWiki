@@ -1,4 +1,6 @@
 import { useState, useEffect, useRef } from "react";
+import SoundButton from "../components/SoundButton.jsx";
+import useTipRotation from "../hooks/useTipRotation.js";
 
 const BG_VIDEO_PATH = "/videos/whitebg.mp4";
 const NAME = "White";
@@ -26,8 +28,7 @@ const PARTICLES = [
 ];
 
 export default function WhitePage() {
-  const [tipIndex, setTipIndex] = useState(0);
-  const [tipVisible, setTipVisible] = useState(true);
+  const { tip, tipVisible } = useTipRotation(TIPS);
   const [hovered, setHovered] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const [soundOn, setSoundOn] = useState(false);
@@ -36,25 +37,6 @@ export default function WhitePage() {
   useEffect(() => {
     const t = setTimeout(() => setLoaded(true), 1400);
     return () => clearTimeout(t);
-  }, []);
-
-  useEffect(() => {
-    if (TIPS.length <= 1) return;
-    let outer = null;
-    let inner = null;
-    const schedule = (idx) => {
-      outer = setTimeout(() => {
-        setTipVisible(false);
-        inner = setTimeout(() => {
-          const next = (idx + 1) % TIPS.length;
-          setTipIndex(next);
-          setTipVisible(true);
-          schedule(next);
-        }, 500);
-      }, TIPS[idx].duration * 1000);
-    };
-    schedule(0);
-    return () => { clearTimeout(outer); clearTimeout(inner); };
   }, []);
 
   return (
@@ -396,7 +378,7 @@ export default function WhitePage() {
 
         <div className={`caption ${loaded ? "" : "intro"}`}>
           <span className="caption-text" style={{ opacity: tipVisible ? 1 : 0 }}>
-            {TIPS[tipIndex].text}
+            {tip}
           </span>
           <span className="caret" />
         </div>
@@ -405,29 +387,15 @@ export default function WhitePage() {
       <div className="scanlines" />
       <div className="scanband" />
 
-      <button
-        className="soundbtn"
-        onClick={() => {
+      <SoundButton
+        soundOn={soundOn}
+        onToggle={() => {
           const v = videoRef.current;
           if (!v) return;
           if (soundOn) { v.muted = true; setSoundOn(false); }
           else { v.muted = false; v.volume = 0.1; setSoundOn(true); }
         }}
-      >
-        {soundOn ? (
-          <svg width={14} height={14} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="currentColor" />
-            <path d="M19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.07" />
-          </svg>
-        ) : (
-          <svg width={14} height={14} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="currentColor" />
-            <line x1="23" y1="9" x2="17" y2="15" />
-            <line x1="17" y1="9" x2="23" y2="15" />
-          </svg>
-        )}
-        {soundOn ? "10%" : "muted"}
-      </button>
+      />
     </div>
   );
 }

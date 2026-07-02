@@ -46,7 +46,7 @@ Her signature weapon, "Falling Up," is a katana enchanted with permanent gravity
       name: 'Sentinel Phantasma',
       title: 'Violet Nihility',
       category: 'Main Characters',
-      image: './sentinel.png',
+      image: '/images/sentinel.png',
       infobox: {
         'Full Name': 'Sentinel Phantasma',
         'Title': 'Violet Nihility',

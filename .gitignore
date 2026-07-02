@@ -12,6 +12,13 @@ dist
 dist-ssr
 *.local
 
+# Large media — already-tracked files stay tracked; new tracks need `git add -f`
+public/music/
+
+# Vercel / env
+.vercel
+.env*
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

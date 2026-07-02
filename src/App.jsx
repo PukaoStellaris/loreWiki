@@ -234,7 +234,9 @@ export default function MusicPlayer() {
   const [liked, setLiked] = useState(() => {
     try { return new Set(JSON.parse(localStorage.getItem('va-liked') || '[]')); } catch { return new Set(); }
   });
-  const [durations, setDurations] = useState({});
+  const [durations, setDurations] = useState(() => {
+    try { return JSON.parse(localStorage.getItem('va-durations') || '{}'); } catch { return {}; }
+  });
   const [miniPlayer, setMiniPlayer] = useState(false);
   const [showQueue, setShowQueue] = useState(false);
   const [songMeta, setSongMeta] = useState({});
@@ -298,9 +300,12 @@ export default function MusicPlayer() {
     return () => clearInterval(interval);
   }, []);
 
-  // Load durations for all library songs upfront via metadata-only fetch
+  // Load durations for library songs, skipping any already cached in localStorage
   useEffect(() => {
+    let cached = {};
+    try { cached = JSON.parse(localStorage.getItem('va-durations') || '{}'); } catch {}
     LIBRARY_SONGS.forEach(song => {
+      if (cached[song.id]) return;
       const a = new Audio();
       a.preload = "metadata";
       a.onloadedmetadata = () => setDurations(prev => ({ ...prev, [song.id]: a.duration }));
@@ -308,11 +313,9 @@ export default function MusicPlayer() {
     });
   }, []);
 
-  // Fetch ID3/Vorbis tags using a Range request (first 128KB only)
-  const fetchMeta = useCallback(async (song) => {
+  // Parse ID3/Vorbis tags out of the first 128KB of a track
+  const applyMetaBuffer = useCallback(async (song, buf) => {
     try {
-      const res = await fetch(song.url, { headers: { Range: "bytes=0-131071" } });
-      const buf = await res.arrayBuffer();
       const { common } = await parseBuffer(new Uint8Array(buf), { mimeType: getMime(song.file || song.url) });
       let picture = null;
       if (common.picture?.length) {
@@ -326,12 +329,38 @@ export default function MusicPlayer() {
     } catch {}
   }, []);
 
-  // Load tag metadata for all library songs on mount, staggered to avoid hammering
+  // Fetch tag bytes with a Range request (first 128KB only) and cache them
+  const fetchMeta = useCallback(async (song, cache) => {
+    try {
+      const res = await fetch(song.url, { headers: { Range: "bytes=0-131071" } });
+      const buf = await res.arrayBuffer();
+      // Cache API rejects partial (206) responses, so store a fresh 200 instead
+      try { await cache?.put(song.url, new Response(buf.slice(0), { headers: { "Content-Type": "application/octet-stream" } })); } catch {}
+      await applyMetaBuffer(song, buf);
+    } catch {}
+  }, [applyMetaBuffer]);
+
+  // Load tag metadata for all library songs on mount. Cached tracks parse
+  // immediately; only uncached ones hit the network, staggered to avoid hammering.
   useEffect(() => {
-    LIBRARY_SONGS.forEach((song, i) => {
-      setTimeout(() => fetchMeta(song), i * 150);
-    });
-  }, [fetchMeta]);
+    let cancelled = false;
+    (async () => {
+      let cache = null;
+      try { cache = await caches.open("va-meta-v1"); } catch {}
+      let netIndex = 0;
+      for (const song of LIBRARY_SONGS) {
+        if (cancelled) return;
+        const hit = cache ? await cache.match(song.url).catch(() => null) : null;
+        if (hit) {
+          applyMetaBuffer(song, await hit.arrayBuffer());
+        } else {
+          setTimeout(() => { if (!cancelled) fetchMeta(song, cache); }, netIndex * 150);
+          netIndex++;
+        }
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [fetchMeta, applyMetaBuffer]);
 
   // Persist liked songs and volume to localStorage
   useEffect(() => {
@@ -341,6 +370,10 @@ export default function MusicPlayer() {
   useEffect(() => {
     localStorage.setItem("va-volume", String(volume));
   }, [volume]);
+
+  useEffect(() => {
+    try { localStorage.setItem("va-durations", JSON.stringify(durations)); } catch {}
+  }, [durations]);
 
   // Keyboard shortcuts — handler ref is updated each render so it always has fresh state
   useEffect(() => {

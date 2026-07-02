@@ -1,152 +1,162 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import SoundButton from "../components/SoundButton.jsx";
+import useRevealOnHover from "../hooks/useRevealOnHover.js";
 
 const BG_VIDEO_PATH = "/videos/background.mp4";
+const AUDIO_PATH = "/audio/phantasma.mp3";
 const BG_MAIN = "#0c0a1a";
 const ACCENT  = "#c493fd";
 
-const LEFT_STANZAS = [
-  [
-    "To love a thing is to know it will end.",
-    "To love a thing is to understand the shape of its absence before absence arrives.",
-    "To love a thing is to hold it gently, knowing your hands are made of edges.",
-  ],
-  [
-    "I am the space after the last breath.",
-    "I am the pause between heartbeats where nothing exists.",
-    "I am the moment of ending, and I am not cruel...",
-    <>I am simply <em>thorough</em>.</>,
-  ],
-  [
-    "To be Nihil is to understand that everything is temporary.",
-    "To be Nihil is to know that impermanence is not tragedy...",
-    "It is the condition that makes beauty possible.",
-    "If nothing ever ended, nothing would ever matter.",
-  ],
-  [
-    "So I will love this world the only way I know how:",
-    "By holding it gently.",
-    "By taking only what must be taken.",
-    "By learning, slowly, carefully, over millennia if necessary...",
-    "How to be the ending that serves the continuing.",
-  ],
-];
+const START_TIME    = 84;   // seconds to skip to on load
+const FADE_VOLUME    = 0.2; // target volume after fade-in
+const FADE_DURATION  = 1500; // ms
 
-const RIGHT_STANZAS = [
-  [
-    "I will be the winter that makes spring possible.",
-    "I will be the silence that defines sound.",
-    "I will be the void that gives shape to existence.",
-    "And I will do this with love,",
-    "Even when love looks like letting go.",
-  ],
-  [
-    "This is my prayer:",
-    "Let me learn gentleness.",
-    "Let me understand the difference between deletion and destruction.",
-    "Let me hold without breaking.",
-    "Let me end things with the care they deserve.",
-  ],
-  [
-    "And if I cannot do this alone,",
-    "Let me find someone patient enough to teach me.",
-    "Someone stubborn enough to stay.",
-    "Someone kind enough to believe I can be better than I was.",
-  ],
-  [
-    "Someone who eats chips on rooftops,",
-    "And looks at the sky like they're surprised it's still there,",
-    "And makes me remember",
-    "Why I stayed.",
-  ],
+// Placeholder lyrics — replace text/time (seconds) once the real track + lyrics are ready.
+const LYRICS = [
+  { time: 84,  text: "'Cause now I know that pain cannot define the past" },
+  { time: 89,  text: "We are built to overcome endless mishaps" },
+  { time: 95,  text: "You know, it is not so bad" },
+  { time: 99, text: "When you are with me?" },
+  { time: 101, text: "Cherish as long as we last" },
+  { time: 104, text: "'Cause S is not for Sayonara" },
+  { time: 109, text: "'Let memories play back" },
 ];
-
-function Stanza({ lines, direction, delay }) {
-  const anim = direction === "left" ? "slideFromLeft" : "slideFromRight";
-  const align = direction === "right" ? "right" : "left";
-  return (
-    <div style={{ opacity: 0, animation: `${anim} 0.65s ease ${delay}s both`, textAlign: align }}>
-      {lines.map((line, i) => (
-        <div key={i} style={{
-          fontSize: 18, lineHeight: 1.9, color: "#c8c4d8",
-          fontWeight: 300, fontFamily: "'Cormorant Garamond', serif",
-          textShadow: "0 1px 6px #000000bb",
-        }}>
-          {line}
-        </div>
-      ))}
-    </div>
-  );
-}
 
 export default function PhantasmaPage() {
-  const [showAka, setShowAka]           = useState(false);
-  const [titleVisible, setTitleVisible] = useState(true);
-  const [poemVisible, setPoemVisible]   = useState(false);
   const [titleLoaded, setTitleLoaded]   = useState(false);
+  const [soundOn, setSoundOn]           = useState(false);
+  const [started, setStarted]           = useState(false);
+  const [lyricIndex, setLyricIndex]     = useState(-1);
+
+  const audioRef = useRef(null);
+  const fadeIntervalRef = useRef(null);
+  const { revealed: showAka, visible: titleVisible, bind: titleBind } = useRevealOnHover();
 
   useEffect(() => {
     // titleFadeIn ends at 0.1s + 0.7s = 0.8s; hand off to transition after that
     const t1 = setTimeout(() => setTitleLoaded(true), 850);
-    const t2 = setTimeout(() => setPoemVisible(true), 900);
-    return () => { clearTimeout(t1); clearTimeout(t2); };
+    return () => clearTimeout(t1);
   }, []);
 
-  const handleTitleEnter = () => {
-    setTitleVisible(false);
-    setTimeout(() => { setShowAka(true);  setTitleVisible(true); }, 200);
-  };
-  const handleTitleLeave = () => {
-    setTitleVisible(false);
-    setTimeout(() => { setShowAka(false); setTitleVisible(true); }, 200);
+  useEffect(() => {
+    const a = audioRef.current;
+    if (!a) return;
+    const onTime = () => {
+      const t = a.currentTime;
+      let idx = -1;
+      for (let i = 0; i < LYRICS.length; i++) if (LYRICS[i].time <= t) idx = i;
+      setLyricIndex(idx);
+    };
+    a.addEventListener("timeupdate", onTime);
+    return () => a.removeEventListener("timeupdate", onTime);
+  }, []);
+
+  useEffect(() => () => {
+    if (fadeIntervalRef.current) clearInterval(fadeIntervalRef.current);
+  }, []);
+
+  // Triggered by the "click to begin" overlay — a real user gesture, so the
+  // browser will reliably allow unmuted playback (autoplay alone kept getting blocked).
+  const handleStart = () => {
+    const a = audioRef.current;
+    if (!a || started) return;
+
+    const begin = () => {
+      try { a.currentTime = START_TIME; } catch {}
+      a.muted = false;
+      a.volume = 0;
+      a.play().catch(() => {});
+      setSoundOn(true);
+      setStarted(true);
+      const steps = 30;
+      let i = 0;
+      fadeIntervalRef.current = setInterval(() => {
+        i++;
+        a.volume = Math.min(FADE_VOLUME, (FADE_VOLUME * i) / steps);
+        if (i >= steps && fadeIntervalRef.current) {
+          clearInterval(fadeIntervalRef.current);
+          fadeIntervalRef.current = null;
+        }
+      }, FADE_DURATION / steps);
+    };
+
+    if (a.readyState >= 1) begin();
+    else a.addEventListener("loadedmetadata", begin, { once: true });
   };
 
   return (
     <div style={{
-      width: "100%", height: "100vh", overflowY: "auto",
+      width: "100%", height: "100vh", overflow: "hidden",
       background: BG_MAIN, fontFamily: "'DM Sans', 'Segoe UI', sans-serif",
     }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Tangerine:wght@400;700&display=swap');
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        @keyframes videoFadeIn    { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes titleFadeIn    { from { opacity: 0; transform: translateY(-18px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes slideFromLeft  { from { opacity: 0; transform: translateX(-48px); } to { opacity: 1; transform: translateX(0); } }
-        @keyframes slideFromRight { from { opacity: 0; transform: translateX( 48px); } to { opacity: 1; transform: translateX(0); } }
-        @keyframes fadeUp         { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #2a2450; border-radius: 2px; }
+        @keyframes videoFadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes titleFadeIn { from { opacity: 0; transform: translateY(-18px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeUp      { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        .poem-outer {
-          min-height: 100vh; padding: 40px 4vw;
+        .phantasma-stage {
+          position: relative; z-index: 2; width: 100%; height: 100%;
+          display: flex; flex-direction: column; align-items: center; justify-content: center;
+          text-align: center; padding: 0 6vw;
+        }
+        .phantasma-stage h1 { font-size: 104px; }
+        .karaoke-line {
+          margin-top: 26px; max-width: 760px;
+          font-family: 'Cormorant Garamond', serif; font-style: italic;
+          font-size: 28px; font-weight: 300; line-height: 1.7;
+          color: #c8c4d8; text-shadow: 0 1px 6px #000000bb;
+          animation: fadeUp 0.5s ease both;
+        }
+
+        .soundbtn {
+          position: absolute; bottom: 24px; right: 24px; z-index: 10;
+          background: rgba(255,255,255,0.1);
+          border: 1px solid rgba(255,255,255,0.16);
+          border-radius: 999px; padding: 7px 13px; cursor: pointer;
+          display: flex; align-items: center; gap: 7px;
+          color: #d4d0e0; font-size: 11px; letter-spacing: 0.07em;
+          font-family: 'Space Mono', monospace; text-transform: lowercase;
+          backdrop-filter: blur(8px);
+          transition: background 0.2s, border-color 0.2s;
+        }
+        .soundbtn:hover {
+          background: rgba(255,255,255,0.18);
+          border-color: rgba(255,255,255,0.28);
+        }
+
+        .start-overlay {
+          position: fixed; inset: 0; z-index: 50;
           display: flex; align-items: center; justify-content: center;
+          background: rgba(8,6,16,0.4);
+          backdrop-filter: blur(16px);
+          -webkit-backdrop-filter: blur(16px);
+          animation: videoFadeIn 0.4s ease both;
         }
-        .poem-layout {
-          display: flex; align-items: center; width: 100%; gap: 0;
+        .startbtn {
+          background: rgba(20,16,36,0.55);
+          border: 1px solid ${ACCENT}66;
+          border-radius: 999px; padding: 14px 30px; cursor: pointer;
+          color: #ece6fb; font-size: 12px; letter-spacing: 0.16em;
+          font-family: 'Space Mono', monospace; text-transform: uppercase;
+          box-shadow: 0 0 30px -6px ${ACCENT};
+          transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+          animation: fadeUp 0.6s ease 0.3s both;
         }
-        .poem-col {
-          flex: 0 1 38%; display: flex; flex-direction: column; gap: 36px;
+        .startbtn:hover {
+          background: rgba(20,16,36,0.78);
+          box-shadow: 0 0 44px -4px ${ACCENT};
+          transform: scale(1.05);
         }
-        .poem-center {
-          flex: 0 0 24%; display: flex; flex-direction: column;
-          align-items: center; justify-content: center; text-align: center;
-        }
-        .poem-col-right .stanza { text-align: right; }
 
         @media (max-width: 700px) {
-          .poem-outer { align-items: flex-start; padding: 48px 6vw 64px; }
-          .poem-layout { flex-direction: column; gap: 0; }
-          .poem-center { flex: unset; width: 100%; order: -1; margin-bottom: 36px; }
-          .poem-center h1 { font-size: 52px !important; }
-          .poem-col { flex: unset; width: 100%; gap: 28px; }
-          .poem-col + .poem-col { margin-top: 28px; }
-          .poem-col-right .stanza { text-align: left; }
+          .phantasma-stage h1 { font-size: 68px !important; }
+          .karaoke-line { font-size: 22px; }
         }
-
         @media (min-width: 701px) and (max-width: 1024px) {
-          .poem-col { flex: 0 1 42%; }
-          .poem-center { flex: 0 0 16%; }
-          .poem-center h1 { font-size: 48px !important; }
+          .phantasma-stage h1 { font-size: 80px !important; }
+          .karaoke-line { font-size: 24px; }
         }
       `}</style>
 
@@ -164,52 +174,59 @@ export default function PhantasmaPage() {
         background: `radial-gradient(ellipse at center, ${BG_MAIN}88 0%, ${BG_MAIN}dd 65%, ${BG_MAIN}f5 100%)`,
       }} />
 
+      <audio ref={audioRef} src={AUDIO_PATH} loop muted />
+
       {/* Centered content */}
-      <div className="poem-outer" style={{ position: "relative", zIndex: 2 }}>
-        <div className="poem-layout">
+      <div className="phantasma-stage">
+        <h1
+          {...titleBind}
+          style={{
+            fontWeight: 700, color: "#ffffff",
+            letterSpacing: "0.02em", lineHeight: 1.1,
+            fontFamily: "'Tangerine', cursive",
+            textShadow: "0 0 10px #000000cc, 0 0 30px #000000aa, 0 2px 4px #000000ee",
+            cursor: "default",
+            opacity: titleLoaded ? (titleVisible ? 1 : 0) : undefined,
+            animation: titleLoaded ? "none" : "titleFadeIn 0.7s ease 0.1s both",
+            transition: titleLoaded ? "opacity 0.2s ease-in-out" : "none",
+          }}
+        >
+          {showAka ? "Pukao" : "Phantasma"}
+        </h1>
+        <div style={{
+          width: 248, height: 2,
+          background: `linear-gradient(90deg, transparent, ${ACCENT}55, transparent)`,
+          margin: "10px auto 0",
+          opacity: 0, animation: "titleFadeIn 0.7s ease 0.5s both",
+        }} />
 
-          {/* Left poem column */}
-          <div className="poem-col poem-col-left">
-            {poemVisible && LEFT_STANZAS.map((lines, i) => (
-              <Stanza key={i} lines={lines} direction="left" delay={i * 0.12} />
-            ))}
+        {lyricIndex >= 0 && (
+          <div className="karaoke-line" key={lyricIndex}>
+            {LYRICS[lyricIndex].text}
           </div>
-
-          {/* Center — title */}
-          <div className="poem-center">
-            <h1
-              onMouseEnter={handleTitleEnter}
-              onMouseLeave={handleTitleLeave}
-              style={{
-                fontSize: 72, fontWeight: 700, color: "#ffffff",
-                letterSpacing: "0.02em", lineHeight: 1.1,
-                fontFamily: "'Tangerine', cursive",
-                textShadow: "0 0 10px #000000cc, 0 0 30px #000000aa, 0 2px 4px #000000ee",
-                cursor: "default",
-                opacity: titleLoaded ? (titleVisible ? 1 : 0) : undefined,
-                animation: titleLoaded ? "none" : "titleFadeIn 0.7s ease 0.1s both",
-                transition: titleLoaded ? "opacity 0.2s ease-in-out" : "none",
-              }}
-            >
-              {showAka ? "Pukao" : "Phantasma"}
-            </h1>
-            <div style={{
-              width: 248, height: 2,
-              background: `linear-gradient(90deg, transparent, ${ACCENT}55, transparent)`,
-              margin: "10px auto 0",
-              opacity: 0, animation: "titleFadeIn 0.7s ease 0.5s both",
-            }} />
-          </div>
-
-          {/* Right poem column */}
-          <div className="poem-col poem-col-right">
-            {poemVisible && RIGHT_STANZAS.map((lines, i) => (
-              <Stanza key={i} lines={lines} direction="right" delay={i * 0.12} />
-            ))}
-          </div>
-
-        </div>
+        )}
       </div>
+
+      {!started && (
+        <div className="start-overlay">
+          <button className="startbtn" onClick={handleStart}>
+            click me (unmutes music)
+          </button>
+        </div>
+      )}
+
+      {started && (
+        <SoundButton
+          soundOn={soundOn}
+          onToggle={() => {
+            const a = audioRef.current;
+            if (!a) return;
+            if (fadeIntervalRef.current) { clearInterval(fadeIntervalRef.current); fadeIntervalRef.current = null; }
+            if (soundOn) { a.muted = true; setSoundOn(false); }
+            else { a.muted = false; a.volume = FADE_VOLUME; setSoundOn(true); }
+          }}
+        />
+      )}
     </div>
   );
 }
