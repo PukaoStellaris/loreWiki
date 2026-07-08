@@ -166,7 +166,7 @@
 .va-hub__node-pos {
   position: absolute;
   z-index: 4;
-  animation: va-float 4s ease-in-out infinite;
+  animation: va-float 4s ease-in-out infinite backwards;
 }
 .va-hub__node-pop {
   animation: va-pop 0.8s cubic-bezier(0.34, 1.4, 0.5, 1) both;

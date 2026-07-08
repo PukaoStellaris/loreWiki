@@ -6,6 +6,16 @@
     { "source": "/livvy",     "destination": "/livvy/index.html"     },
     { "source": "/jenny",     "destination": "/jenny/index.html"     },
     { "source": "/white",     "destination": "/white/index.html"     },
+    { "source": "/story",     "destination": "/story/index.html"     },
+    { "source": "/osuRender", "destination": "/osuRender/index.html" },
+    { "source": "/osu-api/(.*)",     "destination": "https://catboy.best/api/$1"    },
+    { "source": "/osu-preview/(.*)", "destination": "https://b.ppy.sh/preview/$1"   },
+    { "source": "/osu-cover/(.*)",   "destination": "https://assets.ppy.sh/$1"      },
+    {
+      "source": "/",
+      "has": [{ "type": "host", "value": "render.violet-aegis.com" }],
+      "destination": "/osuRender/index.html"
+    },
     { "source": "/(.*)",      "destination": "/index.html"           }
   ]
 }

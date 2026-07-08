@@ -1,10 +1,11 @@
 export const characters = [
     {
       id: 'astral-anemos',
+      color: '#34d399',
       name: 'Astral Anemos',
       title: 'Leader of the Violet Aegis',
       category: 'Main Characters',
-      image: './place.png',
+      image: '/images/astral.png',
       infobox: {
         'Full Name': 'Astral Anemos',
         'Title': 'Shield of The Kingdom / Leader of the Violet Aegis',
@@ -14,15 +15,15 @@ export const characters = [
         'Weapon': 'Falling Up (Gravity-Enchanted Katana)',
         'Status': 'Active (Violet Aegis)'
       },
-      description: `Astral Anemos is the former Grand Marshal of the Imperial Aegis and current leader of the Violet Aegis. Known as "The Shield of the Kingdom," she rose to military prominence after single-handedly destroying one of the Titan Series mechanical giants during the Siege of the Iron Giants—an act that earned her the Grand Marshal title at an exceptionally young age.
+      description: `Astral Anemos is the former Grand Marshal of the Imperial Aegis and current leader of the Violet Aegis. Known as "The Shield of the Kingdom," she rose to military prominence after single-handedly destroying one of the Titan Series mechanical giants during the [[siege-of-iron-giants|Siege of the Iron Giants]]—an act that earned her the Grand Marshal title at an exceptionally young age.
 
-Her bond with Sentinel Phantasma is the emotional core of her story. A decade ago, when Sentinel faced expulsion from Sovereign Saints Academy for being unable to control elemental magic, Astral broke into the Headmaster's vault to steal the Ancient Gravity Scroll, telling her: "If you can't keep up with the elements, force them to bow to you." This act of friendship transformed Sentinel into an Archmage and defined their unbreakable partnership.
+Her bond with [[Sentinel Phantasma]] is the emotional core of her story. A decade ago, when Sentinel faced expulsion from [[sovereign-saints-academy|Sovereign Saints Academy]] for being unable to control elemental magic, Astral broke into the Headmaster's vault to steal the Ancient Gravity Scroll, telling her: "If you can't keep up with the elements, force them to bow to you." This act of friendship transformed Sentinel into an Archmage and defined their unbreakable partnership.
 
-When Sentinel was arrested by the Archon for protecting her sister, Astral did not hesitate. She resigned her commission as Grand Marshal, rallied the Cardinals of the Divinity Council, and orchestrated their mass defection from the Citadel. Under her leadership, the group established the Violet Aegis—a rogue coalition operating from the Astral Spire, outside the reach of the Kingdom's authority.
+When Sentinel was arrested by the Archon for protecting her sister, Astral did not hesitate. She resigned her commission as Grand Marshal, rallied the Cardinals of the Divinity Council, and orchestrated their mass defection from [[the-citadel|the Citadel]]. Under her leadership, the group established the Violet Aegis—a rogue coalition operating from [[astral-spire|the Astral Spire]], outside the reach of the Kingdom's authority.
 
 In Act 2, Astral's role evolves from soldier to strategist. She leverages her encyclopedic knowledge of the Citadel's internal procedures, chain of command, and bureaucratic vulnerabilities to dismantle the Kingdom's operations from the outside. She coordinates high-risk missions including infiltrating Executioner territory alongside the unlikely alliance with Sullivan Domineer's reformed Domineer Restoration Corp. She also navigates complex new relationships with Sera Vael and Voss, integrating former adversaries into the Violet Aegis's expanding network.
 
-Her signature weapon, "Falling Up," is a katana enchanted with permanent gravity magic by Sentinel. Beyond her natural wind magic, she wields the forbidden Shatter Magic drawn from an Ancient Shatter Scroll, capable of cracking the atmosphere itself.`,
+Her signature weapon, [[falling-up|"Falling Up"]], is a katana enchanted with permanent gravity magic by Sentinel. Beyond her natural wind magic, she wields the forbidden [[shatter-magic|Shatter Magic]] drawn from an Ancient Shatter Scroll, capable of cracking the atmosphere itself.`,
       abilities: [
         'Wind Step - High-speed movement using wind propulsion',
         'Maximus: Gale Javelin - High-velocity wind projectile attack',
@@ -43,10 +44,11 @@ Her signature weapon, "Falling Up," is a katana enchanted with permanent gravity
     },
     {
       id: 'sentinel-phantasma',
+      color: '#a78bfa',
       name: 'Sentinel Phantasma',
       title: 'Violet Nihility',
       category: 'Main Characters',
-      image: '/images/sentinel.png',
+      image: '/images/sentinel2.png',
       infobox: {
         'Full Name': 'Sentinel Phantasma',
         'Title': 'Violet Nihility',
@@ -56,13 +58,13 @@ Her signature weapon, "Falling Up," is a katana enchanted with permanent gravity
         'Weapon': "Destiny's Fall, Inabsolutus Halberd",
         'Status': 'Active (Violet Aegis)'
       },
-      description: `Sentinel Phantasma is the Kingdom's strongest and most volatile magic user, formerly known as the "Ace" of the Imperial Aegis. Described by the Archon as a "Rogue Anomaly," she is feared not for her rank but for the nature of her power — Nihil, a primordial force that does not destroy, but deletes.
+      description: `Sentinel Phantasma is the Kingdom's strongest and most volatile magic user, formerly known as the "Ace" of the Imperial Aegis. Described by the Archon as a "Rogue Anomaly," she is feared not for her rank but for the nature of her power — [[nihil-the-void|Nihil]], a primordial force that does not destroy, but deletes.
 
-Her path to Nihil began when she deciphered a forbidden scroll hidden in the Executioners' treasure vault. The power was immediately addictive and consuming, initially causing fractures across her skin and pushing her to the edge of corruption. Before she could be lost entirely, Astral used Shattering Fist to break through — and what emerged was not the same mage. Her mana shifted from corrupted black to focused violet. She had achieved Ascension, claiming the Inabsolutus Form and becoming what many believe to be the most powerful singular entity in the kingdom.
+Her path to Nihil began when she deciphered a forbidden scroll hidden in the Executioners' treasure vault. The power was immediately addictive and consuming, initially causing fractures across her skin and pushing her to the edge of corruption. Before she could be lost entirely, [[Astral Anemos|Astral]] used Shattering Fist to break through — and what emerged was not the same mage. Her mana shifted from corrupted black to focused violet. She had achieved Ascension, claiming the Inabsolutus Form and becoming what many believe to be the most powerful singular entity in the kingdom.
 
-The event that changed everything was her arrest. When Sentinel moved to protect her younger sister Luna, the Archon had her detained. In response, every Cardinal of the Divinity Council resigned their commissions. Astral Anemos personally led the defection, and together they escaped the Citadel to form the Violet Aegis — a rogue coalition headquartered at the Astral Spire, beyond the Kingdom's reach.
+The event that changed everything was her arrest. When Sentinel moved to protect her younger sister [[Luna Phantasma|Luna]], [[the-archon|the Archon]] had her detained. In response, every Cardinal of the Divinity Council resigned their commissions. Astral Anemos personally led the defection, and together they escaped the Citadel to form the Violet Aegis — a rogue coalition headquartered at [[astral-spire|the Astral Spire]], beyond the Kingdom's reach.
 
-In Act 2, Sentinel's role deepens from weapon to cornerstone. At the Astral Spire, her bond with Luna creates the Dual Star system — Luna's Aethereal magic stabilizes the Void's corruption, allowing Sentinel to sustain her power indefinitely without the original thirty-three-second limit. She personally ends the Monarch by deletion, removing the Dark Continent's ruling threat from existence entirely.
+In Act 2, Sentinel's role deepens from weapon to cornerstone. At the Astral Spire, her bond with Luna creates the Dual Star system — Luna's Aethereal magic stabilizes the Void's corruption, allowing Sentinel to sustain her power indefinitely without the original thirty-three-second limit. She personally ends [[the-monarch|the Monarch]] by deletion, removing [[the-dark-continent|the Dark Continent]]'s ruling threat from existence entirely.
 
 She carries a dual nature forged between her human self and Oreia, the ancient Goddess of the Void who inhabits her. Their relationship evolves in Act 2 from tension to accord — Sentinel does not channel Oreia, she co-exists with her. The Inabsolutus Halberd is the physical expression of this merged state, manifested only when both are fully aligned.`,
       abilities: [
@@ -89,6 +91,7 @@ She carries a dual nature forged between her human self and Oreia, the ancient G
     },
     {
       id: 'luna-phantasma',
+      color: '#f0abfc',
       name: 'Luna Phantasma',
       title: 'The Aethereal Spark',
       category: 'Main Characters',
@@ -101,11 +104,11 @@ She carries a dual nature forged between her human self and Oreia, the ancient G
         'Magic Type': 'Aethereal Magic (Pure Light)',
         'Status': 'Active (Violet Aegis)'
       },
-      description: `Luna Phantasma is the younger sister of Sentinel and the essential counterpart to her power. A former final-year cadet at Sovereign Saints Academy, she was thrust into the conflict when the Monarch kidnapped her to use her Aethereal light as fuel for his void form. Her rescue by Sentinel and the resigned Cardinals was one of the catalysts that formally unified the Violet Aegis.
+      description: `Luna Phantasma is the younger sister of [[Sentinel Phantasma|Sentinel]] and the essential counterpart to her power. A former final-year cadet at [[sovereign-saints-academy|Sovereign Saints Academy]], she was thrust into the conflict when [[the-monarch|the Monarch]] kidnapped her to use her Aethereal light as fuel for his void form. Her rescue by Sentinel and the resigned Cardinals was one of the catalysts that formally unified the Violet Aegis.
 
-Her magic — Aethereal Magic — is described as carrying the energy of a "Big Bang." Pure, dense, and catastrophically destructive, it was initially too overwhelming for her own body to channel without serious internal recoil. Under the mentorship of General Xi and the Equinox Control techniques he developed for her, Luna has made steady progress toward mastering her output.
+Her magic — [[aethereal-magic|Aethereal Magic]] — is described as carrying the energy of a "Big Bang." Pure, dense, and catastrophically destructive, it was initially too overwhelming for her own body to channel without serious internal recoil. Under the mentorship of [[general-xi|General Xi]] and the Equinox Control techniques he developed for her, Luna has made steady progress toward mastering her output.
 
-What makes Luna irreplaceable is not just her power in isolation, but what happens when it meets Sentinel's Nihil. Her pure light is the only force capable of washing out the "Red" corruption embedded in the Void. Together, they form the Dual Star system — Luna as the White Dwarf to Sentinel's Black Hole — an infinite, self-sustaining energy loop that removes Sentinel's thirty-three-second combat limit entirely. In Act 2, this system matures from an emergency measure into a reliable, battle-ready state, fundamentally changing what Sentinel is capable of sustaining in prolonged conflict.`,
+What makes Luna irreplaceable is not just her power in isolation, but what happens when it meets Sentinel's [[nihil-the-void|Nihil]]. Her pure light is the only force capable of washing out the "Red" corruption embedded in the Void. Together, they form the Dual Star system — Luna as the White Dwarf to Sentinel's Black Hole — an infinite, self-sustaining energy loop that removes Sentinel's thirty-three-second combat limit entirely. In Act 2, this system matures from an emergency measure into a reliable, battle-ready state, fundamentally changing what Sentinel is capable of sustaining in prolonged conflict.`,
       abilities: [
         'Aethereal Magic - Rare, high-density light magic capable of incinerating targets and detonating the surrounding air',
         'Starburst - High-tier light spell; still being stabilized under Xi\'s guidance',
@@ -122,6 +125,7 @@ What makes Luna irreplaceable is not just her power in isolation, but what happe
     },
     {
       id: 'general-xi',
+      color: '#5eead4',
       name: 'Mei Xi',
       title: 'Equinox Master',
       category: 'Supporting Characters',
@@ -153,6 +157,7 @@ What makes Luna irreplaceable is not just her power in isolation, but what happe
     },
     {
       id: 'lyra-mirai',
+      color: '#fbbf24',
       name: 'Lyra Mirai',
       title: 'Imperial General',
       category: 'Supporting Characters',
@@ -183,6 +188,7 @@ What makes Luna irreplaceable is not just her power in isolation, but what happe
     },
     {
       id: 'stellium-choros',
+      color: '#818cf8',
       name: 'Stellium Choros',
       title: 'Rank 2 Cardinal Mage (Dio)',
       category: 'Supporting Characters',
@@ -214,6 +220,7 @@ What makes Luna irreplaceable is not just her power in isolation, but what happe
     },
     {
       id: 'vesta-aeris',
+      color: '#fb923c',
       name: 'Vesta Aeris',
       title: 'Rank 3 Cardinal Mage (Tria)',
       category: 'Supporting Characters',
@@ -244,6 +251,7 @@ What makes Luna irreplaceable is not just her power in isolation, but what happe
     },
     {
       id: 'vespera-nox',
+      color: '#c084fc',
       name: 'Vespera Nox',
       title: 'Rank 4 Cardinal Mage (Téssera)',
       category: 'Supporting Characters',
@@ -274,6 +282,7 @@ What makes Luna irreplaceable is not just her power in isolation, but what happe
     },
     {
       id: 'zane-axios',
+      color: '#f87171',
       name: 'Zane Axios',
       title: 'Rank 5 Cardinal Mage (Pende)',
       category: 'Supporting Characters',
@@ -304,6 +313,7 @@ What makes Luna irreplaceable is not just her power in isolation, but what happe
     },
     {
       id: 'modeus-exi',
+      color: '#94a3b8',
       name: 'Modeus',
       title: 'Rank 6 Cardinal Mage (Éxi)',
       category: 'Supporting Characters',
@@ -333,6 +343,7 @@ What makes Luna irreplaceable is not just her power in isolation, but what happe
     },
     {
       id: 'miyu-epta',
+      color: '#f9a8d4',
       name: 'Miyu',
       title: 'Rank 7 Cardinal Mage (Eptá)',
       category: 'Supporting Characters',
@@ -362,6 +373,7 @@ What makes Luna irreplaceable is not just her power in isolation, but what happe
     },
     {
       id: 'avis-okto',
+      color: '#38bdf8',
       name: 'Avis',
       title: 'Rank 8 Cardinal Mage (Októ)',
       category: 'Supporting Characters',
@@ -391,6 +403,7 @@ What makes Luna irreplaceable is not just her power in isolation, but what happe
     },
     {
       id: 'selena-enea',
+      color: '#e2e8f0',
       name: 'Selena',
       title: 'Rank 9 Cardinal Mage (Enéa)',
       category: 'Supporting Characters',
@@ -420,6 +433,7 @@ What makes Luna irreplaceable is not just her power in isolation, but what happe
     },
     {
       id: 'ryusei-dekka',
+      color: '#67e8f9',
       name: 'Ryusei',
       title: 'Rank 10 Cardinal Mage (Déka)',
       category: 'Supporting Characters',
@@ -450,6 +464,7 @@ What makes Luna irreplaceable is not just her power in isolation, but what happe
     },
     {
       id: 'thysia-asteri',
+      color: '#fb7185',
       name: 'Thysia Asteri',
       title: 'Executioner\'s Overseer',
       category: 'Antagonists',
@@ -481,10 +496,11 @@ Driven by a fierce desire to prove her strength, she led the brutal assault on t
     },
     {
       id: 'sullivan-domineer',
+      color: '#facc15',
       name: 'Sullivan Domineer',
       title: 'Executioner\'s Overseer',
       category: 'Antagonists',
-      image: './place.png',
+      image: '/images/sullivan.png',
       infobox: {
         'Full Name': 'Sullivan Domineer',
         'Title': 'The Architect of Decay',
@@ -511,6 +527,7 @@ After realizing the Monarch viewed the Overseers merely as food, Sullivan initia
     },
     {
       id: 'lilith-nacht',
+      color: '#fda4af',
       name: 'Lilith Nacht',
       title: 'Executioner\'s Overseer',
       category: 'Antagonists',
@@ -541,6 +558,7 @@ During the clash in the ruins, her magic was utterly shattered by Sentinel's Obl
     },
     {
       id: 'gamma-voidwalker',
+      color: '#a1a1aa',
       name: 'Gamma Voidwalker',
       title: 'Executioner\'s Overseer',
       category: 'Antagonists',
@@ -570,6 +588,7 @@ During the clash in the ruins, her magic was utterly shattered by Sentinel's Obl
     },
     {
       id: 'the-monarch',
+      color: '#ef4444',
       name: 'The Monarch',
       title: 'Entity of the Dark Continent',
       category: 'Antagonists',
@@ -599,6 +618,7 @@ He sought to harvest Luna's Aethereal light to stabilize his own fragile void fo
     },
     {
       id: 'the-archon',
+      color: '#d8b4fe',
       name: 'The Archon',
       title: 'Leader of the Divinity Council',
       category: 'Antagonists',

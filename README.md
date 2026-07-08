@@ -11,6 +11,7 @@ This is a Vite **multi-page app**, not a SPA. Each section is its own HTML entry
 | `/` | `index.html` | `src/VioletAegisHub.jsx` |
 | `/listen` | `listen/index.html` | `src/App.jsx` (music player) |
 | `/divinity` | `divinity/index.html` | `src/pages/wikiPage.jsx` (lore wiki) |
+| `/story` | `story/index.html` | `src/pages/storyPage.jsx` (webnovel reader) |
 | `/phantasma` | `phantasma/index.html` | `src/pages/PhantasmaPage.jsx` |
 | `/livvy` | `livvy/index.html` | `src/pages/LivvyPage.jsx` |
 | `/jenny` | `jenny/index.html` | `src/pages/JennyPage.jsx` |
@@ -18,7 +19,11 @@ This is a Vite **multi-page app**, not a SPA. Each section is its own HTML entry
 
 Clean URLs are handled by rewrites in `vercel.json` (production) and the `devRewrites` plugin in `vite.config.js` (dev server).
 
-Shared UI lives in `src/components/` (`CharacterSplashPage`, `SoundButton`), `src/hooks/` (`useTipRotation`, `useRevealOnHover`), and `src/styles/character-page.css`. Lore data for the wiki is in `src/data/`.
+Shared UI lives in `src/components/` (`CharacterSplashPage`, `SoundButton`, `LockScreen`, `DialogueBox`, `ChapterReader`, …), `src/hooks/`, `src/lib/`, and `src/styles/`. Lore data for the wiki is in `src/data/`.
+
+## Story chapters
+
+The `/story` reader picks up any markdown file dropped into `src/data/chapters/` (via `src/lib/chapters.js`), ordered by the `chapter:` frontmatter field. Supported markup: `# / ## / ###` headings, `**bold**`, `*italic*`, `> ` blockquotes, `---` scene breaks, `{name}colored text{/}` (character id, palette name like `violet`/`gold`/`crimson`, or a `#hex`), and `:::dialogue` blocks with `Speaker: line`, `Speaker (tone): line`, and `> stage direction` lines. Speaker colors and portraits come from the `color`/`image` fields in `src/data/characters.js`. Both `/story` and `/divinity` share the password gate in `src/lib/authConfig.js`.
 
 ## Commands
 

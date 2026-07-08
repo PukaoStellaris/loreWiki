@@ -38,6 +38,8 @@ function devRewrites() {
     '/livvy':     '/livvy/index.html',
     '/jenny':     '/jenny/index.html',
     '/white':     '/white/index.html',
+    '/story':     '/story/index.html',
+    '/osuRender': '/osuRender/index.html',
   };
   return {
     name: 'dev-rewrites',
@@ -53,6 +55,15 @@ function devRewrites() {
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), musicManifestPlugin(), devRewrites()],
+  // Same-origin proxies for the osu! render page — mirrors the external
+  // rewrites in vercel.json so covers/previews stay CORS-clean in dev too.
+  server: {
+    proxy: {
+      '/osu-api':     { target: 'https://catboy.best',  changeOrigin: true, rewrite: p => p.replace(/^\/osu-api/, '/api') },
+      '/osu-preview': { target: 'https://b.ppy.sh',     changeOrigin: true, rewrite: p => p.replace(/^\/osu-preview/, '/preview') },
+      '/osu-cover':   { target: 'https://assets.ppy.sh', changeOrigin: true, rewrite: p => p.replace(/^\/osu-cover/, '') },
+    },
+  },
   build: {
     rollupOptions: {
       input: {
@@ -63,6 +74,8 @@ export default defineConfig({
         livvy:     path.resolve('livvy/index.html'),
         jenny:     path.resolve('jenny/index.html'),
         white:     path.resolve('white/index.html'),
+        story:     path.resolve('story/index.html'),
+        osuRender: path.resolve('osuRender/index.html'),
       },
     },
   },

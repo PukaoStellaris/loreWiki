@@ -18,7 +18,8 @@ const DEFAULT_TRACKS = [
 const DOORS = [
   { roman: "I",  label: "Listen",   tag: "MUSIC PLAYER", href: "/listen",   left: "64%", top: "26%", delay: "0.6s", floatDelay: "0s"   },
   { roman: "II", label: "Divinity", tag: "THE PATH",     href: "/divinity", left: "81%", top: "53%", delay: "0.8s", floatDelay: "1.3s" },
-  // { roman: "III", label: "Phantasma", tag: "THE POEM", href: "/phantasma", left: "60%", top: "78%", delay: "1.0s", floatDelay: "0.65s" },
+  { roman: "III", label: "Chronicle", tag: "THE STORY",  href: "/story",    left: "60%", top: "78%", delay: "1.0s", floatDelay: "0.65s" },
+  // { roman: "IV", label: "Phantasma", tag: "THE POEM", href: "/phantasma", left: "45%", top: "30%", delay: "1.2s", floatDelay: "0.9s" },
 ];
 
 const MOTION_FACTORS = { Calm: 0.55, Drifting: 1, Charged: 1.7 };

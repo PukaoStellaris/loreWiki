@@ -6,18 +6,25 @@
  */
 
 import React, { useState, useMemo, useEffect } from 'react';
-import { 
-  Search, Users, Map, Sparkles, BookOpen, ChevronRight, 
-  Menu, X, Shield, Star, Crown, Scroll, 
-  Heart, Target, Home, ArrowLeft, Moon, Sun, Eye, Lock, Key
+import {
+  Search, Users, Map, Sparkles, BookOpen, ChevronRight,
+  Menu, X, Shield, Star, Crown, Scroll,
+  Heart, Target, Home, ArrowLeft, Moon, Sun, Eye
 } from 'lucide-react';
+import FloatingParticles from '../components/FloatingParticles.jsx';
+import LockScreen from '../components/LockScreen.jsx';
+import useSessionAuth from '../hooks/useSessionAuth.js';
+import WikiProse from '../components/wiki/WikiProse.jsx';
+import RelationshipGraph from '../components/wiki/RelationshipGraph.jsx';
+import HistoryTimeline from '../components/wiki/HistoryTimeline.jsx';
+import WorldMapChart from '../components/wiki/WorldMapChart.jsx';
+import { resolveCharacter } from '../lib/loreIndex.js';
 
 // ============================================================
 // CONFIGURATION
 // ============================================================
 
-// CHANGE THE PASSWORD HERE
-const ACCESS_PASSWORD = "33SECONDS"; 
+// The access password lives in src/lib/authConfig.js (shared with /story)
 
 // ============================================================
 // SECTION 1: LORE DATA
@@ -33,6 +40,15 @@ import { history } from '../data/history.js';
 const loreData = { characters, worldMap, magicSystem, history };
 
 
+// Hash deep links: #/characters/astral-anemos, #/worldMap, #/home …
+const parseHash = () => {
+  const parts = window.location.hash.replace(/^#\/?/, '').split('/').filter(Boolean);
+  const category = parts[0] === 'home' || loreData[parts[0]] ? parts[0] : 'home';
+  const item = parts[1] ? loreData[category]?.find((i) => i.id === parts[1]) ?? null : null;
+  return { category, item };
+};
+const hashFor = (category, item) => (item ? `#/${category}/${item.id}` : `#/${category}`);
+
 const getLoreStats = () => ({
   characters: loreData.characters.length,
   locations: loreData.worldMap.length,
@@ -43,23 +59,6 @@ const getLoreStats = () => ({
 // ============================================================
 // SECTION 2: UI COMPONENTS
 // ============================================================
-
-const FloatingParticles = () => (
-  <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
-    {[...Array(15)].map((_, i) => (
-      <div
-        key={i}
-        className="absolute w-1 h-1 bg-violet-400/30 rounded-full"
-        style={{
-          left: `${Math.random() * 100}%`,
-          top: `${Math.random() * 100}%`,
-          animation: `float ${8 + Math.random() * 4}s ease-in-out infinite`,
-          animationDelay: `${Math.random() * 5}s`
-        }}
-      />
-    ))}
-  </div>
-);
 
 const Divider = ({ icon: Icon = Sparkles }) => (
   <div className="flex items-center gap-4">
@@ -189,87 +188,6 @@ const CategoryCard = ({ title, subtitle, description, icon: Icon, onClick }) => 
 // SECTION 3: PAGE COMPONENTS
 // ============================================================
 
-const LockScreen = ({ onLogin }) => {
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState(false);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (password === ACCESS_PASSWORD) {
-      onLogin();
-    } else {
-      setError(true);
-      setPassword('');
-    }
-  };
-
-  return (
-    <div className="min-h-screen bg-stone-950 flex flex-col items-center justify-center p-4 relative overflow-hidden">
-      {/* Background Ambience */}
-      <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20viewBox%3D%220%200%20200%20200%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cfilter%20id%3D%22noise%22%3E%3CfeTurbulence%20type%3D%22fractalNoise%22%20baseFrequency%3D%220.65%22%20numOctaves%3D%223%22%20stitchTiles%3D%22stitch%22%2F%3E%3C%2Ffilter%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20filter%3D%22url(%23noise)%22%20opacity%3D%220.03%22%2F%3E%3C%2Fsvg%3E')] pointer-events-none" />
-      <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent via-stone-900/50 to-stone-950 pointer-events-none" />
-      <FloatingParticles />
-
-      {/* Login Box */}
-      <div className="relative z-10 w-full max-w-md">
-        <div className="absolute -top-3 -left-3 w-12 h-12 border-t-2 border-l-2 border-violet-500/60 rounded-tl-xl" />
-        <div className="absolute -top-3 -right-3 w-12 h-12 border-t-2 border-r-2 border-violet-500/60 rounded-tr-xl" />
-        <div className="absolute -bottom-3 -left-3 w-12 h-12 border-b-2 border-l-2 border-violet-500/60 rounded-bl-xl" />
-        <div className="absolute -bottom-3 -right-3 w-12 h-12 border-b-2 border-r-2 border-violet-500/60 rounded-br-xl" />
-
-        <div className="bg-stone-900/90 backdrop-blur-xl border border-violet-700/30 p-8 rounded-2xl shadow-2xl">
-          <div className="text-center mb-8">
-            <div className="w-16 h-16 bg-gradient-to-br from-violet-700/30 to-violet-900/30 rounded-full flex items-center justify-center mx-auto mb-4 border border-violet-500/30">
-              <Lock className="w-8 h-8 text-violet-400" />
-            </div>
-            <h1 className="text-3xl font-bold text-purple-100 mb-2 font-cinzel tracking-wider">Restricted Access</h1>
-            <p className="text-purple-500/60 text-sm uppercase tracking-widest">Aegis Archives</p>
-          </div>
-
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="relative">
-              <Key className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-violet-600/50" />
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                  setError(false);
-                }}
-                placeholder="Enter access code..."
-                className={`w-full pl-12 pr-4 py-4 bg-stone-950/50 border rounded-xl focus:outline-none focus:ring-2 transition-all text-stone-200 placeholder-stone-600
-                  ${error ? 'border-red-500/50 focus:ring-red-500/30' : 'border-violet-700/30 focus:ring-violet-500/30 border-violet-500/20'}
-                `}
-                autoFocus
-              />
-            </div>
-
-            {error && (
-              <div className="text-red-400 text-sm text-center bg-red-900/10 py-2 rounded-lg border border-red-900/20 animate-pulse">
-                Access Denied: Unknown Code
-              </div>
-            )}
-
-            <button
-              type="submit"
-              className="w-full py-2 bg-gradient-to-r from-violet-600 to-purple-700 hover:from-violet-600 hover:to-purple-700 text-violet-50 font-bold rounded-xl shadow-lg transition-all transform hover:scale-[1.02] active:scale-[0.98] border border-violet-500/30 flex items-center justify-center gap-2"
-            >
-              <Shield className="w-5 h-5" />
-              <span>Enter Archives</span>
-            </button>
-          </form>
-
-          <div className="mt-8 pt-6 border-t border-violet-800/50 text-center">
-            <p className="text-stone-500 text-[14px]">
-              <span className="text-violet-500/70 italic">"Only those who know the duration of the Void may enter the Spire."</span>
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
 const Sidebar = ({ activeCategory, onSelectCategory, isOpen, onClose }) => {
   const categories = [
     { id: 'home', name: 'Home', icon: Home },
@@ -282,7 +200,7 @@ const Sidebar = ({ activeCategory, onSelectCategory, isOpen, onClose }) => {
   return (
     <>
       {isOpen && <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-40 lg:hidden" onClick={onClose} />}
-      <aside className={`fixed lg:static inset-y-0 left-0 z-50 w-72 bg-gradient-to-b from-stone-900 via-stone-900 to-stone-950 transform transition-transform duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'} flex flex-col shadow-2xl border-r border-violet-800/20`}>
+      <aside className={`fixed lg:sticky lg:top-0 lg:h-screen inset-y-0 left-0 z-50 w-72 bg-gradient-to-b from-stone-900 via-stone-900 to-stone-950 transform transition-transform duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'} flex flex-col shadow-2xl border-r border-violet-800/20`}>
         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-violet-600/50 via-violet-400/50 to-violet-600/50" />
         <div className="p-6 border-b border-violet-800/30">
           <div className="flex items-center justify-between">
@@ -443,11 +361,17 @@ const CategoryContent = ({ category, searchQuery, onSelectItem }) => {
         </div>
       </div>
 
+      {category === 'worldMap' && (
+        <WorldMapChart locations={data} onSelectItem={onSelectItem} searchQuery={searchQuery} />
+      )}
+
       {filteredData.length === 0 ? (
         <div className="text-center py-16 bg-stone-800/50 rounded-2xl border border-violet-700/20">
           <Search className="w-12 h-12 text-violet-600/30 mx-auto mb-4" />
           <p className="text-stone-400 text-lg">No ancient records found for "{searchQuery}"</p>
         </div>
+      ) : category === 'history' ? (
+        <HistoryTimeline events={filteredData} onSelectItem={onSelectItem} />
       ) : groupedData ? (
         Object.entries(groupedData).map(([groupName, items]) => (
           <div key={groupName} className="mb-8">
@@ -472,7 +396,7 @@ const CategoryContent = ({ category, searchQuery, onSelectItem }) => {
   );
 };
 
-const ArticleView = ({ item, category, onBack }) => {
+const ArticleView = ({ item, category, onBack, onNavigate }) => {
   const categoryNames = { characters: 'Characters', worldMap: 'World Map', magicSystem: 'Magic System', history: 'History' };
   const breadcrumbs = [
     { label: 'Home', path: 'home' },
@@ -512,11 +436,7 @@ const ArticleView = ({ item, category, onBack }) => {
               
               <div className="p-8">
                 <Divider />
-                <div className="mt-6 space-y-4">
-                  {item.description.split('\n\n').map((p, i) => (
-                    <p key={i} className={`indent-8 text-stone-300 leading-relaxed ${i === 0 ? 'first-letter:text-2xl first-letter:text-violet-400 first-letter:mr-1' : ''}`}>{p}</p>
-                  ))}
-                </div>
+                <WikiProse text={item.description} onNavigate={onNavigate} />
                 
                 {item.abilities && (
                   <div className="mt-8 pt-6 border-t border-violet-700/30">
@@ -534,19 +454,34 @@ const ArticleView = ({ item, category, onBack }) => {
                   </div>
                 )}
                 
+                {category === 'characters' && <RelationshipGraph character={item} onNavigate={onNavigate} />}
+
                 {item.relationships && (
                   <div className="mt-8 pt-6 border-t border-violet-700/30">
                     <h2 className="text-xl font-bold text-violet-200 mb-4 flex items-center gap-2">
                       <Heart className="w-5 h-5 text-rose-400" /> Bonds & Connections
                     </h2>
                     <div className="grid gap-3">
-                      {item.relationships.map((rel, i) => (
-                        <div key={i} className="flex items-center gap-3 bg-stone-900/80 rounded-lg px-4 py-3 border border-violet-700/20">
-                          <span className="font-semibold text-violet-300">{rel.name}</span>
-                          <span className="text-violet-600/50">✦</span>
-                          <span className="text-stone-400 italic">{rel.relation}</span>
-                        </div>
-                      ))}
+                      {item.relationships.map((rel, i) => {
+                        const bond = resolveCharacter(rel.name);
+                        return (
+                          <div key={i} className="flex items-center gap-3 bg-stone-900/80 rounded-lg px-4 py-3 border border-violet-700/20">
+                            {bond ? (
+                              <button
+                                onClick={() => onNavigate('characters', bond.id)}
+                                className="font-semibold hover:underline decoration-dotted underline-offset-4 transition-colors"
+                                style={{ color: bond.color }}
+                              >
+                                {rel.name}
+                              </button>
+                            ) : (
+                              <span className="font-semibold text-violet-300">{rel.name}</span>
+                            )}
+                            <span className="text-violet-600/50">✦</span>
+                            <span className="text-stone-400 italic">{rel.relation}</span>
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
                 )}
@@ -570,33 +505,49 @@ const ArticleView = ({ item, category, onBack }) => {
 // ============================================================
 
 export default function LoreWiki() {
-  const [activeCategory, setActiveCategory] = useState('home');
+  const initial = parseHash();
+  const [activeCategory, setActiveCategory] = useState(initial.category);
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedItem, setSelectedItem] = useState(null);
+  const [selectedItem, setSelectedItem] = useState(initial.item);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const { isAuthenticated, login } = useSessionAuth();
 
-  // Check for stored session on mount
+  // Browser back/forward re-drives state from the hash
   useEffect(() => {
-    const session = sessionStorage.getItem('lore_wiki_auth');
-    if (session === 'true') {
-      setIsAuthenticated(true);
-    }
+    const onHash = () => {
+      const { category, item } = parseHash();
+      setActiveCategory(category);
+      setSelectedItem(item);
+    };
+    window.addEventListener('hashchange', onHash);
+    return () => window.removeEventListener('hashchange', onHash);
   }, []);
-
-  const handleLogin = () => {
-    setIsAuthenticated(true);
-    sessionStorage.setItem('lore_wiki_auth', 'true');
-  };
 
   const handleSelectCategory = (category) => {
     setActiveCategory(category);
     setSelectedItem(null);
     setSearchQuery('');
+    window.location.hash = hashFor(category, null);
   };
 
   const handleSelectItem = (item) => {
     setSelectedItem(item);
+    window.location.hash = hashFor(activeCategory, item);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleBack = () => {
+    setSelectedItem(null);
+    window.location.hash = hashFor(activeCategory, null);
+  };
+
+  // Cross-category jump used by [[wiki links]], the bonds graph, and bond rows
+  const navigateToArticle = (category, id) => {
+    const item = loreData[category]?.find((i) => i.id === id);
+    if (!item) return;
+    setActiveCategory(category);
+    setSelectedItem(item);
+    window.location.hash = hashFor(category, item);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -612,7 +563,7 @@ export default function LoreWiki() {
             50% { transform: translateY(-20px); opacity: 0.6; }
           }
         `}</style>
-        <LockScreen onLogin={handleLogin} />
+        <LockScreen onLogin={login} />
       </div>
     );
   }
@@ -629,7 +580,7 @@ export default function LoreWiki() {
            <SearchBar value={searchQuery} onChange={setSearchQuery} onMenuClick={() => setSidebarOpen(true)} />
           
           {selectedItem ? (
-            <ArticleView item={selectedItem} category={activeCategory} onBack={() => setSelectedItem(null)} />
+            <ArticleView item={selectedItem} category={activeCategory} onBack={handleBack} onNavigate={navigateToArticle} />
           ) : activeCategory === 'home' ? (
             <HomeContent onSelectCategory={handleSelectCategory} />
           ) : (
