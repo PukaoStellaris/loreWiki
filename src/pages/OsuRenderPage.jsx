@@ -45,13 +45,13 @@ const STYLE = {
   triangles: { count: 25, color: "196,181,253", minSize: 50, maxSize: 100 },
 };
 
-const W = 1280;
+const W =1920;
 const H = 720;
 const INTRO_MS = 750;
 const FADE_IN_MS = 500;       // black screen fades in to the reveal at the very start
 const STAGGER_DELAY_MS = 250; // bars + title wait this long after the cover starts, then fade/slide in together
 const STAGGER_MS = 800;
-const FADE_START_MS = 6000;   // reveal holds until this point, then fades out
+const FADE_START_MS = 7000;   // reveal holds until this point, then fades out
 const FADE_DURATION_MS = 900;
 const HOLD_BLACK_MS = 500;    // stay on black before the recording stops
 const RECORD_MS = FADE_START_MS + FADE_DURATION_MS + HOLD_BLACK_MS;
@@ -79,16 +79,24 @@ function makeGradient(ctx, x0, y0, x1, y1, colors) {
   return g;
 }
 
+// Best-effort preferred mimeType — returning null here does NOT mean recording
+// is unsupported, just that we let the browser fall back to its own default
+// (isTypeSupported coverage varies a lot, especially on Firefox).
 function pickMimeType() {
   const candidates = [
     "video/mp4;codecs=avc1.42E01E,mp4a.40.2",
     "video/mp4",
+    "video/webm;codecs=vp9,opus",
     "video/webm;codecs=vp9",
+    "video/webm;codecs=vp8,opus",
     "video/webm;codecs=vp8",
+    "video/webm;codecs=h264",
     "video/webm",
   ];
   for (const c of candidates) {
-    if (window.MediaRecorder?.isTypeSupported?.(c)) return c;
+    try {
+      if (window.MediaRecorder?.isTypeSupported?.(c)) return c;
+    } catch { /* keep trying other candidates */ }
   }
   return null;
 }
@@ -302,6 +310,7 @@ export default function OsuRenderPage() {
   const [progress, setProgress] = useState(0);
   const [result, setResult] = useState(null); // { url, ext, size }
   const [mimeType] = useState(() => (typeof window !== "undefined" ? pickMimeType() : null));
+  const [recorderSupported] = useState(() => typeof window !== "undefined" && !!window.MediaRecorder);
 
   // Load the current map's cover (missing image still renders the card) and
   // rebuild the offscreen layers; runs on mount and whenever a beatmap loads.
@@ -672,7 +681,7 @@ export default function OsuRenderPage() {
 
   const startRecording = () => {
     const canvas = canvasRef.current;
-    if (!canvas || !mimeType || recording) return;
+    if (!canvas || !recorderSupported || recording) return;
     if (result?.url) URL.revokeObjectURL(result.url);
     setResult(null);
 
@@ -697,13 +706,18 @@ export default function OsuRenderPage() {
       } catch { /* fall back to a silent recording */ }
     }
 
-    const recorder = new MediaRecorder(stream, { mimeType, videoBitsPerSecond: 8_000_000 });
+    // omitting mimeType lets the browser pick its own default when none of our
+    // preferred candidates were reported as supported (isTypeSupported coverage
+    // varies a lot across browsers, Firefox especially)
+    const recorderOptions = { videoBitsPerSecond: 8_000_000, ...(mimeType ? { mimeType } : {}) };
+    const recorder = new MediaRecorder(stream, recorderOptions);
     chunksRef.current = [];
     recorder.ondataavailable = (e) => { if (e.data.size) chunksRef.current.push(e.data); };
     recorder.onstop = () => {
-      const blob = new Blob(chunksRef.current, { type: mimeType });
+      const actualType = recorder.mimeType || mimeType || "video/webm";
+      const blob = new Blob(chunksRef.current, { type: actualType });
       const url = URL.createObjectURL(blob);
-      const ext = mimeType.includes("mp4") ? "mp4" : "webm";
+      const ext = actualType.includes("mp4") ? "mp4" : "webm";
       setResult({ url, ext, size: blob.size });
       recordingRef.current = false;
       setRecording(false);
@@ -740,7 +754,7 @@ export default function OsuRenderPage() {
         <p style={{ color: "#9d95c2", fontSize: 14, marginTop: 8, lineHeight: 1.6 }}>
           The card below is drawn frame-by-frame on a &lt;canvas&gt;, no video file involved.
           "Record" captures that canvas live via <code>captureStream()</code> + <code>MediaRecorder</code> and
-          hands you a downloadable {mimeType?.includes("mp4") ? "MP4" : "WebM"} — proof that a React/Vite
+          hands you a downloadable video file — proof that a React/Vite
           page can produce real video output straight from the browser.
         </p>
       </div>
@@ -792,7 +806,7 @@ export default function OsuRenderPage() {
         </button>
         <button
           onClick={startRecording}
-          disabled={!mimeType || recording}
+          disabled={!recorderSupported || recording}
           style={btnStyle(true, recording)}
         >
           {recording ? `Recording… ${Math.round(progress * 100)}%` : `Record ${(RECORD_MS / 1000).toFixed(1)}s clip`}
@@ -808,9 +822,9 @@ export default function OsuRenderPage() {
         )}
       </div>
 
-      {!mimeType && (
+      {!recorderSupported && (
         <p style={{ color: "#e0384a", fontSize: 13 }}>
-          This browser doesn't support MediaRecorder video capture — try a recent Chrome or Edge.
+          This browser doesn't support MediaRecorder video capture — try a recent Chrome, Edge, or Firefox.
         </p>
       )}
 
