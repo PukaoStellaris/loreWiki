@@ -45,8 +45,14 @@ const STYLE = {
   triangles: { count: 25, color: "196,181,253", minSize: 50, maxSize: 100 },
 };
 
-const W =1920;
+// All layout math below is expressed in this logical 1280x720 design space —
+// the actual canvas backing store (and recorded video) is OUTPUT_W x OUTPUT_H;
+// draw() scales up to fill it, so nothing else needs to change to go full HD.
+const W = 1280;
 const H = 720;
+const OUTPUT_W = 1920;
+const OUTPUT_H = 1080;
+const OUTPUT_SCALE = OUTPUT_W / W;
 const INTRO_MS = 750;
 const FADE_IN_MS = 500;       // black screen fades in to the reveal at the very start
 const STAGGER_DELAY_MS = 250; // bars + title wait this long after the cover starts, then fade/slide in together
@@ -354,6 +360,9 @@ export default function OsuRenderPage() {
     if (!canvas || !layers) return;
     const map = mapRef.current;
     const ctx = canvas.getContext("2d", { alpha: false });
+    // reset (not save/restore) so this can't drift across frames — everything
+    // below is authored in 1280x720 space and comes out at the real OUTPUT_W/H
+    ctx.setTransform(OUTPUT_SCALE, 0, 0, OUTPUT_SCALE, 0, 0);
     const t = now - animStartRef.current;
     // content animations run on a clock that only starts once the fade from
     // black has finished; the background layers keep drifting on real time
@@ -709,7 +718,7 @@ export default function OsuRenderPage() {
     // omitting mimeType lets the browser pick its own default when none of our
     // preferred candidates were reported as supported (isTypeSupported coverage
     // varies a lot across browsers, Firefox especially)
-    const recorderOptions = { videoBitsPerSecond: 8_000_000, ...(mimeType ? { mimeType } : {}) };
+    const recorderOptions = { videoBitsPerSecond: 16_000_000, ...(mimeType ? { mimeType } : {}) };
     const recorder = new MediaRecorder(stream, recorderOptions);
     chunksRef.current = [];
     recorder.ondataavailable = (e) => { if (e.data.size) chunksRef.current.push(e.data); };
@@ -785,13 +794,13 @@ export default function OsuRenderPage() {
       <audio ref={audioRef} src={mapData.preview || undefined} preload="auto" style={{ display: "none" }} />
 
       <div style={{
-        width: "min(100%, 900px)", aspectRatio: `${W} / ${H}`, borderRadius: 14,
+        width: "min(100%, 900px)", aspectRatio: `${OUTPUT_W} / ${OUTPUT_H}`, borderRadius: 14,
         overflow: "hidden", border: "1px solid #241c44", boxShadow: "0 20px 60px #00000066",
       }}>
         <canvas
           ref={canvasRef}
-          width={W}
-          height={H}
+          width={OUTPUT_W}
+          height={OUTPUT_H}
           style={{ width: "100%", height: "100%", display: "block", background: BG_MAIN }}
         />
       </div>
