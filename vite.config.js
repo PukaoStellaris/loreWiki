@@ -39,6 +39,7 @@ function devRewrites() {
     '/jenny':     '/jenny/index.html',
     '/white':     '/white/index.html',
     '/story':     '/story/index.html',
+    '/chat':      '/chat/index.html',
     '/osuRender': '/osuRender/index.html',
   };
   return {
@@ -75,6 +76,7 @@ export default defineConfig({
         jenny:     path.resolve('jenny/index.html'),
         white:     path.resolve('white/index.html'),
         story:     path.resolve('story/index.html'),
+        chat:      path.resolve('chat/index.html'),
         osuRender: path.resolve('osuRender/index.html'),
       },
     },

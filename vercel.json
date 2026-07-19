@@ -7,6 +7,7 @@
     { "source": "/jenny",     "destination": "/jenny/index.html"     },
     { "source": "/white",     "destination": "/white/index.html"     },
     { "source": "/story",     "destination": "/story/index.html"     },
+    { "source": "/chat",      "destination": "/chat/index.html"      },
     { "source": "/osuRender", "destination": "/osuRender/index.html" },
     { "source": "/osu-api/(.*)",     "destination": "https://catboy.best/api/$1"    },
     { "source": "/(.*)",      "destination": "/index.html"           }
