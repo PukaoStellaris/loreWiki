@@ -15,6 +15,9 @@ dist-ssr
 # Large media — already-tracked files stay tracked; new tracks need `git add -f`
 public/music/
 
+# Cover art extracted from music tags at build time — regenerated, never edited
+public/music-covers/
+
 # Vercel / env
 .vercel
 .env*

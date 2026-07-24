@@ -24,6 +24,16 @@
     <!-- <meta property="twitter:image" content="https://www.violet-aegis.com/images/og-cover.jpg" /> -->
 
     <title>Violet Aegis: Audio Player</title>
+
+    <!-- Loaded here rather than from an @import inside a runtime-injected
+         <style>, which couldn't start fetching until React had mounted. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap"
+    />
+
     <style>
       *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
       body { background: #0c0a1a; color: #e8e4f0; font-family: 'Segoe UI', sans-serif; }

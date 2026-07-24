@@ -6,40 +6,50 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
    White — about me.  Converted from index.html.
 
    Assets live in /public:
-     public/audio/...        the four .webm tracks
-     public/images/...       cover images, Mahiru webm + wing gif
+     public/music/...        the four .webm tracks
+     public/music/art/...    cover images
+     public/assests/...      Mahiru webm + wing gif
    Fonts are pulled from Google Fonts by the <style> block below.
    ═══════════════════════════════════════════════════════════════ */
 
 /* ── ✏️ CONFIG ──────────────────────────────────────────────── */
+/* Every asset path is built from these two, so moving a folder
+   is a one-line change. Both are relative to /public. */
+const AUDIO_DIR = "/audio";
+const IMG_DIR   = "/images";
+
 const SONGS = [
   { title: "Over 85", artist: "Hojean", album: "Over 85",
-    src: "/audio/85.webm",
-    art: "/images/over85.jpg",
+    src: `${AUDIO_DIR}/85.webm`,
+    art: `${IMG_DIR}/over85.jpg`,
     tint: ["#1f4a5c", "#101f2b"] },
 
   { title: "deserve this", artist: "Hojean", album: "deserve this",
-    src: "/audio/deserve.webm",
-    art: "/images/deserve.jpg",
+    src: `${AUDIO_DIR}/deserve.webm`,
+    art: `${IMG_DIR}/deserve.jpg`,
     tint: ["#2b6b63", "#14322f"] },
 
   { title: "weathergirl", artist: "ft. Eleanor Forte", album: "weathergirl",
-    src: "/audio/girl.webm",
-    art: "/images/weathergirl.jpg",
+    src: `${AUDIO_DIR}/girl.webm`,
+    art: `${IMG_DIR}/weathergirl.jpg`,
     tint: ["#3a5fa8", "#1a2444"] },
 
   { title: "Patchwork Staccato", artist: "JubyPhonic", album: "ツギハギスタッカート",
-    src: "/audio/patch.webm",
-    art: "/images/patchwork.jpg",
+    src: `${AUDIO_DIR}/patch.webm`,
+    art: `${IMG_DIR}/patchwork.jpg`,
     tint: ["#b8412c", "#5e2a1e"] },
 ];
+
+/* the Mahiru clip + wing gif */
+const WAIFU_VIDEO = `${IMG_DIR}/67667.webm`;
+const WING_GIF    = `${IMG_DIR}/wing-marry.gif`;
 
 /* copy: "..." copies to clipboard instead of opening a link */
 const SOCIALS = [
   { icon: "discord", title: "Discord", handle: "white1ist", copy: "white1ist" },
-  { icon: "roblox",  title: "Roblox",  handle: "@white", href: "https://www.roblox.com/users/375885461/profile" },
-  { icon: "steam",   title: "Steam",   handle: "@white", href: "https://steamcommunity.com/profiles/76561199195856483/" },
-  { icon: "x",       title: "Twitter", handle: "@white", href: "https://x.com/white1ist" },
+  { icon: "roblox",  title: "Roblox",  handle: "@white", href: "https://www.roblox.com/users/1752114591/profile" },
+  { icon: "steam",   title: "Steam",   handle: "@white", href: "https://steamcommunity.com/profiles/76561199195856483" },
+  { icon: "x",       title: "Twitter", handle: "@white1ist", href: "https://x.com/white1ist" },
 ];
 
 const ICONS = {
@@ -165,36 +175,91 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
 .shell.in{filter:none;opacity:1}
 
 /* ═══════════════════════════════════════════════════════════
-   MAGIK BORDER — cursor-tracked conic edge (thereallo.dev)
+   CARD CHROME — shared shell. The cursor reaction is NOT shared;
+   each card gets its own fx-* effect below.
    ═══════════════════════════════════════════════════════════ */
 .magik{
-  --a:0;--on:0;--spread:115;
   position:relative;isolation:isolate;border-radius:var(--r);
   background:var(--card);
   border:1px solid var(--line);
   backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
-  transition:background .35s ease,transform .4s cubic-bezier(.16,1,.3,1);
+  overflow:hidden;
+  transition:background .35s ease,border-color .35s ease,
+             transform .35s cubic-bezier(.16,1,.3,1);
 }
-.magik::after{
-  content:"";position:absolute;inset:0;z-index:2;pointer-events:none;
-  border-radius:inherit;padding:1px;
-  background:conic-gradient(from calc((var(--a) - var(--spread)*.5)*1deg),
-    transparent 0deg,var(--lav-hot),var(--pink),var(--mint),
-    transparent calc(var(--spread)*1deg));
-  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
-          mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
-  -webkit-mask-composite:xor;mask-composite:exclude;
-  opacity:var(--on);transition:opacity .5s ease;
-}
-.magik::before{
-  content:"";position:absolute;inset:-3px;z-index:0;pointer-events:none;
-  border-radius:inherit;
-  background:conic-gradient(from calc((var(--a) - var(--spread)*.5)*1deg),
-    transparent 0deg,var(--lav),var(--pink),
-    transparent calc(var(--spread)*1deg));
-  filter:blur(20px);opacity:calc(var(--on)*.55);transition:opacity .5s ease;
-}
+.magik:hover{border-color:rgba(244,242,255,.28)}
 .magik > *{position:relative;z-index:3}
+
+/* ═══════════════════════════════════════════════════════════
+   SIX DIFFERENT CURSOR EFFECTS
+   1 spotlight · 2 tilt · 3 aurora · 4 beam · 5 parallax · 6 magnet
+   All driven by one throttled pointermove; the easing is CSS.
+   ═══════════════════════════════════════════════════════════ */
+
+/* 1 ── SPOTLIGHT (the player) — light pools under the cursor */
+.fx-spot::after{
+  content:"";position:absolute;inset:0;z-index:2;pointer-events:none;
+  background:radial-gradient(300px circle at var(--mx,50%) var(--my,50%),
+    rgba(255,255,255,.22),rgba(255,255,255,.07) 38%,transparent 70%);
+  opacity:var(--fx,0);transition:opacity .35s ease;
+}
+
+/* 2 ── TILT (about me) — the card leans toward you */
+.fx-tilt{
+  transform:perspective(900px) rotateX(var(--tx,0deg)) rotateY(var(--ty,0deg));
+  transition:transform .3s cubic-bezier(.16,1,.3,1),
+             background .35s ease,border-color .35s ease;
+}
+
+/* 3 ── AURORA (status) — a colour cloud trailing the cursor */
+.fx-aurora .aurora{
+  position:absolute;top:0;left:0;z-index:0;pointer-events:none;
+  width:250px;height:250px;margin:-125px 0 0 -125px;border-radius:50%;
+  background:radial-gradient(circle,var(--lav-hot),var(--pink) 45%,transparent 70%);
+  filter:blur(45px);
+  opacity:calc(var(--fx,0) * .6);
+  transform:translate(var(--ax,50%),var(--ay,50%));
+  transition:transform .5s cubic-bezier(.16,1,.3,1),opacity .5s ease;
+}
+
+/* the second aurora is tinted mint→lavender so the two cards
+   share the behaviour without being carbon copies */
+.fx-aurora.aurora-mint .aurora{
+  background:radial-gradient(circle,var(--mint),var(--lav-hot) 48%,transparent 70%);
+}
+
+/* 4 ── BEAM — unused now that "on repeat" uses the aurora; kept so
+   it can be dropped back on any card with one class. */
+.fx-beam::after{
+  content:"";position:absolute;top:0;bottom:0;left:0;z-index:0;pointer-events:none;
+  width:200px;margin-left:-100px;
+  background:linear-gradient(90deg,transparent,rgba(195,182,255,.22),transparent);
+  transform:translateX(var(--bx,0px));
+  opacity:var(--fx,0);
+  transition:transform .45s cubic-bezier(.16,1,.3,1),opacity .4s ease;
+}
+
+/* 5 ── PARALLAX (favourite) — layers drift against each other */
+.fx-parallax .waifu-vid{
+  transform:scale(var(--wz,1.06)) translate(var(--wx,0px),var(--wy,0px));
+  transition:transform .55s cubic-bezier(.16,1,.3,1);
+}
+.fx-parallax:hover .waifu-vid{--wz:1.12}
+.fx-parallax .waifu-kanji{
+  transform:translate(var(--kx,0px),var(--ky,0px)) rotate(var(--kr,0deg));
+  transition:transform .55s cubic-bezier(.16,1,.3,1),color .6s;
+}
+.fx-parallax:hover .waifu-kanji{--kr:-4deg;color:rgba(232,182,212,.3)}
+.fx-parallax .waifu-body{
+  transform:translate(var(--bx2,0px),var(--by2,0px));
+  transition:transform .55s cubic-bezier(.16,1,.3,1);
+}
+
+/* 6 ── MAGNET (elsewhere) — the tiles lean toward your cursor */
+.fx-magnet .link{
+  transform:translate(var(--lx,0px),var(--ly,0px));
+  transition:transform .35s cubic-bezier(.16,1,.3,1),background .3s ease;
+}
 
 /* ═══════════════════════════════════════════════════════════
    LAYOUT
@@ -393,14 +458,14 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
   position:absolute;inset:0;display:grid;place-items:center;
   background:rgba(0,0,0,.3);opacity:0;transition:opacity .3s,background .3s;
 }
-.song[data-playing] .art-play{opacity:.72}
+.song.playing .art-play{opacity:.72}
 .art:hover .art-play{opacity:1;background:rgba(0,0,0,.45)}
 .art-play svg{width:26px;height:26px;color:#fff;filter:drop-shadow(0 2px 6px rgba(0,0,0,.5))}
 
 /* little equaliser that only animates while "playing" */
 .eq{display:flex;align-items:flex-end;gap:2.5px;height:15px;flex-shrink:0}
 .eq i{width:3px;border-radius:2px;background:#1ed760;height:30%}
-.song[data-playing] .eq i{animation:bounce .9s ease-in-out infinite}
+.song.playing .eq i{animation:bounce .9s ease-in-out infinite}
 .eq i:nth-child(1){animation-delay:0s}
 .eq i:nth-child(2){animation-delay:.22s}
 .eq i:nth-child(3){animation-delay:.44s}
@@ -434,10 +499,20 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
    OTHER BENTO CARDS
    ═══════════════════════════════════════════════════════════ */
 /* about tile — the only way into the bio */
+/* it's a <button>, so restate the card look explicitly — a host
+   reset (Tailwind preflight, template index.css) otherwise strips
+   the border/background off buttons and this one stops matching
+   the other cards. */
 .about-tile{
   display:flex;align-items:center;gap:16px;padding:22px;cursor:pointer;width:100%;text-align:left;
+  -webkit-appearance:none;appearance:none;
+  font:inherit;color:inherit;
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:var(--r);
 }
-.about-tile:hover{background:var(--card-hi);transform:translateY(-3px)}
+.about-tile:focus-visible{outline:2px solid var(--lav-hot);outline-offset:2px}
+.about-tile:hover{background:var(--card-hi)}   /* lift comes from fx-tilt */
 .blob{
   width:52px;height:52px;flex-shrink:0;display:grid;place-items:center;
   background:rgba(244,242,255,.09);color:var(--ink);
@@ -564,11 +639,9 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
   width:100%;height:100%;object-fit:cover;
   /* pull the crop toward the top so her whole head is in frame */
   object-position:50% 6%;
-  /* slight overscan keeps the source watermark out of the corner */
-  transform:scale(1.06);
-  transition:transform 1.1s cubic-bezier(.16,1,.3,1);
+  /* --wz overscan keeps the source watermark out of the corner;
+     fx-parallax drives --wx/--wy */
 }
-.waifu:hover .waifu-vid{transform:scale(1.12)}
 .waifu .waifu-scrim{
   position:absolute;inset:0;z-index:1;pointer-events:none;
   background:linear-gradient(180deg,
@@ -580,9 +653,7 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
   font-size:clamp(64px,7vw,96px);font-weight:700;line-height:1;letter-spacing:-.04em;
   color:rgba(255,255,255,.16);user-select:none;pointer-events:none;
   text-shadow:0 4px 20px rgba(0,0,0,.3);
-  transition:transform .6s cubic-bezier(.16,1,.3,1),color .6s;
 }
-.waifu:hover .waifu-kanji{transform:rotate(-4deg) scale(1.05);color:rgba(232,182,212,.3)}
 .waifu-body{position:relative;z-index:3;padding-top:6px}
 /* the wing gif standing in for the 🪶 emoji */
 .wing-inline{
@@ -598,7 +669,7 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
 .link{display:flex;align-items:center;gap:12px;padding:13px 15px;border-radius:13px;
   background:rgba(244,242,255,.04);border:1px solid var(--line);
   transition:background .3s,transform .3s cubic-bezier(.16,1,.3,1)}
-.link:hover{background:rgba(244,242,255,.09);transform:translateY(-3px)}
+.link:hover{background:rgba(244,242,255,.09)}   /* movement comes from fx-magnet */
 .link .ico{pointer-events:none;width:34px;height:34px}
 .link:hover .ico{transform:none;background:var(--lav-hot);color:#241f38;border-color:var(--lav-hot)}
 .link-t{font-size:13.5px;font-weight:600}
@@ -690,6 +761,13 @@ footer{
   *,*::before,*::after{animation:none !important;transition-duration:.01ms !important}
   .rise{opacity:1;transform:none}
   .shell{filter:none;opacity:1}
+  /* hold the cursor effects still too */
+  .fx-tilt{transform:none !important}
+  .fx-parallax .waifu-vid{transform:scale(1.06) !important}
+  .fx-parallax .waifu-kanji,
+  .fx-parallax .waifu-body,
+  .fx-magnet .link{transform:none !important}
+  .fx-spot::after,.fx-beam::after,.fx-aurora .aurora{opacity:0 !important}
 }`;
 
 export default function WhitePage() {
@@ -699,11 +777,12 @@ export default function WhitePage() {
   const [now, setNow]           = useState(0);
   const [dur, setDur]           = useState(0);
   const [lens, setLens]         = useState({});
-  const [vol, setVol]           = useState(0.55);
+  const [vol, setVol]           = useState(0.2);
   const [aboutOpen, setAbout]   = useState(false);
   const [toast, setToast]       = useState("");
   const [decoText, setDecoText] = useState("");
   const [pct, setPct]           = useState(0);
+  const [seen, setSeen]         = useState(() => new Set());
 
   const audioRef = useRef(null);
   const shellRef = useRef(null);
@@ -711,7 +790,7 @@ export default function WhitePage() {
   const starsRef = useRef(null);
   const decoRef  = useRef(null);
   const wantPlay = useRef(false);
-  const lastVol  = useRef(0.55);
+  const lastVol  = useRef(0.2);
   const toastT   = useRef(null);
 
   const song = SONGS[cur];
@@ -772,30 +851,110 @@ export default function WhitePage() {
 
   useEffect(() => { if (audioRef.current) audioRef.current.volume = vol; }, [vol]);
 
-  /* ── magik borders + ghost eyes, one shared pointer loop ──── */
+  /* ── CURSOR EFFECTS ───────────────────────────────────────────
+     Six different reactions, one throttled loop. Each branch only
+     writes CSS variables — the easing is CSS, so nothing needs a
+     continuously running animation frame.
+       1 spotlight · 2 tilt · 3 aurora · 4 beam · 5 parallax · 6 magnet
+     ─────────────────────────────────────────────────────────── */
   useEffect(() => {
-    const cards = Array.from(document.querySelectorAll(".magik"));
-    const eyes  = ghostRef.current ? ghostRef.current.querySelectorAll(".eye") : [];
-    const PROX  = 200;
+    const q = (sel) => Array.from(document.querySelectorAll(sel));
+    const FX = {
+      spot:     q(".fx-spot"),
+      tilt:     q(".fx-tilt"),
+      aurora:   q(".fx-aurora"),
+      beam:     q(".fx-beam"),
+      parallax: q(".fx-parallax"),
+      magnet:   q(".fx-magnet"),
+    };
+    const eyes = ghostRef.current ? ghostRef.current.querySelectorAll(".eye") : [];
+
     let px = -9999, py = -9999, queued = false, alive = true;
+    const inside = (r) => px >= r.left && px <= r.right && py >= r.top && py <= r.bottom;
+    const off    = (r) => r.bottom < -200 || r.top > window.innerHeight + 200;
 
     const paint = () => {
       queued = false;
       if (!alive) return;
-      for (const c of cards) {
-        const r = c.getBoundingClientRect();
-        if (r.bottom < -PROX || r.top > window.innerHeight + PROX) {
-          c.style.setProperty("--on", 0);
-          continue;
+
+      /* 1 — spotlight pools under the cursor */
+      for (const el of FX.spot) {
+        const r = el.getBoundingClientRect();
+        if (off(r)) continue;
+        const on = inside(r);
+        if (on) {
+          el.style.setProperty("--mx", (px - r.left).toFixed(0) + "px");
+          el.style.setProperty("--my", (py - r.top).toFixed(0) + "px");
         }
-        const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
-        const ang = (Math.atan2(py - cy, px - cx) * 180 / Math.PI + 90 + 360) % 360;
-        const dx = Math.max(r.left - px, 0, px - r.right);
-        const dy = Math.max(r.top - py, 0, py - r.bottom);
-        const dist = Math.hypot(dx, dy);
-        c.style.setProperty("--a", ang.toFixed(1));
-        c.style.setProperty("--on", dist > PROX ? 0 : (1 - dist / PROX).toFixed(3));
+        el.style.setProperty("--fx", on ? 1 : 0);
       }
+
+      /* 2 — the card leans toward you, flattens when you leave */
+      for (const el of FX.tilt) {
+        const r = el.getBoundingClientRect();
+        if (off(r)) continue;
+        if (inside(r)) {
+          const nx = (px - (r.left + r.width / 2)) / (r.width / 2);
+          const ny = (py - (r.top + r.height / 2)) / (r.height / 2);
+          el.style.setProperty("--ty", (nx * 7).toFixed(2) + "deg");
+          el.style.setProperty("--tx", (-ny * 7).toFixed(2) + "deg");
+        } else {
+          el.style.setProperty("--tx", "0deg");
+          el.style.setProperty("--ty", "0deg");
+        }
+      }
+
+      /* 3 — aurora cloud drifts after the cursor */
+      for (const el of FX.aurora) {
+        const r = el.getBoundingClientRect();
+        if (off(r)) continue;
+        const on = inside(r);
+        if (on) {
+          el.style.setProperty("--ax", (px - r.left).toFixed(0) + "px");
+          el.style.setProperty("--ay", (py - r.top).toFixed(0) + "px");
+        }
+        el.style.setProperty("--fx", on ? 1 : 0);
+      }
+
+      /* 4 — beam of light rides the cursor's x */
+      for (const el of FX.beam) {
+        const r = el.getBoundingClientRect();
+        if (off(r)) continue;
+        const on = inside(r);
+        if (on) el.style.setProperty("--bx", (px - r.left).toFixed(0) + "px");
+        el.style.setProperty("--fx", on ? 1 : 0);
+      }
+
+      /* 5 — parallax: three layers, three depths */
+      for (const el of FX.parallax) {
+        const r = el.getBoundingClientRect();
+        if (off(r)) continue;
+        const on = inside(r);
+        const nx = on ? (px - (r.left + r.width / 2)) / (r.width / 2) : 0;
+        const ny = on ? (py - (r.top + r.height / 2)) / (r.height / 2) : 0;
+        el.style.setProperty("--wx", (-nx * 10).toFixed(1) + "px");
+        el.style.setProperty("--wy", (-ny * 8).toFixed(1) + "px");
+        el.style.setProperty("--kx", (nx * 20).toFixed(1) + "px");
+        el.style.setProperty("--ky", (ny * 14).toFixed(1) + "px");
+        el.style.setProperty("--bx2", (nx * 7).toFixed(1) + "px");
+        el.style.setProperty("--by2", (ny * 5).toFixed(1) + "px");
+      }
+
+      /* 6 — magnet: tiles lean toward a nearby cursor */
+      for (const el of FX.magnet) {
+        if (off(el.getBoundingClientRect())) continue;
+        el.querySelectorAll(".link").forEach((l) => {
+          const r = l.getBoundingClientRect();
+          const dx = px - (r.left + r.width / 2);
+          const dy = py - (r.top + r.height / 2);
+          const d = Math.hypot(dx, dy), R = 170;
+          const f = d < R ? (1 - d / R) * 0.3 : 0;
+          l.style.setProperty("--lx", (dx * f).toFixed(1) + "px");
+          l.style.setProperty("--ly", (dy * f).toFixed(1) + "px");
+        });
+      }
+
+      /* the ghost keeps watching you regardless */
       if (ghostRef.current) {
         const r = ghostRef.current.getBoundingClientRect();
         const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
@@ -891,15 +1050,27 @@ export default function WhitePage() {
     return () => { cancelAnimationFrame(raf); window.removeEventListener("resize", size); };
   }, []);
 
-  /* ── scroll reveal ────────────────────────────────────────── */
+  /* ── scroll reveal ────────────────────────────────────────────
+     Reveal state lives in React, NOT as a class poked onto the
+     node. A card like the player rewrites its own className when
+     it starts playing, which would wipe an imperfectly-added
+     "seen" class and make the card vanish. ─────────────────── */
   useEffect(() => {
-    const nodes = Array.from(document.querySelectorAll(".rise"));
+    const nodes = Array.from(document.querySelectorAll("[data-rise]"));
     const io = new IntersectionObserver((es) => {
+      const hit = [];
       es.forEach((en) => {
-        if (en.isIntersecting) { en.target.classList.add("seen"); io.unobserve(en.target); }
+        if (en.isIntersecting) { hit.push(Number(en.target.dataset.rise)); io.unobserve(en.target); }
       });
+      if (hit.length) {
+        setSeen((prev) => {
+          const next = new Set(prev);
+          hit.forEach((i) => next.add(i));
+          return next;
+        });
+      }
     }, { threshold: 0.1 });
-    nodes.forEach((n, i) => { n.style.transitionDelay = i * 80 + "ms"; io.observe(n); });
+    nodes.forEach((n) => io.observe(n));
     return () => io.disconnect();
   }, []);
 
@@ -984,10 +1155,17 @@ export default function WhitePage() {
 
   const toggleMute = () => {
     if (vol > 0) { lastVol.current = vol; setVol(0); }
-    else setVol(lastVol.current || 0.55);
+    else setVol(lastVol.current || 0.2);
   };
 
   const tint = { "--tint-a": song.tint[0], "--tint-b": song.tint[1] };
+
+  /* one helper so every revealing card stays React-owned */
+  const rise = (i) => ({
+    "data-rise": i,
+    className: "rise" + (seen.has(i) ? " seen" : ""),
+    style: { transitionDelay: `${i * 80}ms` },
+  });
 
   return (
     <>
@@ -1073,10 +1251,9 @@ export default function WhitePage() {
           <div className="bento">
 
             {/* the song, front and centre */}
-            {/* className stays a static string: the .rise observer adds "seen"
-                imperatively, so a React-controlled className would wipe it the
-                first time `playing` changed. Play state rides on a data attr. */}
-            <div className="magik song b-hero rise" data-playing={playing ? "" : undefined} style={tint}>
+            <div data-rise={0}
+                 className={"magik song b-hero fx-spot " + rise(0).className + (playing ? " playing" : "")}
+                 style={{ ...tint, transitionDelay: "0ms" }}>
               <div className="song-bg" />
               <div className="song-in">
                 <div className="art" style={tint}>
@@ -1142,7 +1319,10 @@ export default function WhitePage() {
             </div>
 
             {/* about: the ONLY entry point to the bio */}
-            <button className="magik about-tile b-half rise" onClick={() => setAbout(true)}>
+            <button data-rise={1}
+                    className={"magik about-tile b-half fx-tilt " + rise(1).className}
+                    style={rise(1).style}
+                    onClick={() => setAbout(true)}>
               <span className="spark-field">
                 {SPARKS.map(([g, l, t, fs, delay, durS], i) => (
                   <i key={i} style={{
@@ -1166,7 +1346,9 @@ export default function WhitePage() {
             </button>
 
             {/* dreaming meter */}
-            <div className="magik card dream b-half rise">
+            <div data-rise={2} className={"magik card dream b-half fx-aurora " + rise(2).className}
+                 style={rise(2).style}>
+              <div className="aurora" />
               <div className="dream-hearts">
                 {HEARTS.map(([e, left, fs, delay, durS], i) => (
                   <span key={i} style={{
@@ -1191,7 +1373,9 @@ export default function WhitePage() {
             </div>
 
             {/* playlist */}
-            <div className="magik card b-half rise">
+            <div data-rise={3} className={"magik card b-half fx-aurora aurora-mint " + rise(3).className}
+                 style={rise(3).style}>
+              <div className="aurora" />
               <div className="note-field">
                 {NOTES.map(([g, l, t, fs, delay, durS], i) => (
                   <i key={i} style={{
@@ -1218,8 +1402,9 @@ export default function WhitePage() {
             </div>
 
             {/* favourite character */}
-            <div className="magik card waifu b-half rise">
-              <video className="waifu-vid" src="/images/67667.webm"
+            <div data-rise={4} className={"magik card waifu b-half fx-parallax " + rise(4).className}
+                 style={rise(4).style}>
+              <video className="waifu-vid" src={WAIFU_VIDEO}
                      autoPlay loop muted playsInline preload="auto" />
               <div className="waifu-scrim" />
               <div className="c-label">favourite</div>
@@ -1227,12 +1412,13 @@ export default function WhitePage() {
               <div className="waifu-body">
                 <div className="waifu-t">Mahiru Shiina</div>
                 <div className="waifu-s">
-                  椎名真昼 <img className="wing-inline" src="/images/wing-marry.gif" alt="wing" />
+                  椎名真昼 <img className="wing-inline" src={WING_GIF} alt="wing" />
                 </div>
               </div>
             </div>
 
-            <div className="magik card b-hero rise">
+            <div data-rise={5} className={"magik card b-hero fx-magnet " + rise(5).className}
+                 style={rise(5).style}>
               <div className="c-label">elsewhere</div>
               <div className="links">
                 {SOCIALS.map((s) => (
